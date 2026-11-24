@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Cruscotto (primo accesso) — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="cruscotto-onboarding.css">
+<link rel="stylesheet" href="../onboarding-banner.css"> <!-- 16/10/2026: banner comprimibile (candidato locale), dopo il CSS della pagina -->
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== TOPBAR (larghezza piena, sopra sidebar+workspace) ===================== -->
+  <!-- 17/9/2026, propagato da prodotti-panel-static.css su richiesta di Ruggi (fix bug: sidebar-header era finita dentro la sidebar invece che nella topbar): icona toggle sidebar + logo Contenomy tornano qui dentro .topbar-left (via .sidebar-header rimossa). -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+  <!-- ===================== SIDEBAR (piena altezza dell'area sotto la topbar) ===================== -->
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+      <!-- 12/10/2026, richiesta Ruggi: titolo + sottotitolo (e azioni) in cima, sopra il banner degli step. -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Benvenuto, Ruggi</h1>
+          <p class="page-sub">Qui vedrai l'andamento della tua bottega, non appena inizierai a vendere.</p>
+        </div>
+        <!-- Azioni: compaiono solo con la bottega costruita (la pagina prodotto dipende dallo stile della bottega). -->
+        <div class="page-header-actions" data-mostra-se="bottega" hidden>
+          <button class="btn-ghost"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>Visita bottega</button>
+          <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo prodotto</button>
+        </div>
+      </div>
+
+      <!-- ===================== BANNER COMPLETAMENTO ACCOUNT ===================== -->
+      <!-- IA Venditore, Cruscotto: "Banner completamento account (solo se stato = in_onboarding) — priorità visiva sopra tutto, anche sopra la barra incassi".
+           12/11/2026, richiesta di Ruggi (sostituisce l'ordine del 12/10 e del 16/10): quattro passaggi, ordine Prodotto → Bottega → Dati fiscali → Stripe, nessun passaggio bloccato dagli altri, nessuno step pre-completato all'accesso, ogni CTA sempre attiva.
+           Blocco condizionale: nel prodotto reale e' reso o meno nel DOM; qui lo stato e' pilotato da cruscotto-onboarding.js/account-setup.js (vedi commenti in testa ai file JS). Lo stato non persiste al refresh. -->
+      <!-- 16/10/2026: banner comprimibile generato da ../account-setup.js (stesso componente delle altre pagine) -->
+      <section id="onbBanner" aria-label="Completa il tuo account" hidden></section>
+      <div class="onb-toast-stack" id="onbToastStack" aria-live="polite" aria-relevant="additions"></div>
+
+      <!-- BARRA INCASSI — compare solo con i dati fiscali completati: il regime determina quale componente incassi mostrare.
+           Qui resta il componente attuale a zero, segnaposto in attesa del componente per regime. -->
+      <div class="card incassi-card" data-mostra-se="fiscali" hidden>
+        <div class="incassi-totals">
+          <div>
+            <span class="incassi-netto">€ 0</span>
+            <span class="incassi-sep">/</span>
+            <span class="incassi-lordo">€ 0</span>
+          </div>
+          <a class="icon-btn-ghost" href="#" data-tooltip="Vai alla rendicontazione (Conti)" aria-label="Vai alla rendicontazione (Conti)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17 17 7"/><path d="M9 7h8v8"/>
+            </svg>
+          </a>
+        </div>
+        <div class="incassi-bar">
+          <div class="incassi-seg track" style="width:100%"></div>
+          <div class="incassi-seg lordo" style="width:0%"></div>
+          <div class="incassi-seg netto" style="width:0%"></div>
+        </div>
+        <div class="incassi-legend">
+          <span><i class="dot netto"></i>Netto ricevuto</span>
+          <span><i class="dot lordo"></i>Lordo (fee incluse)</span>
+          <span><i class="dot track"></i>Margine alla soglia €80.000</span>
+        </div>
+      </div>
+
+      <div class="grid">
+
+        <!-- METRICHE — struttura invariata, valori a zero. Le due percentuali restano "–": 0% sarebbe un dato falso (IA: media recensioni senza numero sotto soglia). -->
+        <div class="card metriche-card span-12">
+          <div class="metrica">
+            <div class="metrica-value">0</div>
+            <div class="metrica-label-row"><span class="metrica-label">Follower</span></div>
+          </div>
+          <div class="metrica">
+            <div class="metrica-value">0</div>
+            <div class="metrica-label-row"><span class="metrica-label">Prodotti venduti</span></div>
+          </div>
+          <div class="metrica">
+            <div class="metrica-value">–</div>
+            <div class="metrica-label-row"><span class="metrica-label">Media recensioni</span></div>
+          </div>
+          <div class="metrica">
+            <div class="metrica-value">–</div>
+            <div class="metrica-label-row"><span class="metrica-label">Tasso di riacquisto</span></div>
+          </div>
+        </div>
+
+        <!-- DA FARE — vuota: niente anello di avanzamento, niente filtri, niente lista. -->
+        <div class="card span-6 drop-card">
+          <div class="card-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Da fare</div>
+              <div class="card-sub">Oggi, 12 ottobre</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <div class="drop-empty-state">
+            <div class="drop-empty-text">Qui troverai ordini, richieste dei clienti<br>e recensioni a cui rispondere</div>
+          </div>
+        </div>
+
+        <!-- DROP — stato vuoto (markup di cruscotto.html, variante 15/9/2026) in due versioni: senza bottega non si possono creare drop. -->
+        <div class="card span-6 drop-card">
+          <div class="card-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Drop</div>
+              <div class="card-sub">Qui appariranno i tuoi drop attivi.</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+          <div class="drop-empty-state" data-mostra-se="!bottega">
+            <div class="drop-empty-text">Potrai creare i tuoi drop<br>dopo aver costruito la bottega</div>
+            <button class="btn-pill-dark sm secondary" type="button" data-vai="bottega">Costruisci la bottega</button>
+          </div>
+          <div class="drop-empty-state" data-mostra-se="bottega" hidden>
+            <div class="drop-empty-text">Non ci sono Drop attivi<br>al momento</div>
+            <button class="btn-pill-dark sm secondary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Crea drop</button>
+          </div>
+        </div>
+
+        <!-- ULTIMI PRODOTTI — nessuna card prodotto. Senza bottega: solo una frase. Con bottega: solo la card "Nuovo prodotto". -->
+        <div class="card span-12">
+          <div class="card-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Ultimi prodotti</div>
+              <div class="card-sub">I tuoi prodotti pubblicati più di recente</div>
+            </div>
+          </div>
+          <div class="card-divider"></div>
+
+          <!-- 12/11/2026 (Ruggi): 3 stati, il primo prodotto non dipende piu' da "bottega".
+               1) nessun prodotto: CTA diretta alla creazione.
+               2) prodotto in bozza, bottega non ancora creata: card "Bozza" -- click riprende il completamento del prodotto e, a fine flusso, porta alla creazione della bottega.
+               3) bottega creata: griglia con tile "Nuovo prodotto" (comportamento invariato). -->
+          <div class="empty-block" data-mostra-se="!prodotto !bottega">
+            <div class="drop-empty-text">Crea il tuo primo prodotto per iniziare<br>a costruire la tua bottega</div>
+            <button class="btn-pill-dark sm secondary" type="button" data-vai="prodotto">Crea prodotto</button>
+          </div>
+
+          <div class="products-grid is-first" data-mostra-se="prodotto !bottega" hidden>
+            <div class="product-card">
+              <div class="product-card-thumb" data-vai="prodotto">
+                <span class="product-card-badge">Bozza</span>
+              </div>
+              <div class="product-card-body">
+                <div class="product-card-text">
+                  <div class="product-card-primary">
+                    <div class="product-card-name-line">
+                      <span class="product-card-name" data-vai="prodotto">Prodotto senza titolo</span>
+                    </div>
+                    <span class="product-card-stat">Da completare per pubblicarlo</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="products-grid is-first" data-mostra-se="bottega" hidden>
+            <button class="product-new-card">
+              <span class="product-new-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+              <span>Nuovo prodotto</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      </div>
+    </main>
+  </div>
+  </div>
+</div>
+
+<script src="../06-bacheca/bottega-store.js" defer></script>
+<script src="../account-setup.js" defer></script> <!-- 16/10/2026: stato condiviso dei passaggi -->
+<script src="cruscotto-onboarding.js" defer></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

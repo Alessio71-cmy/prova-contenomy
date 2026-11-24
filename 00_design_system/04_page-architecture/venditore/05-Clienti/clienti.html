@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Clienti — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="clienti.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== TOPBAR (larghezza piena, sopra sidebar+workspace) ===================== -->
+  <!-- 17/9/2026, propagato da prodotti-panel-static.css su richiesta di Ruggi (fix bug: sidebar-header era finita dentro la sidebar invece che nella topbar): icona toggle sidebar + logo Contenomy tornano qui dentro .topbar-left (via .sidebar-header rimossa). -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+  <!-- ===================== SIDEBAR (piena altezza dell'area sotto la topbar) — identica a Cruscotto ===================== -->
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Clienti</h1>
+          <p class="page-sub">Gestisci il catalogo della tua bottega</p>
+        </div>
+        <div class="page-header-actions">
+          <!-- CTA "Esporta clienti" (22/9, Ruggi): sostituisce "Nuovo prodotto" — Clienti
+               non ha un flusso "crea nuovo" (i clienti si registrano da soli). Restata fissa
+               in header (non scoped al solo tab Elenco come "in cima" suggerirebbe la lettera
+               dell'IA) su scelta esplicita di Ruggi: accesso rapido anche da Panoramica, senza
+               dover prima entrare nella tabella. Icona download nuova: non esisteva nel
+               progetto, disegnata nello stesso stile stroke delle altre icone. -->
+          <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>Esporta clienti</button>
+        </div>
+      </div>
+
+      <!-- TAB BAR — pagina unica "Clienti" (IA_Venditore §2 + convenzione Panoramica 9/9) -->
+      <nav class="tabs">
+        <div class="tab active" data-tab="panoramica" data-label="Panoramica">Panoramica</div>
+        <div class="tab" data-tab="elenco" data-label="Elenco clienti">Elenco clienti</div>
+        <span class="tab-active-line" aria-hidden="true"></span>
+      </nav>
+
+      <!-- PANORAMICA — tab di default (convenzione IA 9/9) -->
+      <div class="overview" data-panel="panoramica">
+
+        <div class="submetrics-row span-12">
+          <div class="submetric">
+            <span class="submetric-value">96<span class="unit unit-text">/ 210 follower</span></span>
+            <span class="submetric-label" data-tooltip="Clienti con almeno un Order (inclusi quelli generati da un Sostegno) confrontati con i Follower attivi ora. Follow e Acquisto sono azioni indipendenti (IA_Venditore §6) — non è una percentuale di conversione garantita, solo un confronto di volumi" aria-label="Clienti con almeno un Order (inclusi quelli generati da un Sostegno) confrontati con i Follower attivi ora. Follow e Acquisto sono azioni indipendenti (IA_Venditore §6) — non è una percentuale di conversione garantita, solo un confronto di volumi">Acquirenti su follower</span>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">8<span class="unit unit-text">/ 25 tetto</span></span>
+            <span class="submetric-label" data-tooltip="Clienti con badge Tra i primi, su tetto_primi_bottega configurato dal venditore nelle impostazioni generali" aria-label="Clienti con badge Tra i primi, su tetto_primi_bottega configurato dal venditore nelle impostazioni generali">Primi in bottega</span>
+          </div>
+          <div class="submetric">
+            <!-- Trattamento "badge con solo il numero" proposto da Ruggi (22/9) — rimandato
+                 a Fase 4/CSS: qui numero semplice in attesa di una decisione visiva verificata
+                 (stessa distinzione IA/UX già fatta altrove nel documento, es. riga 122). -->
+            <span class="submetric-value">20</span>
+            <span class="submetric-label" data-tooltip="Clienti con PriorityAccess temporaneo ancora attivo (drop_residui > 0) — coerente con Accesso prioritario sulla bottega mostrato in Drop &gt; Panoramica (8 badge + 20 priority = 28)" aria-label="Clienti con PriorityAccess temporaneo ancora attivo (drop_residui > 0) — coerente con Accesso prioritario sulla bottega mostrato in Drop &gt; Panoramica (8 badge + 20 priority = 28)">Accesso prioritario attivo</span>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">&euro; 340<span class="unit unit-text">sostegni</span></span>
+            <div class="submetric-label-row">
+              <span class="submetric-label" data-tooltip="Somma di Support.importo ricevuti nel mese corrente — lo storico completo è nel grafico Sostegni vs acquisti qui sotto" aria-label="Somma di Support.importo ricevuti nel mese corrente — lo storico completo è nel grafico Sostegni vs acquisti qui sotto">Mese corrente</span>
+              <span class="submetric-trend up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 12 9l6 6"/></svg>15%</span>
+            </div>
+          </div>
+        </div>
+        <div class="card span-12">
+          <div class="chart-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Sostegni vs acquisti</div>
+              <div class="card-sub">Confronto settimanale tra importo sostegni e importo acquisti prodotto</div>
+            </div>
+            <div class="filter-row">
+              <button class="filter-pill active">1 settimana</button>
+              <button class="filter-pill">3 mesi</button>
+              <button class="filter-pill">6 mesi</button>
+              <button class="filter-pill">1 anno</button>
+            </div>
+          </div>
+
+          <!-- Nuovo pattern locale (22/9, Ruggi): bar chart a due serie per periodo, non
+               esisteva prima nel design system (solo linea singola o barra impilata
+               netto/lordo). Riusa gli stessi due token dati già stabiliti per Barra incassi
+               (--progress-stacked-primary-fill/--progress-stacked-secondary-fill, DEC-039)
+               invece di inventare nuovi colori — ridichiarati qui in :root perché oggi
+               vivono solo nel :root locale di cruscotto.css, non nella libreria condivisa.
+               Nessuna texture: idea iniziale con riempimento a righe scartata da Ruggi il
+               22/9 a favore di due colori pieni + legenda (riuso di .incassi-legend/.dot). -->
+          <div class="dual-bar-chart" role="img" aria-label="Confronto settimanale tra sostegni e acquisti, ultime 8 settimane">
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 46%" data-tooltip="Sostegni, 6 Lug: € 90" aria-label="Sostegni, 6 Lug: € 90"></div>
+                <div class="dual-bar acquisti" style="height: 70%" data-tooltip="Acquisti, 6 Lug: € 140" aria-label="Acquisti, 6 Lug: € 140"></div>
+              </div>
+              <span class="dual-bar-axis-label">6 Lug</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 58%" data-tooltip="Sostegni, 13 Lug: € 115" aria-label="Sostegni, 13 Lug: € 115"></div>
+                <div class="dual-bar acquisti" style="height: 62%" data-tooltip="Acquisti, 13 Lug: € 125" aria-label="Acquisti, 13 Lug: € 125"></div>
+              </div>
+              <span class="dual-bar-axis-label">13 Lug</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 35%" data-tooltip="Sostegni, 20 Lug: € 70" aria-label="Sostegni, 20 Lug: € 70"></div>
+                <div class="dual-bar acquisti" style="height: 90%" data-tooltip="Acquisti, 20 Lug: € 180" aria-label="Acquisti, 20 Lug: € 180"></div>
+              </div>
+              <span class="dual-bar-axis-label">20 Lug</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 72%" data-tooltip="Sostegni, 27 Lug: € 145" aria-label="Sostegni, 27 Lug: € 145"></div>
+                <div class="dual-bar acquisti" style="height: 55%" data-tooltip="Acquisti, 27 Lug: € 110" aria-label="Acquisti, 27 Lug: € 110"></div>
+              </div>
+              <span class="dual-bar-axis-label">27 Lug</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 90%" data-tooltip="Sostegni, 3 Ago: € 180" aria-label="Sostegni, 3 Ago: € 180"></div>
+                <div class="dual-bar acquisti" style="height: 48%" data-tooltip="Acquisti, 3 Ago: € 96" aria-label="Acquisti, 3 Ago: € 96"></div>
+              </div>
+              <span class="dual-bar-axis-label">3 Ago</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 65%" data-tooltip="Sostegni, 10 Ago: € 130" aria-label="Sostegni, 10 Ago: € 130"></div>
+                <div class="dual-bar acquisti" style="height: 75%" data-tooltip="Acquisti, 10 Ago: € 150" aria-label="Acquisti, 10 Ago: € 150"></div>
+              </div>
+              <span class="dual-bar-axis-label">10 Ago</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 100%" data-tooltip="Sostegni, 17 Ago: € 200" aria-label="Sostegni, 17 Ago: € 200"></div>
+                <div class="dual-bar acquisti" style="height: 60%" data-tooltip="Acquisti, 17 Ago: € 120" aria-label="Acquisti, 17 Ago: € 120"></div>
+              </div>
+              <span class="dual-bar-axis-label">17 Ago</span>
+            </div>
+            <div class="dual-bar-group">
+              <div class="dual-bar-pair">
+                <div class="dual-bar sostegni" style="height: 80%" data-tooltip="Sostegni, 24 Ago: € 160" aria-label="Sostegni, 24 Ago: € 160"></div>
+                <div class="dual-bar acquisti" style="height: 68%" data-tooltip="Acquisti, 24 Ago: € 136" aria-label="Acquisti, 24 Ago: € 136"></div>
+              </div>
+              <span class="dual-bar-axis-label">24 Ago</span>
+            </div>
+          </div>
+
+          <div class="incassi-legend">
+            <span><i class="dot sostegni"></i>Sostegni</span>
+            <span><i class="dot acquisti"></i>Acquisti (esclusi ordini generati da un Sostegno)</span>
+          </div>
+        </div>
+
+        <div class="card span-6">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Composizione clienti</div>
+            <div class="card-sub">Follower e acquirenti, per sovrapposizione</div>
+          </div>
+          <div class="rank-bars">
+            <div class="rank-bar">
+              <span class="rank-bar-label">Solo follower</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 100%;"></span></span>
+              <span class="rank-bar-value">140</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Entrambi</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 50%;"></span></span>
+              <span class="rank-bar-value">70</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Solo acquirenti</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 19%;"></span></span>
+              <span class="rank-bar-value">26</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card span-6">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Top sostenitori</div>
+            <div class="card-sub">Importo sostegni, totale cliente</div>
+          </div>
+          <div class="rank-bars">
+            <div class="rank-bar">
+              <span class="rank-bar-label">Marta B.</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 100%;"></span></span>
+              <span class="rank-bar-value">€ 380</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Luca F.</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 82%;"></span></span>
+              <span class="rank-bar-value">€ 310</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Giorgia R.</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 68%;"></span></span>
+              <span class="rank-bar-value">€ 260</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Davide P.</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 50%;"></span></span>
+              <span class="rank-bar-value">€ 190</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Elena T.</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 37%;"></span></span>
+              <span class="rank-bar-value">€ 140</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ELENCO CLIENTI — nascosto di default (Panoramica è la tab attiva) -->
+      <div class="tab-panel-hidden" data-panel="elenco" hidden>
+
+      <div class="grid">
+      <div class="products-panel span-12">
+
+        <div class="card-header">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Elenco clienti</div>
+            <div class="card-sub">Tutti i clienti della tua bottega</div>
+          </div>
+          <div class="table-pagination">
+            <span class="table-pagination-range">1 – 4</span>
+            <button class="pagination-arrow" disabled data-tooltip="Precedenti" aria-label="Precedenti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></button>
+            <button class="pagination-arrow" disabled data-tooltip="Successivi" aria-label="Successivi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <div class="table-toolbar">
+          <!-- Filtri quick -- 22/9 (Ruggi, "distinti coerente con Panoramica"): Primi bottega
+               (badge permanente) e Accesso prioritario (temporaneo via sostegno) restano
+               due chip separate, stesso perimetro delle due submetriche di Panoramica
+               (8/25 tetto vs 20 attivi) -- NON la somma 28 mostrata invece in Drop, che
+               aggrega le due cose per un motivo diverso (comodita' operativa su quella
+               pagina). Riuso stessa etichetta con perimetro diverso avrebbe confuso. -->
+          <div class="status-chips">
+            <button class="status-chip active" data-status="tutti">Tutti<span class="count">4</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="follower">Follower<span class="count">3</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="sostenitori">Sostenitori<span class="count">3</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="primi-bottega">Primi bottega<span class="count">1</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="accesso-prioritario">Accesso prioritario<span class="count">1</span></button>
+          </div>
+          <div class="table-toolbar-actions" id="toolbarActions">
+            <div class="toolbar-icons-group" id="toolbarIconsGroup">
+              <div class="view-switch" id="viewSwitch">
+                <button class="view-switch-btn active" data-tooltip="Vista elenco" aria-label="Vista elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                <button class="view-switch-btn" data-tooltip="Vista griglia" aria-label="Vista griglia"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></button>
+              </div>
+              <div class="icon-btn" id="toggleFiltersBtn" data-tooltip="Filtri" aria-label="Filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></div>
+              <div class="icon-btn" id="sortBtn" data-tooltip="Ordina" aria-label="Ordina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></div>
+            </div>
+            <div class="search-box" id="searchBox">
+              <div class="icon-btn search-toggle" id="searchToggleBtn" data-tooltip="Cerca" aria-label="Cerca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+              <input type="text" class="search-input" id="searchInput" placeholder="Cerca" tabindex="-1">
+              <div class="search-close-btn" id="searchCloseBtn" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-collapse" id="filtersCollapse">
+          <div class="filters-collapse-inner">
+            <div class="filters-row" id="filtersRow">
+              <button class="filter-chip">Data prima relazione<span class="chev"></span></button>
+              <button class="filter-chip">Numero sostegni<span class="chev"></span></button>
+              <button class="filter-chip">Ultimo sostegno<span class="chev"></span></button>
+            </div>
+            <div class="card-divider" id="filtersDivider"></div>
+          </div>
+        </div>
+
+      <div class="products-table">
+            <div class="product-row-head">
+              <div>Cliente</div>
+              <div>Follower</div>
+              <div>Sostegni</div>
+              <div>Ordini</div>
+              <div>Badge</div>
+              <div>Data</div>
+            </div>
+            <!-- Riga Cliente (22/9, Ruggi) -- voci da IA_Venditore.md §6 ("Riga:"):
+                 foto_profilo/placeholder stile Google (qui .client-avatar, cerchio con
+                 iniziale -- nessun componente avatar trovato nel design system, nuovo
+                 pattern locale/candidato), nickname, badge "Follower" solo se Follow
+                 attivo ora, badge "primi bottega" se presente, sostegni in sintesi
+                 (numero + data ultimo), data_inizio (prima relazione). Categoria/Prezzo
+                 di Prodotti non hanno equivalente Cliente, rimossi. Row-goto-btn (link a
+                 una pagina dedicata) rimosso: non esiste un cliente-detail.html. Tenuti
+                 solo i tre puntini (.row-menu-btn, 22/9 su richiesta di Ruggi) per azioni
+                 rapide senza aprire il pannello. Anche senza la freccia, il menu usa il
+                 wrapper .row-actions di Prodotti: resta sovrapposto e centrato sul bordo
+                 destro, quindi non diventa mai una seconda riga della griglia. Click riga (fuori dai
+                 tre puntini, guardia JS gia' presente) riusa il side panel di Prodotti
+                 (decisione 22/9, non l'inline-expand
+                 letterale della IA). -->
+            <div class="product-row">
+              <div class="product-row-main">
+                <div class="client-avatar" style="background:#8b6fc9">M</div>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Marta B.</span>
+                </div>
+              </div>
+              <span class="status-pill pubblicato" data-tooltip="Follow attivo ora" aria-label="Follow attivo ora"><i class="dot"></i>Follower</span>
+              <div class="client-sostegni-cell"><span class="client-sostegni-count">4 sostegni</span><span class="client-sostegni-date">ultimo 18 Set 2026</span></div>
+              <div class="client-ordini-cell"><span class="client-ordini-count">5 ordini</span><span class="client-ordini-date">ultimo 20 Set 2026</span></div>
+              <div class="badge-cluster"><span class="badge-icon clickable" data-tooltip="Tra i primi in bottega (badge permanente)" aria-label="Tra i primi in bottega (badge permanente)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span><span class="badge-icon empty" data-tooltip="Accesso prioritario non attivo" aria-label="Accesso prioritario non attivo"></span></div>
+              <div class="product-row-date">15 Giu 2026</div>
+              <div class="row-actions"><div class="row-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <div class="client-avatar" style="background:#4f8fd6">L</div>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Luca F.</span>
+                </div>
+              </div>
+              <span class="status-pill pubblicato" data-tooltip="Follow attivo ora" aria-label="Follow attivo ora"><i class="dot"></i>Follower</span>
+              <div class="client-sostegni-cell"><span class="client-sostegni-count">3 sostegni</span><span class="client-sostegni-date">ultimo 10 Set 2026</span></div>
+              <div class="client-ordini-cell"><span class="client-ordini-count">2 ordini</span><span class="client-ordini-date">ultimo 12 Set 2026</span></div>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non tra i primi in bottega" aria-label="Non tra i primi in bottega"></span><span class="badge-icon clickable" data-tooltip="Accesso prioritario attivo (temporaneo, via sostegno)" aria-label="Accesso prioritario attivo (temporaneo, via sostegno)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3.5 2.5"/></svg></span></div>
+              <div class="product-row-date">3 Lug 2026</div>
+              <div class="row-actions"><div class="row-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <div class="client-avatar" style="background:#3fae7a">S</div>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Sara M.</span>
+                </div>
+              </div>
+              <span class="status-pill pubblicato" data-tooltip="Follow attivo ora" aria-label="Follow attivo ora"><i class="dot"></i>Follower</span>
+              <div class="client-sostegni-cell"><span class="client-sostegni-count">—</span></div>
+              <div class="client-ordini-cell"><span class="client-ordini-count">1 ordine</span><span class="client-ordini-date">ultimo 15 Ago 2026</span></div>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non tra i primi in bottega" aria-label="Non tra i primi in bottega"></span><span class="badge-icon empty" data-tooltip="Accesso prioritario non attivo" aria-label="Accesso prioritario non attivo"></span></div>
+              <div class="product-row-date">12 Set 2026</div>
+              <div class="row-actions"><div class="row-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div>
+            </div>
+            <div class="table-row-divider"></div>
+            <!-- Elena T.: non segue piu' (Follow non attivo) ma resta in elenco per lo
+                 storico sostegni -- eccezione esplicita in IA_Venditore §6 ("se non ha ne'
+                 Order ne' Support e smette di seguire, scompare completamente"; lei ha
+                 Support quindi resta). -->
+            <div class="product-row">
+              <div class="product-row-main">
+                <div class="client-avatar" style="background:#c98f6f">E</div>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Elena T.</span>
+                </div>
+              </div>
+              <div class="product-row-stat" data-tooltip="Non segue più la bottega -- resta in elenco per lo storico sostegni" aria-label="Non segue più la bottega -- resta in elenco per lo storico sostegni">—</div>
+              <div class="client-sostegni-cell"><span class="client-sostegni-count">2 sostegni</span><span class="client-sostegni-date">ultimo 20 Ago 2026</span></div>
+              <div class="client-ordini-cell"><span class="client-ordini-count">3 ordini</span><span class="client-ordini-date">ultimo 15 Lug 2026</span></div>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non tra i primi in bottega" aria-label="Non tra i primi in bottega"></span><span class="badge-icon empty" data-tooltip="Accesso prioritario non attivo" aria-label="Accesso prioritario non attivo"></span></div>
+              <div class="product-row-date">8 Lug 2026</div>
+              <div class="row-actions"><div class="row-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div>
+            </div>
+      </div>
+      </div>
+      </div>
+      </div>
+
+      </div>
+    </main>
+
+      <!-- Pannello dettaglio cliente (click riga): affiancato, non overlay (9/9). -->
+      <!-- Container/comportamento ereditati identici dal pannello Prodotti (17/9→22/9):
+           id="productDetailPanel"/id="panelCloseBtn"/id="panelPrevBtn"/id="panelNextBtn" e
+           le funzioni JS openProductPanel/closeProductPanel restano invariati — stessa
+           convenzione già in uso nel progetto per .product-row-v2 (Cruscotto vs Prodotti:
+           nome condiviso, ruolo diverso, collisione documentata invece che silenziata).
+           .panel-body sostituito il 23/9/2026 con la Scheda cliente unificata
+           (IA_Venditore.md §6): non è più la copia del pannello Prodotti. -->
+      <aside class="product-detail-panel" id="productDetailPanel">
+
+        <!-- 5/10/2026 (Ruggi): pannello Cliente ricostruito sulla struttura di Prodotti/Drop
+             (prodotti-panel-static.html): .panel-header-sticky (toolbar + tab #panelMainTabs),
+             un solo .panel-body che scorre con un .panel-tabpanel per tab, .panel-footer-sticky
+             con le azioni. Tab (DESIGN-JUDGMENT, da rivedere insieme): Profilo (ex Relazione) / Sostegni /
+             Ordini — Support e Order restano entità distinte (IA_Venditore §6). Stessa regola
+             delle altre pagine: l'header (.panel-header-title-row) è ripetuto in ogni tab. -->
+        <div class="panel-header-sticky">
+        <!-- Intestazione: due adattamenti rispetto a Prodotti/Drop. (1) Nessuna freccia
+             "vai alla pagina" nel primo gruppo — non esiste un cliente-detail.html (stesso
+             .panel-header-group senza freccia già usato in
+             03-Drop/drop-statico-chiuso.html: il gap di 16px resta 16px anche con un solo
+             elemento nel gruppo, nessun CSS nuovo necessario). (2) "Condividi" rimosso da
+             header-right — non ha senso per un cliente — resta solo il menu ⋮. -->
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-header-group">
+              <div class="panel-close-btn" id="panelCloseBtn" data-tooltip="Chiudi pannello" aria-label="Chiudi pannello">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </div>
+            </div>
+            <div class="panel-header-group">
+              <div class="panel-nav-btn" id="panelPrevBtn" data-tooltip="Cliente precedente" aria-label="Cliente precedente">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              </div>
+              <div class="panel-nav-btn" id="panelNextBtn" data-tooltip="Cliente successivo" aria-label="Cliente successivo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="panel-header-right">
+            <!-- Menu ⋮ ancora inerte, come ovunque nel progetto: nessun componente dropdown
+                 esiste finora nel design system (verificato in componenti-stati.md, 23/9).
+                 Destinato a "Esporta dati di questo cliente" e "Segnala cliente"
+                 (IA_Venditore.md §6 + modello_dati_fan_profile.md, dove Segnala è nato
+                 esplicitamente "lato UI, pannello Cliente del Venditore, azioni ⋮") — in
+                 attesa che il componente menu venga costruito altrove nel progetto. -->
+            <div class="panel-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <nav class="panel-tabs" id="panelMainTabs" role="tablist" aria-label="Sezioni del cliente">
+          <div class="panel-tab active" id="panelTabBtnRelazione" role="tab" tabindex="0" aria-selected="true" aria-controls="panelTabRelazione" data-tabpanel="panelTabRelazione" data-label="Profilo"><span class="panel-tab-inner">Profilo</span></div>
+          <div class="panel-tab" id="panelTabBtnSostegni" role="tab" tabindex="0" aria-selected="false" aria-controls="panelTabSostegni" data-tabpanel="panelTabSostegni" data-label="Sostegni"><span class="panel-tab-inner">Sostegni</span></div>
+          <div class="panel-tab" id="panelTabBtnOrdini" role="tab" tabindex="0" aria-selected="false" aria-controls="panelTabOrdini" data-tabpanel="panelTabOrdini" data-label="Ordini"><span class="panel-tab-inner">Ordini</span></div>
+          <span class="panel-tab-active-line" aria-hidden="true"></span>
+        </nav>
+        </div>
+
+        <div class="panel-body" id="panelProductBody">
+
+        <!-- TAB 1 "PROFILO" (ex "Relazione", rinominata 5/10/2026 su richiesta di Ruggi; gli id #panelTabRelazione restano) (equivalente di Disponibilità/Stato): header, metriche del sostegno
+             (riuso .submetrics-row), divider, "Accessi prioritari" (card con blocchi), divider e riga
+             "Fasce di sostegno" con icon button. Il Follower e' nella pill dell'header. -->
+        <div class="panel-tabpanel" id="panelTabRelazione" role="tabpanel" aria-labelledby="panelTabBtnRelazione">
+
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="client-avatar" style="background:#4f8fd6" aria-hidden="true">L</div>
+                <div class="card-title title-lg" id="panelProductTitle" data-client-name>Luca F.</div>
+              </div>
+              <span class="panel-product-date" data-tooltip="Prima relazione (data_inizio)" aria-label="Prima relazione (data_inizio)">Cliente dal 3 Lug 2026</span>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill pubblicato" data-tooltip="Follow attivo ora" aria-label="Follow attivo ora"><i class="dot"></i>Follower</span>
+              <span class="panel-meta-divider" aria-hidden="true"></span>
+              <span class="panel-client-context">3 sostegni • 2 ordini</span>
+            </div>
+          </div>
+
+          <div class="submetrics-row span-12 panel-support-metrics">
+            <div class="submetric">
+              <span class="submetric-value">€ 90<span class="unit">,00</span></span>
+              <span class="submetric-label">Sostegni totali</span>
+            </div>
+            <div class="submetric">
+              <span class="submetric-value">€ 25<span class="unit">,00</span></span>
+              <span class="submetric-label">Ultimo sostegno</span>
+            </div>
+          </div>
+
+          <div class="card-divider panel-drop-divider"></div>
+
+          <!-- 5/10/2026 (Ruggi): "Identità cliente" sostituita da "Accessi prioritari". Testata = .panel-variant-section-heading come in Drop (stesso titolo 20px/regular + sottotitolo). Card = mix di .card.panel-gradimento (card con bordo hairline, stato del drop) e .panel-drop-col (titolo scritto DENTRO la card, 16px regular): titolo uguale per accesso temporaneo e permanente ("Accesso prioritario"), a destra la natura (Temporaneo / Permanente). Sotto, numero grande (stile .drop-countdown) + unita', poi barra a blocchi (stile .drop-progress): un blocco per ogni accesso concesso, lilla = posseduto, grigio = gia' usato. Il totale concesso (3 in questa demo) e' DA CONFERMARE nel modello dati: oggi esiste solo drop_residui.
+               VARIANTE PERMANENTE (Primi bottega, esclusiva con il temporaneo) — PROPOSTA, non ancora decisa: numero = "Sempre", unita' = "Tra i primi in bottega", barra = un unico blocco lilla a tutta larghezza (.is-permanent). Alternativa: niente barra, solo il numero. -->
+          <div class="panel-variant-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Accessi prioritari</div>
+              </div>
+              <span class="panel-variant-section-desc">Entrata anticipata ai drop della bottega</span>
+            </div>
+            <section class="card panel-gradimento panel-access-card" aria-label="Accesso prioritario">
+              <div class="panel-access-head">
+                <span class="panel-access-title">Accesso prioritario</span>
+                <span class="panel-product-date">Temporaneo</span>
+              </div>
+              <div class="panel-access-value">
+                <span class="panel-access-number">2</span>
+                <span class="panel-access-unit">drop rimanenti</span>
+              </div>
+              <div class="panel-access-blocks" role="img" aria-label="2 accessi su 3 ancora disponibili">
+                <span class="panel-access-block is-owned"></span>
+                <span class="panel-access-block is-owned"></span>
+                <span class="panel-access-block"></span>
+              </div>
+              <div class="card-divider"></div>
+              <!-- 5/10/2026 (Ruggi): titolo "Fasce di sostegno" (.panel-accordion-header-label, 16px regular come in Drop) con icon button ghost cliccabile (.panel-goto-btn, icona info). TODO (dal 23/9): il click aprira' un popover con le fasce (scaglioni_sostegno); contenuto e comportamento da progettare, nessun popover esiste ancora. Sta DENTRO la card Accesso prioritario (richiesta Ruggi, 5/10/2026); sostituisce la .panel-attention-row. -->
+              <div class="panel-fasce-row">
+                <span class="panel-accordion-header-label">Fasce di sostegno</span>
+                <button type="button" class="panel-goto-btn" data-action="priority-scale" data-tooltip="Vedi fasce di sostegno" aria-label="Vedi fasce di sostegno">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg>
+                </button>
+              </div>
+            </section>
+          </div>
+
+        </div><!-- /#panelTabRelazione -->
+
+        <!-- TAB 2 "SOSTEGNI": header ripetuto + divider (come Interazioni in Prodotti), poi
+             l'elenco dal più recente — riuso .panel-field-row. -->
+        <div class="panel-tabpanel" id="panelTabSostegni" role="tabpanel" aria-labelledby="panelTabBtnSostegni" hidden>
+
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="client-avatar" style="background:#4f8fd6" aria-hidden="true">L</div>
+                <div class="card-title title-lg" data-client-name>Luca F.</div>
+              </div>
+              <span class="panel-product-date" data-tooltip="Prima relazione (data_inizio)" aria-label="Prima relazione (data_inizio)">Cliente dal 3 Lug 2026</span>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill pubblicato" data-tooltip="Follow attivo ora" aria-label="Follow attivo ora"><i class="dot"></i>Follower</span>
+              <span class="panel-meta-divider" aria-hidden="true"></span>
+              <span class="panel-client-context">3 sostegni • 2 ordini</span>
+            </div>
+          </div>
+
+          <div class="card-divider panel-drop-divider"></div>
+
+          <div class="panel-variant-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Sostegni <span class="panel-variant-section-count">(3)</span></div>
+              </div>
+              <span class="panel-variant-section-desc">Dal più recente</span>
+            </div>
+            <!-- 5/10/2026 (Ruggi): terza proposta per Sostegni (barre e timeline scartate): griglia di tile a 3 colonne come gli Ordini, ogni tile e' una piccola card con data e importo in evidenza. LOCALE/CANDIDATO (.panel-support-grid/-tile). Dati demo. -->
+            <div class="panel-support-grid" aria-label="Elenco sostegni">
+              <div class="panel-support-tile">
+                <span class="panel-support-date">10 Set 2026</span>
+                <span class="panel-support-amount">€ 25</span>
+              </div>
+              <div class="panel-support-tile">
+                <span class="panel-support-date">28 Lug 2026</span>
+                <span class="panel-support-amount">€ 45</span>
+              </div>
+              <div class="panel-support-tile">
+                <span class="panel-support-date">3 Lug 2026</span>
+                <span class="panel-support-amount">€ 20</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /#panelTabSostegni -->
+
+        <!-- TAB 3 "ORDINI": stesso schema; righe .panel-order-row (thumbnail + prodotto/variante
+             + prezzo/data). Dati demo = prodotti reali di prodotti.html, non somme reali. -->
+        <div class="panel-tabpanel" id="panelTabOrdini" role="tabpanel" aria-labelledby="panelTabBtnOrdini" hidden>
+
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="client-avatar" style="background:#4f8fd6" aria-hidden="true">L</div>
+                <div class="card-title title-lg" data-client-name>Luca F.</div>
+              </div>
+              <span class="panel-product-date" data-tooltip="Prima relazione (data_inizio)" aria-label="Prima relazione (data_inizio)">Cliente dal 3 Lug 2026</span>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill pubblicato" data-tooltip="Follow attivo ora" aria-label="Follow attivo ora"><i class="dot"></i>Follower</span>
+              <span class="panel-meta-divider" aria-hidden="true"></span>
+              <span class="panel-client-context">3 sostegni • 2 ordini</span>
+            </div>
+          </div>
+
+          <div class="card-divider panel-drop-divider"></div>
+
+          <div class="panel-variant-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Ordini <span class="panel-variant-section-count">(3)</span></div>
+              </div>
+              <span class="panel-variant-section-desc">Prodotti acquistati, dal più recente</span>
+            </div>
+            <!-- 5/10/2026 (Ruggi): ordini come griglia di tile (anteprima grande + nome, variante, prezzo, data), stesso schema di .drop-variant-grid in Drop (3 colonne); sostituisce le righe .panel-order-row. LOCALE/CANDIDATO (.panel-order-grid/-tile). Colori = segnaposto delle anteprime. -->
+            <div class="panel-order-grid">
+                <div class="panel-order-tile">
+                  <div class="panel-order-thumb" style="background:#2b2b2b" aria-hidden="true"></div>
+                  <span class="panel-order-name">Maglione oversize</span>
+                  <span class="panel-order-variant">Nero</span>
+                  <span class="panel-order-price">€ 49</span>
+                  <span class="panel-order-date">28 Lug 2026</span>
+                </div>
+                <div class="panel-order-tile">
+                  <div class="panel-order-thumb" style="background:#8b6fc9" aria-hidden="true"></div>
+                  <span class="panel-order-name">Felpa logo</span>
+                  <span class="panel-order-price">€ 55</span>
+                  <span class="panel-order-date">12 Lug 2026</span>
+                </div>
+                <div class="panel-order-tile">
+                  <div class="panel-order-thumb" style="background:#c9a15a" aria-hidden="true"></div>
+                  <span class="panel-order-name">Borsa in tela</span>
+                  <span class="panel-order-price">€ 32</span>
+                  <span class="panel-order-date">3 Lug 2026</span>
+                </div>
+            </div>
+          </div>
+
+        </div><!-- /#panelTabOrdini -->
+
+        </div>
+
+        <!-- Footer fisso, comune a tutte le tab (come .panel-footer-sticky di Prodotti). Blocca cliente
+             = ghost danger, Ringrazia = primary. "Esporta dati" e "Segnala cliente" restano nel menu ⋮
+             (scelta del 23/9, da confermare). -->
+        <div class="panel-footer-sticky">
+          <button class="btn-ghost danger" id="panelBlockClientBtn">Blocca cliente</button>
+          <button class="btn-pill-dark primary" id="panelThankClientBtn">Ringrazia</button>
+        </div>
+      </aside>
+  </div>
+  </div>
+</div>
+
+<script>
+  // Sidebar comprimibile a sola-icona — stessa logica di cruscotto.js, mai inclusa qui: il
+  // pulsante #sidebarToggle esisteva già in markup/CSS ma senza alcun listener (9/9).
+  var sidebarToggleBtn = document.getElementById('sidebarToggle');
+  var shellEl = document.querySelector('.shell');
+  if (sidebarToggleBtn && shellEl) {
+    sidebarToggleBtn.addEventListener('click', function () {
+      shellEl.classList.toggle('sidebar-collapsed');
+      // Se l'utente riapre manualmente la sidebar sinistra mentre il pannello dettaglio è
+      // aperto, il pannello si chiude (i due non stanno mai aperti insieme) — nessun
+      // ripristino automatico dello stato sidebar dopo: la scelta è appena stata fatta
+      // dall'utente stesso (9/9)
+      if (!shellEl.classList.contains('sidebar-collapsed') && bodyEl.classList.contains('panel-open')) {
+        bodyEl.classList.remove('panel-open');
+        document.querySelectorAll('.product-row.selected').forEach(function (r) { r.classList.remove('selected'); });
+        setTimeout(function () { updateTabsFade(); updateStatusChipsFade(); }, 300);
+      }
+    });
+  }
+
+  // Dissolvenza dinamica della tab bar quando il pannello è aperto: --fade-l/--fade-r
+  // riflettono lo scroll reale (0px se non c'è nulla da nascondere da quel lato, altrimenti
+  // 28px), così la prima tab non viene mai tagliata quando si è già all'inizio (9/9).
+  var tabsEl = document.querySelector('.tabs');
+  function updateTabsFade() {
+    if (!tabsEl) { return; }
+    var maxScroll = tabsEl.scrollWidth - tabsEl.clientWidth;
+    var fadeL = tabsEl.scrollLeft > 1 ? '28px' : '0px';
+    var fadeR = tabsEl.scrollLeft < maxScroll - 1 ? '28px' : '0px';
+    tabsEl.style.setProperty('--fade-l', fadeL);
+    tabsEl.style.setProperty('--fade-r', fadeR);
+  }
+  if (tabsEl) {
+    updateTabsFade();
+    tabsEl.addEventListener('scroll', updateTabsFade, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(updateTabsFade).observe(tabsEl);
+    }
+  }
+
+  // Stesso segnale progressivo della tab bar, applicato ai filtri rapidi solo quando
+  // il pannello dettaglio restringe la toolbar: la dissolvenza indica chip ulteriori
+  // senza spezzare le loro etichette su due righe.
+  var statusChipsEl = document.querySelector('.status-chips');
+  function updateStatusChipsFade() {
+    if (!statusChipsEl) { return; }
+    var maxScroll = statusChipsEl.scrollWidth - statusChipsEl.clientWidth;
+    var fadeL = statusChipsEl.scrollLeft > 1 ? '48px' : '0px';
+    var fadeR = statusChipsEl.scrollLeft < maxScroll - 1 ? '48px' : '0px';
+    statusChipsEl.style.setProperty('--status-chips-fade-l', fadeL);
+    statusChipsEl.style.setProperty('--status-chips-fade-r', fadeR);
+  }
+  if (statusChipsEl) {
+    updateStatusChipsFade();
+    statusChipsEl.addEventListener('scroll', updateStatusChipsFade, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(updateStatusChipsFade).observe(statusChipsEl);
+    }
+  }
+
+  // Linea della tab attiva: un solo elemento (.tab-active-line) che trasla verso la tab
+  // cliccata invece di un bordo colorato per-tab che appariva/spariva di scatto (14/9/2026,
+  // segnalato da Ruggi). Posizione/larghezza calcolate dalla tab reale (getBoundingClientRect
+  // - offset del contenitore, + scrollLeft per restare solidale al contenuto anche con la
+  // barra scorsa) e animate con transform/width, stessa durata/curva già in uso nel sistema
+  // per gli spostamenti di posizione (motion/duration/standard 280ms + motion/easing/standard
+  // ease, es. motion/panel-slide) — candidato locale, non una nuova primitiva.
+  var tabActiveLine = document.querySelector('.tab-active-line');
+  // 15/9/2026, richiesta Ruggi: al caricamento pagina la linea deve comparire gia' posizionata,
+  // statica (nessuna animazione di "entrata") -- si anima solo al click su una tab successiva.
+  // Fix: sul posizionamento iniziale disattivo transition, forzo un reflow, poi la riattivo --
+  // altrimenti il primo set di transform/width (da 0/translateX(0) dichiarati in CSS al valore
+  // vero della tab attiva) veniva comunque animato dalla transition sempre attiva sulla regola base.
+  function updateTabActiveLine(tab, animate) {
+    if (!tabsEl || !tabActiveLine || !tab) { return; }
+    var tabRect = tab.getBoundingClientRect();
+    var navRect = tabsEl.getBoundingClientRect();
+    var left = (tabRect.left - navRect.left) + tabsEl.scrollLeft;
+    if (!animate) { tabActiveLine.style.transition = 'none'; }
+    tabActiveLine.style.width = tabRect.width + 'px';
+    tabActiveLine.style.transform = 'translateX(' + left + 'px)';
+    if (!animate) {
+      tabActiveLine.offsetHeight; // forza il reflow prima di riabilitare la transition
+      tabActiveLine.style.transition = '';
+    }
+  }
+  var initialActiveTab = document.querySelector('.tab[data-tab].active') || document.querySelector('.tab[data-tab]');
+  updateTabActiveLine(initialActiveTab, false);
+  if (tabsEl && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(function () {
+      updateTabActiveLine(document.querySelector('.tab[data-tab].active'), false);
+    }).observe(tabsEl);
+  }
+
+  // Solo Panoramica/Elenco prodotti sono cablate per ora; le altre tab restano statiche.
+  // Ogni click porta comunque la tab cliccata in vista (scrollIntoView orizzontale): con il
+  // pannello aperto la barra tab è scorrevole e mascherata ai bordi, quindi una tab selezionata
+  // che era tagliata sotto la maschera deve spostarsi a sinistra e risultare intera, mai
+  // rimanere nascosta dietro la dissolvenza (9/9). Cambiare tab mentre il pannello dettaglio è
+  // aperto lo chiude (le due cose non hanno senso insieme: il pannello è per un prodotto della
+  // tabella Elenco, non ha senso restare aperto su un'altra tab).
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      if (bodyEl.classList.contains('panel-open')) { closeProductPanel(); }
+      // La penultima (o la seconda) tab interamente visibile rivela anche la successiva
+      // nascosta: è un indizio attivo che la barra continua oltre il bordo mascherato.
+      var allTabs = Array.prototype.slice.call(tabsEl.querySelectorAll('.tab'));
+      var containerRect = tabsEl.getBoundingClientRect();
+      var visibleTabs = allTabs.filter(function (candidate) {
+        var rect = candidate.getBoundingClientRect();
+        return rect.left >= containerRect.left - 0.5 && rect.right <= containerRect.right + 0.5;
+      });
+      var isSecondToLastVisible = visibleTabs.length > 1 &&
+        visibleTabs[visibleTabs.length - 2] === tab &&
+        visibleTabs[visibleTabs.length - 1] !== allTabs[allTabs.length - 1];
+      var isSecondVisible = visibleTabs.length > 1 &&
+        visibleTabs[1] === tab && visibleTabs[0] !== allTabs[0];
+      var scrollTarget = tab;
+      var inlineAlign = 'nearest';
+      if (isSecondToLastVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[visibleTabs.length - 1]) + 1];
+        inlineAlign = 'end';
+      } else if (isSecondVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[0]) - 1];
+        inlineAlign = 'start';
+      }
+      if (scrollTarget) {
+        scrollTarget.scrollIntoView({ behavior: 'smooth', inline: inlineAlign, block: 'nearest' });
+      }
+      setTimeout(function () { updateTabsFade(); updateStatusChipsFade(); }, 300); // dopo lo scroll animato (300ms > .28s del motion)
+      if (!tab.hasAttribute('data-tab')) { return; }
+      document.querySelectorAll('.tab[data-tab]').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      updateTabActiveLine(tab, true);
+      var target = tab.getAttribute('data-tab');
+      document.querySelectorAll('[data-panel]').forEach(function (panel) {
+        panel.hidden = panel.getAttribute('data-panel') !== target;
+      });
+    });
+  });
+
+  // Icona Ordina: solo stato visivo cliccato per ora (stesso colore neutro del filtro/riga
+  // selezionata) — la logica di ordinamento reale non è ancora cablata.
+  var sortBtn = document.getElementById('sortBtn');
+  if (sortBtn) {
+    sortBtn.addEventListener('click', function () {
+      sortBtn.classList.toggle('active');
+    });
+  }
+
+  // Ricerca in tabella: l'icona si espande in una search box (motion .28s ease, la stessa
+  // della sidebar sinistra). Mentre è aperta le altre icone della toolbar (vista/filtro/ordina)
+  // spariscono del tutto, altrimenti in spazi stretti (es. pannello dettaglio aperto) finirebbero
+  // sotto gli altri elementi. La chiusura (x in fondo) svuota il campo e richiude la box.
+  var toolbarActions = document.getElementById('toolbarActions');
+  var searchBox = document.getElementById('searchBox');
+  var searchToggleBtn = document.getElementById('searchToggleBtn');
+  var searchInput = document.getElementById('searchInput');
+  var searchCloseBtn = document.getElementById('searchCloseBtn');
+  if (toolbarActions && searchBox && searchToggleBtn && searchInput && searchCloseBtn) {
+    searchToggleBtn.addEventListener('click', function () {
+      searchBox.classList.add('open');
+      toolbarActions.classList.add('search-active');
+      searchInput.tabIndex = 0;
+      searchInput.focus({ preventScroll: true });
+    });
+    searchCloseBtn.addEventListener('click', function () {
+      searchBox.classList.remove('open');
+      toolbarActions.classList.remove('search-active');
+      searchInput.value = '';
+      searchInput.tabIndex = -1;
+      searchInput.blur();
+    });
+  }
+
+  // Toggle riga filtri (Stato/Categoria/...): nascosta di default, mostrata dall'icona filtro
+  // Apertura/chiusura filtri animata con grid-template-rows 0fr/1fr (stessa durata/easing
+  // della sidebar: .28s ease, coerenza motion 9/9) — l'attributo hidden non è animabile.
+  var toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+  var filtersCollapse = document.getElementById('filtersCollapse');
+  if (toggleFiltersBtn && filtersCollapse) {
+    toggleFiltersBtn.addEventListener('click', function () {
+      filtersCollapse.classList.toggle('open');
+      toggleFiltersBtn.classList.toggle('active', filtersCollapse.classList.contains('open'));
+    });
+  }
+
+  // Chip di stato veloce: oltre a selezionare il filtro, un chip tagliato ai bordi porta
+  // avanti/indietro la striscia. A destra anticipa il chip seguente; a sinistra il precedente.
+  // Se non ce n'è uno, il chip cliccato viene invece portato interamente in vista.
+  function revealStatusChipNeighbour(chip) {
+    if (!statusChipsEl || !bodyEl || !bodyEl.classList.contains('panel-open')) { return; }
+
+    var chips = Array.prototype.slice.call(statusChipsEl.querySelectorAll('.status-chip'));
+    var index = chips.indexOf(chip);
+    if (index === -1) { return; }
+
+    var stripRect = statusChipsEl.getBoundingClientRect();
+    var chipRect = chip.getBoundingClientRect();
+    var clippedAtRight = chipRect.right > stripRect.right + 1;
+    var clippedAtLeft = chipRect.left < stripRect.left - 1;
+    var target = chip;
+    var nextScrollLeft;
+
+    if (clippedAtRight) {
+      target = chips[index + 1] || chip;
+      nextScrollLeft = target.offsetLeft + target.offsetWidth - statusChipsEl.clientWidth + 16;
+    } else if (clippedAtLeft) {
+      target = chips[index - 1] || chip;
+      nextScrollLeft = target.offsetLeft - 16;
+    } else {
+      return;
+    }
+
+    statusChipsEl.scrollTo({ left: Math.max(0, nextScrollLeft), behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.status-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.status-chip').forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      revealStatusChipNeighbour(chip);
+    });
+  });
+
+  // Pannello dettaglio prodotto (click riga): affiancato, non overlay (9/9).
+  // All'apertura la sidebar sinistra si chiude sempre; alla chiusura del pannello la sidebar
+  // resta chiusa (non si riapre più automaticamente — non serve, l'utente la riapre lui se
+  // vuole tramite il pulsante dedicato, che chiude a sua volta il pannello se aperto).
+  var bodyEl = document.querySelector('.body');
+  var productDetailPanel = document.getElementById('productDetailPanel');
+  var panelCloseBtn = document.getElementById('panelCloseBtn');
+
+  function openProductPanel(row) {
+    var name = row.querySelector('.product-row-name');
+    // 5/10/2026: il nome compare nell'header di ogni tab del pannello ([data-client-name]).
+    if (name) { document.querySelectorAll('[data-client-name]').forEach(function (el) { el.textContent = name.textContent; }); }
+
+    // La riga resta evidenziata (selected) finché il pannello è aperto su di essa; cliccarne
+    // un'altra sposta l'evidenziazione, non la accumula.
+    document.querySelectorAll('.product-row.selected').forEach(function (r) { r.classList.remove('selected'); });
+    row.classList.add('selected');
+
+    shellEl.classList.add('sidebar-collapsed');
+    bodyEl.classList.add('panel-open');
+    setTimeout(function () { updateTabsFade(); updateStatusChipsFade(); }, 300); // il restringimento del workspace è animato (.28s ease)
+  }
+
+  function closeProductPanel() {
+    bodyEl.classList.remove('panel-open');
+    document.querySelectorAll('.product-row.selected').forEach(function (r) { r.classList.remove('selected'); });
+    setTimeout(function () { updateTabsFade(); updateStatusChipsFade(); }, 300);
+  }
+
+  document.querySelectorAll('.product-row').forEach(function (row) {
+    row.addEventListener('click', function (event) {
+      if (event.target.closest('.row-menu-btn')) { return; } // i tre puntini apriranno un menu, non il pannello
+      if (event.target.closest('.row-goto-btn')) { return; } // la freccia porta alla pagina del prodotto, non al pannello (11/9)
+      if (event.target.closest('.product-row-chevron')) { return; } // la chevron espande/collassa, non apre il pannello
+      openProductPanel(row);
+    });
+  });
+
+  // Nessuna sotto-riga variante nella tabella Clienti (solo Prodotti ne ha) — rimosso il
+  // relativo handler di click il 23/9/2026 insieme al markup delle tab varianti nel
+  // pannello, che qui non hanno equivalente.
+
+  // Chevron varianti: espande/collassa la riga (10/9). Le righe senza varianti hanno uno
+  // slot .placeholder senza handler (non cliccabile, solo per allineamento). stopPropagation
+  // evita che il click salga alla riga e apra il pannello dettaglio.
+  document.querySelectorAll('.product-row-chevron:not(.placeholder)').forEach(function (chevron) {
+    chevron.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var row = chevron.closest('.product-row');
+      row.classList.toggle('expanded');
+    });
+  });
+
+  if (panelCloseBtn) {
+    panelCloseBtn.addEventListener('click', closeProductPanel);
+  }
+
+  // 5/10/2026 (Ruggi): cambio tab del pannello (#panelMainTabs), copiato da prodotti-panel-static.html.
+  // Toggle .active/aria-selected sulla tab e hidden sul .panel-tabpanel collegato (data-tabpanel = id; NON data-panel, già usato in questa pagina per Panoramica/Elenco).
+  // la linea animata .panel-tab-active-line scorre sulla tab attiva.
+  (function () {
+    var nav = document.getElementById("panelMainTabs");
+    var body = document.getElementById("panelProductBody");
+    var line = nav ? nav.querySelector(".panel-tab-active-line") : null;
+    if (!nav) return;
+    // 30/9/2026 (Ruggi): la linea della tab attiva scorre verso la tab selezionata come
+    // .tab-active-line di prodotti.html (un solo elemento, translateX + width, transition già
+    // definita da .panel-tab-active-line: 280ms ease) invece del bordo che cambiava di scatto.
+    // Posizione iniziale senza animazione; ricalcolata al resize e a font caricato.
+    function moveLine(tab, animate) {
+      if (!line || !tab) return;
+      var tr = tab.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+      if (!animate) line.style.transition = "none";
+      line.style.width = tr.width + "px";
+      line.style.transform = "translateX(" + (tr.left - nr.left) + "px)";
+      if (!animate) { line.offsetHeight; line.style.transition = ""; }
+    }
+    function select(tab) {
+      if (!tab.getAttribute("data-tabpanel")) return;
+      Array.prototype.forEach.call(nav.querySelectorAll(".panel-tab[data-tabpanel]"), function (t) {
+        var on = t === tab;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        var p = document.getElementById(t.getAttribute("data-tabpanel"));
+        if (p) p.hidden = !on;
+      });
+      if (body) body.scrollTop = 0;
+      moveLine(tab, true);
+    }
+    nav.addEventListener("click", function (e) {
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) select(t);
+    });
+    nav.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) { e.preventDefault(); select(t); }
+    });
+    function refreshLine() { moveLine(nav.querySelector(".panel-tab.active"), false); }
+    refreshLine();
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(refreshLine).observe(nav);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshLine);
+  })();
+</script>
+<script src="../page-search.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

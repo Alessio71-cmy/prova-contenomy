@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Prodotto — Pagina dettaglio (demo statica) — Protocollo 04</title>
+<link rel="stylesheet" href="prodotti-panel-static.css">
+<link rel="stylesheet" href="prodotto-detail.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell sidebar-collapsed">
+
+  <!-- ===================== TOPBAR (larghezza intera) — identica a Cruscotto ===================== -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="body">
+
+    <!-- ===================== SIDEBAR — identica a Cruscotto, "Prodotti" attivo ===================== -->
+    <aside class="sidebar" id="sidebarV2">
+      <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+      </div>
+    </aside>
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+
+      <!-- ===================== HEADER PAGINA DETTAGLIO PRODOTTO =====================
+           Pagina nuova (non porting del pannello): freccia indietro ghost al posto della X
+           di chiusura overlay — qui non si "chiude", si torna all'elenco. Contenuto sotto
+           ereditato 1:1 dal pannello (11/9), solo riadattato alla larghezza piena; layout
+           da rivedere insieme a Ruggi (vedi nota in cima al CSS). -->
+      <div class="product-detail-page-header">
+        <div class="product-detail-page-header-left">
+          <a class="product-detail-back-btn" id="productDetailBackBtn" href="prodotti.html" data-tooltip="Torna all'elenco prodotti" aria-label="Torna all'elenco prodotti">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </a>
+          <span class="panel-header-divider"></span>
+          <div class="panel-nav-btn" id="productDetailPrevBtn" data-tooltip="Prodotto precedente" aria-label="Prodotto precedente">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+          </div>
+          <div class="panel-nav-btn" id="productDetailNextBtn" data-tooltip="Prodotto successivo" aria-label="Prodotto successivo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <h1 class="product-detail-page-title">Maglione oversize</h1>
+        </div>
+        <div class="product-detail-page-header-right">
+          <button class="btn-pill-dark sm secondary" id="productDetailShareBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.2M8.4 13.3l7.2 4.2"/></svg>Condividi</button>
+          <div class="panel-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-detail-body" id="productDetailBody">
+
+          <!-- Banner alert: solo se almeno una variante è esaurita, sopra a tutto il resto
+               del contenuto (10/9). "Non mostrare più" come azione di dismiss — non
+               funzionante in questa demo statica. -->
+          <div class="panel-alert-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg>
+            <span class="panel-alert-text">1 variante esaurita &bull; 1 variante con taglie esaurite</span>
+            <button class="panel-alert-dismiss">Non mostrare più</button>
+          </div>
+
+          <!-- Blocco riepilogo prodotto: sempre presente. Immagine di copertina (verticale)
+               a sinistra + colonna info a destra: stato, titolo (.card-title.title-lg,
+               riuso diretto), descrizione breve (.card-sub, riuso diretto), poi prezzo
+               (16px), venduti, categoria — in quest'ordine di importanza (Ruggi 10/9) -->
+          <div class="panel-summary-block">
+          <!-- Immagine + testo: un unico div, così come prima (10/9 — separato dai badge,
+               che ora sono un div a sé sotto, non nidificato qui dentro) -->
+          <div class="panel-product-summary">
+            <div class="panel-product-image"></div>
+            <div class="panel-product-info">
+              <!-- Stack di contenuto (testa+categoria+stats): margini interni fra i blocchi
+                   invariati. Il bottone Modifica è un secondo figlio a sé di
+                   .panel-product-info, spinto in fondo da justify-content: space-between
+                   sul contenitore (10/9) -->
+              <div class="panel-info-stack">
+                <!-- Blocco 1: stato + titolo + descrizione, gap interno stretto -->
+                <div class="panel-info-block panel-info-block-head">
+                  <div class="panel-status-date-row">
+                    <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+                    <span class="panel-product-date">3 Set 2026</span>
+                  </div>
+                  <div class="card-title title-lg" id="panelProductTitle">Maglione oversize</div>
+                  <span class="card-sub">Maglione morbido in misto lana, vestibilità oversize.</span>
+                </div>
+                <!-- Categoria: spostata sopra il blocco prezzo, con label "Categoria:" (10/9) -->
+                <div class="panel-category-row">
+                  <span class="panel-category-label">Categoria:</span>
+                  <div class="panel-product-category cat-moda">Moda</div>
+                </div>
+                <!-- Blocco 2: "prezzo • venduti" sulla stessa riga, poi recensioni con icona
+                     diamante (10/9: tornata qui — l'accordion sotto le tab mostra solo il
+                     conteggio, non la percentuale) -->
+                <div class="panel-info-block panel-info-block-stats">
+                  <div class="panel-product-pricesold"><span class="panel-product-price">€ 49–52</span><span class="panel-meta-sep">•</span><span class="panel-product-sold"><strong>38</strong> di <strong>80</strong> venduti</span></div>
+                  <div class="product-card-reviews"><svg class="product-card-reviews-icon" width="15" height="15" viewBox="0 0 52 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M26,50C26,50,26,50,26,50c-0.3,0-0.6-0.2-0.8-0.4l-23-34c-0.2-0.3-0.2-0.7-0.1-1C2.3,14.2,2.6,14,3,14h46c0.4,0,0.7,0.2,0.9,0.5s0.2,0.7-0.1,1l-23,34C26.6,49.8,26.3,50,26,50z M4.9,16L26,47.2L47.1,16H4.9z"/><path d="M26,50L26,50c-0.5,0-0.9-0.3-1-0.8l-8-34c-0.1-0.3,0-0.6,0.2-0.9c0.2-0.2,0.5-0.4,0.8-0.4h16c0.3,0,0.6,0.1,0.8,0.4c0.2,0.2,0.3,0.6,0.2,0.8l-8,34C26.9,49.7,26.5,50,26,50z M19.3,16L26,44.6L32.7,16H19.3z"/><path d="M49,16H3c-0.4,0-0.7-0.2-0.9-0.6c-0.2-0.4-0.1-0.8,0.1-1.1l10-12C12.4,2.1,12.7,2,13,2h26c0.3,0,0.6,0.1,0.8,0.4l10,12c0.2,0.3,0.3,0.7,0.1,1.1C49.7,15.8,49.4,16,49,16z M5.1,14h41.7L38.5,4H13.5L5.1,14z"/><path d="M18,16c-0.4,0-0.8-0.2-0.9-0.6l-5-12c-0.2-0.5,0-1.1,0.5-1.3c0.5-0.2,1.1,0,1.3,0.5l5,12c0.2,0.5,0,1.1-0.5,1.3C18.3,16,18.1,16,18,16z"/><path d="M34,16c-0.1,0-0.3,0-0.4-0.1c-0.5-0.2-0.8-0.8-0.5-1.3l5-12c0.2-0.5,0.8-0.8,1.3-0.5c0.5,0.2,0.8,0.8,0.5,1.3l-5,12C34.8,15.8,34.4,16,34,16z"/><path d="M34.2,16c-0.3,0-0.6-0.1-0.8-0.4L26,5.4l-7.4,10.1c-0.3,0.4-1,0.5-1.4,0.2c-0.4-0.3-0.5-1-0.2-1.4l8.2-11.2c0.4-0.5,1.2-0.5,1.6,0L35,14.4c0.3,0.4,0.2,1.1-0.2,1.4C34.7,15.9,34.4,16,34.2,16z"/></svg>94% recensioni positive</div>
+                </div>
+              </div>
+              <!-- Modifica prodotto: ghost, larga quanto la colonna info, in fondo a tutto
+                   (10/9) — apre in futuro la pagina prodotto completa (storia/immagini), non
+                   collegato ora -->
+              <button class="btn-pill-dark primary panel-edit-btn" id="panelEditProductBtn">Gestisci prodotto <span class="panel-action-count">1</span></button>
+            </div>
+          </div>
+
+          <!-- Badge di prodotto: div separato, sotto l'immagine, confinato alla sua stessa
+               larghezza (224px) — non più nidificato nel div di immagine+testo (10/9,
+               correzione: "i badge sono all'interno dello stesso div panel-product-summary
+               di immagine e testo il che è un errore"). Icone più grandi (10/9). -->
+          <div class="panel-badge-row">
+            <span class="badge-icon clickable" data-tooltip="Prezzo da rivedere" aria-label="Prezzo da rivedere"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg></span>
+            <span class="badge-icon" data-tooltip="Prodotto personalizzato" aria-label="Prodotto personalizzato"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></span>
+            <span class="badge-icon" data-tooltip="In vetrina" aria-label="In vetrina"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span>
+            <span class="badge-icon clickable" data-tooltip="Verifica idoneità Curation — 2 di 3" aria-label="Verifica idoneità Curation — 2 di 3"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/></svg></span>
+          </div>
+          </div>
+
+          <!-- Recensioni: accordion subito sotto la linea del blocco riepilogo+badge, sopra
+               le tab varianti (10/9, spostato). Chiuso: solo label + conteggio (muted) + "+".
+               Click reale (piccolo script dedicato, unica eccezione alla regola "niente JS"
+               di questo file statico — comportamento esplicitamente richiesto da Ruggi). -->
+          <div class="panel-accordion-divider" aria-hidden="true"></div>
+          <div class="panel-accordion">
+            <button class="panel-accordion-header" id="panelReviewsAccordionBtn">
+              <span class="panel-accordion-header-label">Recensioni <span class="panel-accordion-count">(32)</span></span>
+              <span class="panel-accordion-toggle" id="panelReviewsAccordionToggle">+</span>
+            </button>
+            <!-- Contenuto recensioni (elenco recensioni reali) da definire — rimossi i
+                 due esempi hardcoded (11/9, Ruggi) in attesa dei dati veri -->
+            <div class="panel-accordion-body" id="panelReviewsAccordionBody" hidden></div>
+          </div>
+
+          <!-- Tab per variante: solo se il prodotto ha varianti. La freccia di una sotto-riga
+               della tabella arriva qui con ?variant=... e rende attiva la tab corrispondente. -->
+          <!-- Titolo sezione varianti (11/9, richiesto da Ruggi): sotto la linea recensioni,
+               sopra le tab -->
+          <div class="panel-variant-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Varianti prodotto <span class="panel-variant-section-count">(3)</span></div>
+                <button class="btn-pill-dark sm secondary" id="panelNewVariantBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuova variante</button>
+              </div>
+              <span class="panel-variant-section-desc">Gestisci le varianti del prodotto</span>
+            </div>
+          </div>
+          <!-- Badge tondo rosso sulla tab della variante esaurita (11/9, richiesto da Ruggi,
+               mancava): qui assunto Rosso a scopo dimostrativo, coerente col banner alert
+               "1 di 3 varianti esaurite" in cima al pannello — nessun altro dato nella demo
+               indica quale delle tre lo sia davvero, da confermare con Ruggi -->
+          <nav class="panel-tabs" id="panelVariantTabs">
+            <div class="panel-tab active" data-label="Nero"><span class="panel-tab-inner">Nero<span class="variant-esaurito-warning" data-tooltip="Esaurita la taglia M" aria-label="Esaurita la taglia M"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span></span></div>
+            <div class="panel-tab" data-label="Blu"><span class="panel-tab-inner">Blu<span class="panel-tab-dot" data-tooltip="Variante esaurita" aria-label="Variante esaurita"></span></span></div>
+            <div class="panel-tab" data-label="Rosso">Rosso</div>
+          </nav>
+
+          <div class="panel-variant-content" id="panelVariantContent">
+
+            <div class="panel-section">
+              <div class="panel-section-title">Dati variante</div>
+              <div class="panel-field-row"><span class="panel-field-label">Nome variante</span><span class="panel-field-value">Nero</span></div>
+              <div class="panel-field-row"><span class="panel-field-label">Prezzo</span><span class="panel-field-value">€ 49</span></div>
+              <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">20 pezzi</span></div>
+              <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 2</span></div>
+              <!-- Sotto-varianti (es. taglie) legate a questa variante colore: solo lettura,
+                   nessuno swap/gestione ancora definito (11/9, Ruggi) — chip rettangolari,
+                   quella esaurita in disabled con il pallino rosso pieno (stesso linguaggio
+                   di .variant-esaurito-dot, esaurito totale). Il numero di sotto-varianti
+                   da gestire (qui: 1, la M esaurita) compare mutato accanto al bottone
+                   "Gestisci variante" in fondo. -->
+              <div class="panel-field-row stacked">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip">S</span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia M esaurita" aria-label="Taglia M esaurita">M<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip">L</span>
+                  <span class="panel-subvariant-chip">XL</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <div class="panel-section-title">Immagini variante</div>
+              <!-- Box "aggiungi" per primo (11/9, Ruggi); oltre 3 miniature la riga
+                   scrolla lateralmente invece di andare a capo (vedi .panel-image-grid) -->
+              <div class="panel-image-grid">
+                <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                  <span class="panel-image-thumb-add-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  </span>
+                </div>
+                <div class="panel-image-thumb"></div>
+                <div class="panel-image-thumb"></div>
+              </div>
+            </div>
+
+            <div class="panel-section">
+              <div class="panel-section-title">Vendite</div>
+              <div class="panel-field-row"><span class="panel-field-label">Venduti</span><span class="panel-field-value"><strong>8</strong> di <strong>20</strong></span></div>
+              <div class="panel-field-row"><span class="panel-field-label">Stato</span><span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span></div>
+            </div>
+
+            <!-- Regola a 3 stati per l'azione distruttiva (11/9, Ruggi, ragionata insieme):
+                 1) variante MAI venduta -> Elimina (danger, irreversibile, sicuro);
+                 2) ha venduto ma non esaurita -> Archivia (ghost, storico intatto) — CASO
+                    ATTUALE: Nero ha 8 di 20 venduti, quindi qui sotto niente Elimina;
+                 3) esaurita -> Ripubblica (spinge a tornare disponibile), mai Elimina.
+                 "Elimina" vera va quindi mostrata SOLO se non c'e mai stata una vendita —
+                 altrimenti romperebbe carrelli/ordini/storico gia esistenti. Non ancora
+                 dimostrabile per gli altri due stati in questa demo statica (un solo blocco
+                 di contenuto tab, non cambia al click) — pronto per quando costruiamo i
+                 blocchi per variante. -->
+            <div class="panel-section panel-section-actions">
+              <!-- Ordine e stile ragionati con Ruggi (11/9): l'azione legata allo STATO della
+                   variante (Archivia/Elimina/Ripubblica) va per prima, Gestisci sempre per
+                   seconda — Gestisci resta ghost ovunque (stesso pattern di "Gestisci
+                   articolo" nel riepilogo), Elimina e Archivia restano ghost (nessun rischio
+                   reale, vedi ragionamento sopra su Elimina/carrello), SOLO Ripubblica sara
+                   scura/primary quando comparira (unica azione che vogliamo davvero spingere). -->
+              <div class="panel-actions-row">
+                <button class="panel-action-btn">Archivia variante</button>
+                <button class="btn-pill-dark sm primary">Gestisci variante <span class="panel-action-count">1</span></button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Prodotto SENZA varianti (es. Borsa in tela): niente tab, solo le informazioni
+               di gestione prodotto sotto il riepilogo. Contenuto non ancora definito nel
+               dettaglio (Ruggi 10/9: "saranno sicuramente informazioni di gestione prodotto")
+               — placeholder da sostituire, tenuto fuori dal flusso (display:none) in questa
+               demo perché la riga mostrata (Maglione oversize) ha varianti. -->
+          <div class="panel-noVariant-content" id="panelNoVariantContent" hidden>
+            <div class="panel-section">
+              <div class="panel-section-title">Gestione prodotto</div>
+              <p class="panel-placeholder-note">Contenuto da definire — badge, stato, contenuto editoriale (storia_breve, blocchi_contenuto).</p>
+            </div>
+          </div>
+
+      </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  // Stessa eccezione JS del pannello (Ruggi 10/9): toggle reale accordion Recensioni.
+  (function () {
+    var btn = document.getElementById("panelReviewsAccordionBtn");
+    var body = document.getElementById("panelReviewsAccordionBody");
+    var toggle = document.getElementById("panelReviewsAccordionToggle");
+    if (!btn || !body || !toggle) return;
+    btn.addEventListener("click", function () {
+      var isHidden = body.hasAttribute("hidden");
+      if (isHidden) {
+        body.removeAttribute("hidden");
+        toggle.textContent = "−";
+      } else {
+        body.setAttribute("hidden", "");
+        toggle.textContent = "+";
+      }
+    });
+  })();
+
+  // La tab variante può essere selezionata direttamente dalla tabella prodotti o drop.
+  (function () {
+    var variantTabs = document.querySelectorAll("#panelVariantTabs .panel-tab");
+    function selectVariantTab(label) {
+      variantTabs.forEach(function (tab) {
+        tab.classList.toggle("active", tab.getAttribute("data-label") === label);
+      });
+    }
+    variantTabs.forEach(function (tab) {
+      tab.addEventListener("click", function () { selectVariantTab(tab.getAttribute("data-label")); });
+    });
+    var requestedVariant = new URLSearchParams(window.location.search).get("variant");
+    if (!requestedVariant) return;
+    selectVariantTab(requestedVariant);
+  })();
+</script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

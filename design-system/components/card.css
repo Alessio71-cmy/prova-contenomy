@@ -1,0 +1,70 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+:root { --elevation-subtle: 0 2px 10px color-mix(in srgb, var(--dark) 5%, transparent); }
+
+.card {
+  background: transparent; /* 12/10/2026, richiesta Ruggi: card trasparenti (eccetto pannello destro, vedi sotto) */
+  border-radius: var(--card-card-border_radius);
+  padding: var(--card-card-padding);
+  border: var(--border-width-hairline) solid var(--color-neutral-100); /* 12/10/2026 neutral-200 (richiesta Ruggi); storico 1/10/2026 (Ruggi): bordo neutral-100 su tutte le .card (sfondo neutral-25); nel pannello laterale destro le card avevano gia' lo stesso bordo (--border = neutral-100). Storico 28/9: border-neutral-200 rimosso quando .card e' tornata neutral-25. */
+}
+
+.card:has(button:not([hidden]), a[href]) { box-shadow: var(--elevation-subtle); }
+/* 3/11/2026 (Ruggi): stessa regola «contiene un'azione → ombra» per i blocchi del pannello che non sono .card: card Drop collegato (.panel-drop-col), invito drop (.editor-drop-invite), .variant-card, .panel-alert-banner — in tutte le pagine. */
+:is(.panel-drop-col, .editor-drop-invite, .variant-card, .panel-alert-banner):has(button:not([hidden]), a[href]) { box-shadow: var(--elevation-subtle); }
+
+.body.panel-open .product-detail-panel .card, .body.panel-open .drop-detail-panel .card,
+.product-detail-panel .card, .drop-detail-panel .card {
+  background: transparent;
+  border-color: var(--color-neutral-100);
+} /* 12/10/2026, richiesta Ruggi: nei pannelli laterali sfondo trasparente e bordo neutral-200 */
+
+.card-header {
+  display: var(--card-card_header-display);
+  align-items: var(--card-card_header-align_items);
+  justify-content: var(--card-card_header-justify_content);
+  margin-bottom: var(--card-card_header-margin_bottom);
+}
+
+.card-header.no-sub {
+  align-items: var(--card-card_header_no_sub-align_items);
+}
+
+.card-header-titles {
+  display: var(--card-card_header_titles-display);
+  flex-direction: var(--card-card_header_titles-flex_direction);
+  gap: var(--card-card_header_titles-gap);
+}
+
+.card-title {
+  font-size: var(--card-card_title-font_size);
+  font-weight: var(--card-card_title-font_weight);
+  color: var(--card-card_title-color);
+}
+
+.card-title.title-lg {
+  font-size: var(--card-card_title_title_lg-font_size);
+  font-weight: var(--card-card_title_title_lg-font_weight);
+}
+
+.card-title.muted {
+  color: var(--card-card_title_muted-color);
+  font-weight: var(--card-card_title_muted-font_weight);
+}
+
+.card-sub {
+  font-size: var(--card-card_sub-font_size);
+  font-weight: var(--card-card_sub-font_weight);
+  color: var(--card-card_sub-color);
+  margin-top: var(--card-card_sub-margin_top);
+  display: var(--card-card_sub-display);
+}
+
+.card-divider {
+  height: var(--card-card_divider-height);
+  background: var(--card-card_divider-background);
+  margin: var(--card-card_divider-margin);
+}
+
+.card-sub.spaced {
+  margin-bottom: var(--card-card_sub_spaced-margin_bottom);
+}

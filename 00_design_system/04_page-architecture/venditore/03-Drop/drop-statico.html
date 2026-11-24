@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drop — Pannello aperto (demo statica)</title>
+<link rel="stylesheet" href="drop-statico.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<!-- Stato di lavoro: sidebar compatta, Elenco drop attivo, pannello destro aperto.
+     La pagina e volutamente statica: serve a progettare il contenuto del dettaglio. -->
+<div class="shell sidebar-collapsed">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" data-tooltip="Espandi menu" aria-label="Espandi menu"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Negozio</div>
+          <nav class="sidebar-nav">
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+            <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+          </nav>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Account</div>
+          <nav class="sidebar-nav">
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+          </nav>
+        </div>
+        <div class="sidebar-footer"><div class="sidebar-footer-content"><div class="avatar"></div><div class="sidebar-footer-text"><span class="sidebar-footer-name">Ruggi</span><span class="sidebar-footer-role">Venditore</span></div><div class="chev"></div></div></div>
+      </div>
+    </aside>
+
+    <div class="body panel-open">
+      <main class="workspace">
+        <div class="workspace-inner">
+          <div class="page-header">
+            <div><h1 class="page-title">Drop</h1><p class="page-sub">Gestisci le vendite a tiratura limitata</p></div>
+            <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo drop</button>
+          </div>
+          <!-- 5/10/2026 (Ruggi): tab del workspace come in prodotti-panel-static.html: la tab attiva ha il trattino lilla via .tab.active (border-bottom-color), non lo span .tab-active-line (senza il JS di drop.html restava largo 0 e la linea non si vedeva). -->
+          <nav class="tabs"><div class="tab">Panoramica</div><div class="tab active">Elenco drop</div></nav>
+
+          <div class="products-panel">
+            <div class="card-header"><div class="card-header-titles"><div class="card-title title-lg">Elenco drop</div><div class="card-sub">Tutti i drop: aperti, programmati, bozze e passati</div></div><div class="table-pagination"><span class="table-pagination-range">1 – 2</span><button class="pagination-arrow" disabled aria-label="Precedenti">‹</button><button class="pagination-arrow" disabled aria-label="Successivi">›</button></div></div>
+            <div class="card-divider"></div>
+            <div class="table-toolbar">
+              <div class="status-chips"><button class="status-chip active">Aperti ora<span class="count">2</span></button><span class="status-chip-divider"></span><button class="status-chip">Programmati<span class="count">2</span></button><span class="status-chip-divider"></span><button class="status-chip">Bozze<span class="count">2</span></button><span class="status-chip-divider"></span><button class="status-chip">Passati<span class="count">2</span></button></div>
+              <div class="table-toolbar-actions" id="dropToolbarActions">
+                <div class="toolbar-icons-group">
+                  <div class="view-switch" role="group" aria-label="Vista elenco drop">
+                    <button class="view-switch-btn active" type="button" data-tooltip="Vista elenco" aria-label="Vista elenco" aria-pressed="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                    <button class="view-switch-btn" type="button" data-tooltip="Vista calendario" aria-label="Vista calendario" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></button>
+                  </div>
+                  <button class="icon-btn" type="button" data-tooltip="Filtri" aria-label="Mostra filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></button>
+                  <button class="icon-btn" type="button" data-tooltip="Ordina" aria-label="Ordina elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></button>
+                </div>
+                <div class="search-box" id="dropSearchBox">
+                  <button class="icon-btn search-toggle" id="dropSearchToggleBtn" type="button" data-tooltip="Cerca" aria-label="Cerca drop"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></button>
+                  <input type="text" class="search-input" id="dropSearchInput" placeholder="Cerca" tabindex="-1" aria-label="Cerca drop">
+                  <button class="search-close-btn" id="dropSearchCloseBtn" type="button" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <div class="drop-table" data-status-panel="aperti">
+              <div class="drop-row-head"><div>Timer</div><div>Stadio</div><div>Prodotto</div><div>Venduti</div><div>Like</div><div data-tooltip="Persone che hanno chiesto di essere avvisate all'apertura">Interessati</div><div>Quorum</div><div>Periodo</div></div>
+              <div class="drop-row selected">
+                <div class="drop-row-timer"><span class="product-row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></span><div class="drop-row-timer-content"><span class="drop-row-countdown">2h 26m</span><div class="drop-row-progress"><div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:100%"></div></div><div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:100%"></div></div><div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:55%"></div></div></div></div></div>
+                <div class="drop-row-phase">Primi sostenitori</div><div class="drop-row-main"><div class="drop-row-textblock"><span class="drop-row-name">Maglione oversize</span><span class="drop-row-variant-count">3 varianti nel drop</span></div></div><div class="drop-row-stat"><strong>38</strong> di <strong>80</strong></div><div class="drop-row-social"><strong>64</strong></div><div class="drop-row-social"><strong>112</strong></div><div class="drop-row-quorum empty">—</div><div class="product-row-date drop-row-period" data-tooltip="Inizio teaser 15 Set 2026 · fine drop 22 Set 2026, 18:00" aria-label="Inizio teaser 15 Set 2026 · fine drop 22 Set 2026, 18:00">15 Set – 22 Set 2026</div>
+                <div class="row-actions"><a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div>
+              </div>
+              <div class="table-row-divider"></div>
+              <div class="drop-row"><div class="drop-row-timer"><span class="product-row-chevron placeholder"></span><div class="drop-row-timer-content"><span class="drop-row-countdown">3g 4h</span><div class="drop-row-progress"><div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:30%"></div></div><div class="drop-row-progress-seg"></div><div class="drop-row-progress-seg"></div></div></div></div><div class="drop-row-phase">Evento (quorum)</div><div class="drop-row-main"><span class="drop-row-name">Tazza in ceramica — edizione autunno</span></div><div class="drop-row-stat"><strong>6</strong> di <strong>20</strong></div><div class="drop-row-social"><strong>19</strong></div><div class="drop-row-social"><strong>31</strong></div><div class="drop-row-quorum warning">6 di 15</div><div class="product-row-date drop-row-period" data-tooltip="Inizio teaser 18 Set 2026 · fine drop 30 Set 2026" aria-label="Inizio teaser 18 Set 2026 · fine drop 30 Set 2026">18 Set – 30 Set 2026</div><div class="row-actions"><a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div></div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="drop-detail-panel" aria-label="Dettaglio drop Maglione oversize">
+        <!-- 1/10/2026 (Ruggi): toolbar (.panel-header) racchiusa in .panel-header-sticky, copiata da prodotti-panel-static.html: stessa struttura e classi; header e footer sono figli flex non scrollabili del pannello, scorre solo .panel-body. Differenze volute rispetto a Prodotti: (1) le tab ci sono (aggiunte in un secondo passaggio, vedi sotto); (2) i controlli restano <button> (in Prodotti sono <div>) per tastiera/accessibilita', stesso aspetto grazie al reset in CSS. Rimossa .panel-goto-btn (come in Prodotti, 28/9/2026): "Vai al prodotto" va nel menu ⋮. -->
+        <div class="panel-header-sticky">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-header-group">
+              <button class="panel-close-btn" id="panelCloseBtn" data-tooltip="Chiudi pannello" aria-label="Chiudi pannello">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <div class="panel-header-group">
+              <button class="panel-nav-btn" id="panelPrevBtn" data-tooltip="Drop precedente" aria-label="Drop precedente">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              </button>
+              <button class="panel-nav-btn" id="panelNextBtn" data-tooltip="Drop successivo" aria-label="Drop successivo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="panel-header-right">
+            <button class="btn-pill-dark sm secondary panel-share-btn" id="panelShareBtn" aria-label="Condividi"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.2M8.4 13.3l7.2 4.2"/></svg>Condividi</button>
+            <button class="panel-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+          </div>
+        </div>
+
+        <!-- 1/10/2026 (Ruggi): tab copiate ESATTE da prodotti-panel-static.html (stesso markup, id, ARIA, data-panel): fanno parte del blocco .panel-header-sticky. Etichette identiche a Prodotti (Disponibilità / Scheda prodotto / Interazioni) in attesa di decidere quelle di Drop; i pannelli collegati (data-panel) non esistono ancora in Drop: lo script cambia solo stato attivo + linea. -->
+        <nav class="panel-tabs" id="panelMainTabs" role="tablist" aria-label="Sezioni del prodotto">
+        <!-- 5/10/2026 (Ruggi): label delle tab ridefinite sul contenuto di Drop: Stato (stato del drop + Andamento), Prodotto (varianti + prodotto collegato), Programma (periodo, calendario compatto, fasi; prima provato "Tempi"). "Calendario" escluso perche' ripete il calendario completo di drop.html; "Fasi" perche' lo stepper e' gia' nell'header. Gli id (panelTabDisponibilita/Scheda/Interazioni) restano invariati per non rompere CSS/JS. -->
+          <div class="panel-tab active" id="panelTabBtnDisponibilita" role="tab" tabindex="0" aria-selected="true" aria-controls="panelTabDisponibilita" data-panel="panelTabDisponibilita" data-label="Stato"><span class="panel-tab-inner">Stato</span></div>
+          <div class="panel-tab" id="panelTabBtnScheda" role="tab" tabindex="0" aria-selected="false" aria-controls="panelTabScheda" data-panel="panelTabScheda" data-label="Prodotto"><span class="panel-tab-inner"><span class="panel-tab-label" data-label="Prodotto">Prodotto</span><span class="panel-tab-count-badge" data-tooltip="1 cosa da verificare" aria-label="1 cosa da verificare">1</span></span></div>
+          <div class="panel-tab" id="panelTabBtnInterazioni" role="tab" tabindex="0" aria-selected="false" aria-controls="panelTabInterazioni" data-panel="panelTabInterazioni" data-label="Programma"><span class="panel-tab-inner">Programma</span></div>
+          <span class="panel-tab-active-line" aria-hidden="true"></span>
+        </nav>
+        </div>
+
+        <!-- Menu "···" (header invariato, identico a Prodotti): conterrà "Interrompi drop" (motivazione
+             obbligatoria, IA_Venditore §4.3) e "Vai al prodotto". Nessun "Modifica" nel body: su un drop live non c'e
+             proroga ne aggiunta stock (il CTA "Gestisci drop" apre la pagina di gestione, non un editor). Menu non disegnato in questa demo statica. -->
+        <!-- 1/10/2026 (Ruggi): contenuto del body diviso nelle tab (stessa struttura di Prodotti: .panel-tabpanel + data-panel/aria-controls; il JS delle tab mostra/nasconde via attributo hidden). Tab 1 "Disponibilita'" = tutto quello che c'era (titolo, stato, stepper, Andamento, metriche); tab 2 "Scheda prodotto" = card prodotto + Varianti prodotto (tutta .drop-variants-section); tab 3 "Interazioni" = pannello vuoto, da progettare. -->
+        <div class="panel-body drop-panel-body" id="panelProductBody">
+        <div class="panel-tabpanel" id="panelTabDisponibilita" role="tabpanel" aria-labelledby="panelTabBtnDisponibilita">
+
+          <!-- 1 + 2. Riepilogo: stato/tempo del drop (protagonista) e prodotto associato (identita).
+               Il countdown conta verso la PROSSIMA TRANSIZIONE (IA_Venditore §4.1): etichetta
+               "Fase termina tra" nelle fasi 1-2, "Il drop termina tra" solo nell'ultima.
+               Barra 100/100/55 = stessi valori di Cruscotto, Prodotti e riga selezionata in tabella (dato corretto, Ruggi 21/9/2026). Il segmento a 55% (il terzo) corrisponde alla fase corrente (la "prima" fase); lettura completa dei segmenti da confermare. -->
+          <div class="panel-summary-block">
+          <!-- 1/10/2026 (Ruggi): .panel-header-title-row copiato ESATTO da prodotti-panel-static.html (tab Disponibilita'), sopra lo stato del drop. Poi adattato al drop (1/10/2026, Ruggi): rimossi badge-icon "In vetrina", status-pill "Pubblicato" e divider verticale della meta-row; data = periodo del drop. -->
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg" id="panelHeaderProductTitle">Maglione oversize</div>
+                <!-- 1/10/2026 (Ruggi): bottone "Vai al prodotto" (ghost, .panel-goto-btn) accanto al titolo, raggiungibile subito dalla prima tab; resta anche nella card "Prodotto collegato" della tab Scheda prodotto. -->
+                <a class="panel-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai al prodotto" aria-label="Vai al prodotto">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                </a>
+              </div>
+              <span class="panel-product-date" data-tooltip="Inizio teaser 15 Set 2026 · fine drop 22 Set 2026, 18:00" aria-label="Inizio teaser 15 Set 2026 · fine drop 22 Set 2026, 18:00">15 Set – 22 Set 2026</span>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill in-drop"><i class="dot"></i>In drop</span>
+              <span class="panel-header-title-meta-divider" aria-hidden="true"></span>
+              <span class="panel-product-category cat-moda">Moda</span>
+              <span class="tag">Edizione limitata</span>
+            </div>
+          </div>
+
+            <!-- 1/10/2026 (Ruggi): stato del drop riformulato come card (.card.panel-gradimento, stessa card di Interazioni in Prodotti). Dall'alto: pill di stato "In corso" + "Fase n di n" (space-between); countdown + fase (senza tag "Edizione limitata"); barra a segmenti (altezza space-2); divider; "Prossimo step" = nome della prossima fase + data/ora di apertura (space-between). Rimossa .drop-product-row (prodotto associato).
+                 STATI CHIUSI (da disegnare): pill unica "Drop chiuso" (.status-pill.archiviato) per concluso e interrotto; il countdown (stessa dimensione, per non spostare la barra) diventa "Concluso" / "Interrotto" in colore muted, con a fianco l'orario di chiusura; barra tutta piena grigia se concluso, ferma al punto raggiunto se interrotto; il blocco "Prossimo step" non ha senso da chiuso (da decidere). -->
+            <section class="card panel-gradimento drop-state" aria-label="Stato del drop">
+              <div class="panel-status-date-row">
+                <span class="status-pill pubblicato"><i class="dot"></i>In corso</span>
+                <span class="panel-product-date">Fase 2 di 3</span>
+              </div>
+              <div class="drop-state-time">
+                <div class="drop-countdown-info">
+                  <div class="drop-countdown">2h 26m</div>
+                  <div class="drop-phase">Accesso prioritario</div>
+                </div>
+              </div>
+              <div class="drop-progress" aria-hidden="true">
+                <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+                <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+                <div class="drop-seg active"><div class="drop-fill" style="width:55%"></div></div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="drop-next-step">
+                <span class="drop-next-step-label">Prossimo step</span>
+                <div class="drop-next-step-row">
+                  <span class="drop-next-step-name">Apertura al pubblico</span>
+                  <span class="drop-next-step-when">Oggi, 18:00</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- 1/10/2026 (Ruggi): stepper ORIZZONTALE a tutta larghezza, solo riferimento visivo degli step: marker + linea + nome breve della fase. Niente date, badge di stato ne' testi descrittivi (secondo passaggio 1/10/2026: erano troppo ingombranti; stato e prossimo step sono gia' nella card sopra). Lo stato si legge dal marker: spunta lilla = concluso, anello con punto = in corso, anello vuoto = prossimo.
+                 STATI CHIUSI (da disegnare): il lilla esiste solo mentre il drop e vivo o programmato, a drop concluso o interrotto marker e linea diventano muted; interrotto: step gia fatti con spunta muted, step non raggiunti senza segno. -->
+            <section class="panel-section drop-steps-section" aria-label="Percorso del drop">
+              <ol class="phase-stepper">
+                <li class="phase-step is-done">
+                  <span class="phase-step-marker" aria-hidden="true">✓</span>
+                  <div class="phase-step-text">
+                    <div class="phase-step-title">Anteprima pubblica</div>
+                    <span class="phase-step-desc">Solo anteprima</span>
+                  </div>
+                </li>
+                <li class="phase-step is-active" aria-current="step">
+                  <span class="phase-step-marker" aria-hidden="true"></span>
+                  <div class="phase-step-text">
+                    <div class="phase-step-title">Accesso prioritario</div>
+                    <span class="phase-step-desc">Per i sostenitori</span>
+                  </div>
+                </li>
+                <li class="phase-step is-next">
+                  <span class="phase-step-marker" aria-hidden="true"></span>
+                  <div class="phase-step-text">
+                    <div class="phase-step-title">Apertura al pubblico</div>
+                    <span class="phase-step-desc">Aperto a tutti</span>
+                  </div>
+                </li>
+              </ol>
+            </section>
+
+            <!-- 1/10/2026 (Ruggi): divider sotto lo stepper, copiato da prodotti-panel-static.html (.card-divider.panel-drop-divider), prima della sezione Andamento. -->
+            <div class="card-divider panel-drop-divider"></div>
+
+            <!-- 1/10/2026 (Ruggi): sezione "Andamento" sotto lo stepper: testata .panel-variant-section-head + .panel-variant-section-desc (stessa componente di "Varianti prodotto") e .panel-stock-summary copiato da prodotti-panel-static.html (tab Disponibilita'). Numero grande ridotto a --type-display-xs (20px): in Drop l'informazione protagonista e' il countdown, le scorte sono contesto (vedi --panel-stock-number-font in CSS). Dati identici a Prodotti: da allineare al drop. -->
+            <section class="panel-section drop-trend-section" aria-label="Andamento">
+              <div class="panel-variant-section-heading">
+                <div class="panel-variant-section-head">
+                  <div class="panel-variant-section-title">Andamento</div>
+                </div>
+                <span class="panel-variant-section-desc">Vendite e interesse del pubblico</span>
+              </div>
+
+              <!-- 3. Risposta del pubblico: nessun titolo, gestita come metrica (.submetrics-row.span-12 di Prodotti) con 3 .submetric.
+                   Solo per drop `esperienza` con `quorum_attivo` (visibile solo al venditore) si aggiunge una quarta .submetric:
+                   <div class="submetric"><span class="submetric-value">6<span class="unit">/15</span></span><span class="submetric-label">Quorum</span></div> -->
+              <div class="drop-metrics-section" aria-label="Risposta del pubblico">
+                <div class="submetrics-row span-12">
+                  <div class="submetric">
+                    <span class="submetric-value">38<span class="unit">/80</span></span>
+                    <span class="submetric-label">Venduti</span>
+                  </div>
+                  <div class="submetric">
+                    <span class="submetric-value">64</span>
+                    <span class="submetric-label">Like</span>
+                  </div>
+                  <div class="submetric">
+                    <span class="submetric-value">112</span>
+                    <!-- 1/10/2026 (Ruggi): etichetta lato venditore "Interessati" (era "Avvisami", poi provato "Iscritti" — non diceva a cosa), testo del pulsante del cliente): per il drop = iscritti all'avviso di apertura (iscritti_avvisami). Per prodotto/varianti l'etichetta decisa e' "In attesa". Lato cliente il verbo resta "Avvisami all'apertura" / "Avvisami quando torna disponibile". -->
+                    <span class="submetric-label" data-tooltip="Persone che hanno chiesto di essere avvisate all'apertura">Interessati</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-stock-summary">
+                <div class="panel-stock-number">42<span>pezzi rimanenti<span class="variant-esaurito-warning" role="img" aria-label="1 variante esaurita su 3" data-tooltip="1 variante esaurita su 3"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span></span></div><!-- 1/10/2026 (Ruggi): icona di avviso accanto al numero, SOLO se almeno una variante/taglia e' esaurita (il totale aggrega e nasconderebbe l'esaurito); stesso simbolo di .variant-esaurito-warning. In questa pagina statica e' sempre presente perche' l'esempio ha varianti esaurite. -->
+                <div class="panel-stock-meta">
+                  <span class="panel-product-price">€ 49–52</span>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-stat"><strong>38</strong> di <strong>80</strong> venduti</span>
+                </div>
+                <progress class="panel-stock-progress" value="38" max="80" aria-label="38 pezzi venduti su 80">38 / 80</progress>
+              </div>
+              <!-- 1/10/2026 (Ruggi): .drop-product-row (componente di Cruscotto: thumb + nome + chevron) con le linee (bordo sopra/sotto hairline) di .panel-attention-row, per andare al prodotto. Prezzo e pezzi rimasti NON ripetuti: sono gia' nel riepilogo sopra; sotto il nome il n. di varianti. Sostituisce la card .panel-drop-col (rimossa da Disponibilita'; resta in tab Scheda prodotto). -->
+              <a class="drop-product-row" href="../02-Prodotti/prodotto-detail.html" aria-label="Vai al prodotto Maglione oversize">
+                <div class="panel-image-thumb" aria-hidden="true"></div>
+                <div class="drop-product-col">
+                  <span class="drop-product-name">Maglione oversize</span>
+                  <span class="drop-product-sub">3 varianti</span>
+                </div>
+                <span class="drop-product-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+              </a>
+            </section>
+
+            <!-- 1/10/2026 (Ruggi): azioni di gestione ("Interrompi drop" ghost IA §4.3 + "Gestisci Drop") spostate da qui (ex .drop-panel-actions, sticky nel body) a .panel-footer-sticky in fondo al pannello. Il divider e' l'<hr class="drop-panel-divider"> sotto il blocco. -->
+          </div>
+        </div><!-- /#panelTabDisponibilita -->
+
+        <div class="panel-tabpanel" id="panelTabScheda" role="tabpanel" aria-labelledby="panelTabBtnScheda" hidden>
+
+          <!-- 1/10/2026 (Ruggi): header della tab Scheda prodotto = titolo identico a Disponibilita' (stesse classi, 20px) con "Vai al prodotto" accanto, e SOTTO un timer in stile "display piccolo" (.panel-header-timer-value, senza icona) riga 1: titolo + "Vai al prodotto" a sinistra, counter (.panel-header-timer-value) a destra (allineati sulla linea di base); riga 2 (.panel-header-title-meta-row, uguale a Disponibilita'): chip categoria + tag. Ripete il countdown della card stato (nome fase, "Fase n di n", periodo e barra tolti), per avere il tempo sempre sott'occhio da questa tab. Rispetto a Disponibilita' mancano periodo del drop, chip categoria e tag. Timer statico in questa demo (2h 26m come nella card stato, da tenere sincronizzato). Il "Vai al prodotto" non e' ripetuto altrove nella tab (tolta la card "Prodotto collegato"). -->
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg">Maglione oversize</div>
+                <!-- 1/10/2026 (Ruggi): bottone "Vai al prodotto" (ghost, .panel-goto-btn) accanto al titolo, raggiungibile subito dalla prima tab; resta anche nella card "Prodotto collegato" della tab Scheda prodotto. -->
+                <a class="panel-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai al prodotto" aria-label="Vai al prodotto">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                </a>
+              </div>
+              <div class="panel-header-timer-value" data-tooltip="La fase termina tra 2h 26m" aria-label="La fase termina tra 2 ore e 26 minuti">2h 26m</div>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill in-drop"><i class="dot"></i>In drop</span>
+              <span class="panel-header-title-meta-divider" aria-hidden="true"></span>
+              <span class="panel-product-category cat-moda">Moda</span>
+              <span class="tag">Edizione limitata</span>
+            </div>
+            <!-- 5/10/2026 (Ruggi): .phase-stepper (stesso markup/CSS di Disponibilita') DENTRO l'header (.panel-header-title-row) delle tab Scheda prodotto e Interazioni; stepper solo visivo, dentro l'header il percorso del drop resta visibile in tutte le tab. -->
+            <ol class="phase-stepper" aria-label="Percorso del drop">
+              <li class="phase-step is-done">
+                <span class="phase-step-marker" aria-hidden="true">✓</span>
+                <div class="phase-step-text">
+                  <div class="phase-step-title">Anteprima pubblica</div>
+                  <span class="phase-step-desc">Solo anteprima</span>
+                </div>
+              </li>
+              <li class="phase-step is-active" aria-current="step">
+                <span class="phase-step-marker" aria-hidden="true"></span>
+                <div class="phase-step-text">
+                  <div class="phase-step-title">Accesso prioritario</div>
+                  <span class="phase-step-desc">Per i sostenitori</span>
+                </div>
+              </li>
+              <li class="phase-step is-next">
+                <span class="phase-step-marker" aria-hidden="true"></span>
+                <div class="phase-step-text">
+                  <div class="phase-step-title">Apertura al pubblico</div>
+                  <span class="phase-step-desc">Aperto a tutti</span>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <!-- 1/10/2026 (Ruggi): divider sotto l'header della tab Scheda prodotto (stesso .card-divider.panel-drop-divider usato altrove nel pannello, margin space-12). Il blocco "Prodotto collegato" (.panel-drop-col) e il divider che stava sotto le varianti sono stati rimossi: il link al prodotto e' il pulsante accanto al titolo. -->
+          <div class="card-divider panel-drop-divider"></div>
+
+          <!-- 1/10/2026 (Ruggi): tab "Scheda prodotto" riordinata — "Varianti prodotto" (.drop-variants-section) ora e' la PRIMA sezione, il blocco "Prodotto collegato" scende sotto (stesso divider .panel-drop-divider, ora fra le due). Le tile (.drop-variant-tile: miniatura + nome + n/tot + pill) sono sostituite dalle .variant-card di prodotti-panel-static.html (stesso markup/classi; CSS copiato in drop-statico.css, blocco "variant-card"). Testata sezione (titolo + "Gestisci prodotto" + descrizione) invariata. Dati demo: n/tot, stato e tiratura restano quelli delle vecchie tile (18/30, 20/20, 0/30 = 38/80, coerente con il blocco stock); prezzo, salvati, in attesa, taglie, lotto sono demo copiati da Prodotti (stesso prodotto "Maglione oversize"). Etichetta "in attesa" (non "avvisi") per la decisione 1/10/2026 sulla terminologia Avvisami lato venditore — in prodotti-panel-static.html la variant-card dice ancora "avvisi". -->
+          <section class="panel-section drop-variants-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Varianti prodotto</div>
+                <button class="btn-pill-dark sm secondary" id="panelManageVariantsBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Gestisci prodotto</button>
+              </div>
+              <span class="panel-variant-section-desc">Gestisci le varianti del prodotto</span>
+            </div>
+            <div class="panel-variant-list">
+
+            <article class="variant-card">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                  <a class="link" href="../02-Prodotti/prodotto-detail.html?variant=Nero" aria-label="Gestisci variante Nero">Gestisci variante <span class="chev inline"></span></a>
+                </div>
+                <div class="variant-card-header-left">
+                  <div class="variant-card-title">Variante Nero</div>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-price">€ 49</span>
+                </div>
+              </div>
+              <div class="variant-card-stats">
+                <span class="product-row-stat"><strong>18</strong>/<strong>30</strong> venduti</span>
+                <span class="product-row-stat"><strong>12</strong> salvati</span>
+                <span class="product-row-stat" data-tooltip="Attivabile solo se la variante è esaurita del tutto — Nero non lo è (solo la taglia M)" aria-label="Attivabile solo se la variante è esaurita del tutto — Nero non lo è (solo la taglia M)"><strong>0</strong> in attesa</span>
+              </div>
+              <div class="panel-field-row stacked variant-card-sizes">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip">S</span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia M esaurita" aria-label="Taglia M esaurita">M<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip">L</span>
+                  <span class="panel-subvariant-chip">XL</span>
+                </div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 2</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">30 pezzi</span></div>
+                  <div class="panel-image-grid">
+                    <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                      <span class="panel-image-thumb-add-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                    </div>
+                    <div class="panel-image-thumb"></div>
+                    <div class="panel-image-thumb"></div>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button class="panel-action-btn">Archivia variante</button>
+                    <button class="btn-pill-dark sm secondary">Gestisci variante</button>
+                  </div>
+                </div>
+              </details>
+            </article>
+
+            <article class="variant-card">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+                  <a class="link" href="../02-Prodotti/prodotto-detail.html?variant=Blu" aria-label="Gestisci variante Blu">Gestisci variante <span class="chev inline"></span></a>
+                </div>
+                <div class="variant-card-header-left">
+                  <div class="variant-card-title">Variante Blu</div>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-price">€ 49</span>
+                </div>
+              </div>
+              <div class="variant-card-stats">
+                <span class="product-row-stat"><strong>20</strong>/<strong>20</strong> venduti</span>
+                <span class="product-row-stat"><strong>6</strong> salvati</span>
+                <span class="product-row-stat" data-tooltip="Clienti che hanno chiesto di essere avvisati alla riapertura di Blu" aria-label="Clienti che hanno chiesto di essere avvisati alla riapertura di Blu"><strong>4</strong> in attesa</span>
+              </div>
+              <div class="panel-field-row stacked variant-card-sizes">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia S esaurita" aria-label="Taglia S esaurita">S<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia M esaurita" aria-label="Taglia M esaurita">M<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia L esaurita" aria-label="Taglia L esaurita">L<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia XL esaurita" aria-label="Taglia XL esaurita">XL<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                </div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 2</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">20 pezzi</span></div>
+                  <div class="panel-image-grid">
+                    <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                      <span class="panel-image-thumb-add-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                    </div>
+                    <div class="panel-image-thumb"></div>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button class="panel-action-btn">Ripubblica variante</button>
+                    <button class="btn-pill-dark sm secondary">Gestisci variante</button>
+                  </div>
+                </div>
+              </details>
+            </article>
+
+            <article class="variant-card">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                  <a class="link" href="../02-Prodotti/prodotto-detail.html?variant=Rosso" aria-label="Gestisci variante Rosso">Gestisci variante <span class="chev inline"></span></a>
+                </div>
+                <div class="variant-card-header-left">
+                  <div class="variant-card-title">Variante Rosso</div>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-price">€ 52</span>
+                </div>
+              </div>
+              <div class="variant-card-stats">
+                <span class="product-row-stat"><strong>0</strong>/<strong>30</strong> venduti</span>
+                <span class="product-row-stat"><strong>3</strong> salvati</span>
+                <span class="product-row-stat"><strong>0</strong> in attesa</span>
+              </div>
+              <div class="panel-field-row stacked variant-card-sizes">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip">S</span>
+                  <span class="panel-subvariant-chip">M</span>
+                  <span class="panel-subvariant-chip">L</span>
+                  <span class="panel-subvariant-chip">XL</span>
+                </div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 1</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">30 pezzi</span></div>
+                  <div class="panel-image-grid">
+                    <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                      <span class="panel-image-thumb-add-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                    </div>
+                    <div class="panel-image-thumb"></div>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button class="panel-action-btn">Archivia variante</button>
+                    <button class="btn-pill-dark sm secondary">Gestisci variante</button>
+                  </div>
+                </div>
+              </details>
+            </article>
+
+            </div>
+          </section>
+        </div><!-- /#panelTabScheda -->
+
+        <!-- Tab "Interazioni": pannello vuoto (da progettare); serve perche' la tab ha data-panel/aria-controls e il JS non lasci il body senza target. -->
+        <div class="panel-tabpanel" id="panelTabInterazioni" role="tabpanel" aria-labelledby="panelTabBtnInterazioni" hidden>
+          <!-- 5/10/2026 (Ruggi): tab Interazioni — in alto .panel-header-title-row identica a quella della tab Scheda prodotto (stesse classi, stesso timer); sotto divider + calendario compatto del drop (solo le settimane del drop: lun 14 – dom 27 Set 2026, "oggi" = 17 Set come nel calendario di drop.html) e, per ogni fase, il tempo RIMANENTE che diminuisce. Date delle fasi di DEMO (inventate, da allineare al modello dati drop): Anteprima 15–16 Set, Accesso prioritario 17 Set fino alle 18:00, Apertura al pubblico dal 17 Set 18:00 al 22 Set 18:00. Componente locale (classi .drop-mini-cal*, .drop-phase*), NON promossa a candidato. Barre = <progress class="panel-stock-progress"> gia' esistente. -->
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg">Maglione oversize</div>
+                <!-- 1/10/2026 (Ruggi): bottone "Vai al prodotto" (ghost, .panel-goto-btn) accanto al titolo, raggiungibile subito dalla prima tab; resta anche nella card "Prodotto collegato" della tab Scheda prodotto. -->
+                <a class="panel-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai al prodotto" aria-label="Vai al prodotto">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                </a>
+              </div>
+              <div class="panel-header-timer-value" data-tooltip="La fase termina tra 2h 26m" aria-label="La fase termina tra 2 ore e 26 minuti">2h 26m</div>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill in-drop"><i class="dot"></i>In drop</span>
+              <span class="panel-header-title-meta-divider" aria-hidden="true"></span>
+              <span class="panel-product-category cat-moda">Moda</span>
+              <span class="tag">Edizione limitata</span>
+            </div>
+            <!-- 5/10/2026 (Ruggi): .phase-stepper (stesso markup/CSS di Disponibilita') DENTRO l'header (.panel-header-title-row) delle tab Scheda prodotto e Interazioni; stepper solo visivo, dentro l'header il percorso del drop resta visibile in tutte le tab. -->
+            <ol class="phase-stepper" aria-label="Percorso del drop">
+              <li class="phase-step is-done">
+                <span class="phase-step-marker" aria-hidden="true">✓</span>
+                <div class="phase-step-text">
+                  <div class="phase-step-title">Anteprima pubblica</div>
+                  <span class="phase-step-desc">Solo anteprima</span>
+                </div>
+              </li>
+              <li class="phase-step is-active" aria-current="step">
+                <span class="phase-step-marker" aria-hidden="true"></span>
+                <div class="phase-step-text">
+                  <div class="phase-step-title">Accesso prioritario</div>
+                  <span class="phase-step-desc">Per i sostenitori</span>
+                </div>
+              </li>
+              <li class="phase-step is-next">
+                <span class="phase-step-marker" aria-hidden="true"></span>
+                <div class="phase-step-text">
+                  <div class="phase-step-title">Apertura al pubblico</div>
+                  <span class="phase-step-desc">Aperto a tutti</span>
+                </div>
+              </li>
+            </ol>
+          </div>
+
+          <div class="card-divider panel-drop-divider"></div>
+
+          <section class="panel-section drop-cal-section" aria-label="Calendario del drop">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Calendario</div>
+                <a class="link" href="drop.html?tab=elenco&amp;view=calendario">Mostra calendario <span class="chev inline"></span></a>
+              </div>
+              <span class="panel-variant-section-desc">Durata del drop e fasi</span>
+            </div>
+            <!-- NOTE TECNICHE (5/10/2026, Ruggi) – COME VA COSTRUITO IL CALENDARIO DI QUESTA TAB. Qui e' markup statico di DEMO; nell'implementazione il calendario NON e' un mese intero ma una PORZIONE che copre esattamente il periodo del drop.
+                 1. Intervallo mostrato: dal lunedi della settimana che contiene il PRIMO giorno del drop alla domenica della settimana che contiene l'ULTIMO giorno (estremi inclusi). Righe = settimane intere da 7 celle (7 colonne, settimana lun-dom). Demo: drop 15–22 Set 2026 (mar–mar) = 2 righe, da lun 14 a dom 27 Set. Primo giorno = inizio del drop (inizio teaser, il primo evento di fase), ultimo giorno = data di fine drop (nel demo 22 Set, ore 18:00). Nomi dei campi da allineare a modello_dati_drop.
+                 2. Giorni di riempimento (prima/dopo il drop, solo per completare la settimana): nessuno sfondo, testo faint, non cliccabili. Se la porzione attraversa due mesi, la cella del giorno 1 mostra anche l'abbreviazione del mese (es. "1 Ott") e il sottotitolo/heading non riporta un solo mese. Drop lunghi: oltre ~6 righe (42 giorni) la porzione diventa troppo alta nel pannello da 528px: da decidere (compattare a settimane scorrevoli oppure mostrare solo la finestra attorno a oggi).
+                 3. Colore per fase: ogni giorno del drop e' colorato in base alla fase attiva all'inizio di quel giorno (ora locale 00:00). Il giorno in cui una fase cambia a meta' giornata (qui 17 Set, alle 18:00, passaggio Accesso prioritario → Apertura al pubblico) prende la fase attiva a inizio giornata; l'orario esatto del confine sta nelle righe di fase sotto il calendario. Alternativa da valutare: cella divisa (gradiente) in proporzione all'ora del cambio.
+                 4. Stato della fase = posizione rispetto alla fase CORRENTE, non indice: fasi concluse = neutro, fase in corso = accent pieno, fasi future = accent tenue. Il numero di fasi e' variabile (3 nel pilota: Anteprima pubblica, Accesso prioritario, Apertura al pubblico; dipende dal tipo di drop), quindi colori e righe vanno generati dalla lista delle fasi, non scritti a mano.
+                 5. "Oggi": cella cerchiata = data locale corrente (fuso del venditore, Europe/Rome; i confini di fase e di giorno vanno calcolati in ora locale per non slittare di un giorno con l'ora legale). Se oggi e' fuori dalla porzione (drop programmato non ancora iniziato, o gia' concluso) nessuna cella e' cerchiata. Aggiornare a mezzanotte e al cambio di fase.
+                 6. Barre sotto il calendario = TEMPO RIMANENTE della fase: valore = (fine_fase − adesso) / (fine_fase − inizio_fase), limitato a 0–1. Fase conclusa: 0 e pill "Concluso" (.status-pill.archiviato); fase in corso: frazione che diminuisce, con il countdown come etichetta; fase futura: 1 (durata intera) con la durata come etichetta (giorni/ore). Il countdown e' lo stesso valore del timer in header e della card di stato.
+                 7. Stati del drop: bozza senza date = nessun calendario (le bozze non compaiono nel Calendario, decisione Ruggi 21/9); programmato = tutto accent tenue, nessun "oggi" se prima dell'inizio; concluso = tutte le fasi neutre; interrotto = fasi gia' fatte neutre, giorni dopo l'interruzione neutri e senza barra.
+                 8. Accessibilita': role="grid", aria-label con il periodo, ogni cella con aria-label completo (es. "17 settembre, Accesso prioritario, oggi"); il colore non e' l'unica informazione, perche' le fasi sono ripetute per nome e date nelle righe sotto.
+                 9. Link "Mostra calendario": apre il calendario completo in drop.html (?tab=elenco&view=calendario); da valutare un parametro per posizionarlo sul mese del drop (es. &date=2026-09-15).
+                 10. Dati di questa pagina: oggi = 17 Set 2026 (come drop.html) e orari di fase inventati: Anteprima 15–16 Set, Accesso prioritario 17 Set fino alle 18:00, Apertura al pubblico 17 Set 18:00 – 22 Set 18:00. -->
+            <div class="drop-mini-cal" role="grid" aria-label="Settembre 2026, settimane del drop">
+              <span class="drop-mini-cal-wd">Lun</span><span class="drop-mini-cal-wd">Mar</span><span class="drop-mini-cal-wd">Mer</span><span class="drop-mini-cal-wd">Gio</span><span class="drop-mini-cal-wd">Ven</span><span class="drop-mini-cal-wd">Sab</span><span class="drop-mini-cal-wd">Dom</span>
+              <div class="drop-mini-cal-day" data-phase="none" role="gridcell">14</div>
+              <div class="drop-mini-cal-day" data-phase="1" role="gridcell">15</div>
+              <div class="drop-mini-cal-day" data-phase="1" role="gridcell">16</div>
+              <div class="drop-mini-cal-day drop-mini-cal-day--today" data-phase="2" role="gridcell" aria-label="17 settembre, oggi" aria-current="date">17</div>
+              <div class="drop-mini-cal-day" data-phase="3" role="gridcell">18</div>
+              <div class="drop-mini-cal-day" data-phase="3" role="gridcell">19</div>
+              <div class="drop-mini-cal-day" data-phase="3" role="gridcell">20</div>
+              <div class="drop-mini-cal-day" data-phase="3" role="gridcell">21</div>
+              <div class="drop-mini-cal-day" data-phase="3" role="gridcell">22</div>
+              <div class="drop-mini-cal-day" data-phase="none" role="gridcell">23</div>
+              <div class="drop-mini-cal-day" data-phase="none" role="gridcell">24</div>
+              <div class="drop-mini-cal-day" data-phase="none" role="gridcell">25</div>
+              <div class="drop-mini-cal-day" data-phase="none" role="gridcell">26</div>
+              <div class="drop-mini-cal-day" data-phase="none" role="gridcell">27</div>
+            </div>
+            <ul class="drop-phase-list">
+              <li class="drop-phase-row" data-phase="1">
+                <div class="drop-phase-top"><span class="drop-phase-swatch" aria-hidden="true"></span><span class="drop-phase-name">Anteprima pubblica</span><span class="status-pill archiviato"><i class="dot"></i>Concluso</span></div>
+                <span class="drop-phase-dates">15 – 16 Set</span>
+                <progress class="panel-stock-progress" value="0" max="100" aria-label="Anteprima pubblica: concluso"></progress>
+              </li>
+              <li class="drop-phase-row" data-phase="2">
+                <div class="drop-phase-top"><span class="drop-phase-swatch" aria-hidden="true"></span><span class="drop-phase-name">Accesso prioritario</span><span class="drop-phase-remaining">2h 26m</span></div>
+                <span class="drop-phase-dates">17 Set, fino alle 18:00</span>
+                <progress class="panel-stock-progress" value="14" max="100" aria-label="Accesso prioritario: restano 2 ore e 26 minuti"></progress>
+              </li>
+              <li class="drop-phase-row" data-phase="3">
+                <div class="drop-phase-top"><span class="drop-phase-swatch" aria-hidden="true"></span><span class="drop-phase-name">Apertura al pubblico</span><span class="drop-phase-remaining">5 giorni</span></div>
+                <span class="drop-phase-dates">17 Set, 18:00 – 22 Set, 18:00</span>
+                <progress class="panel-stock-progress" value="100" max="100" aria-label="Apertura al pubblico: non ancora iniziata, durata 5 giorni"></progress>
+              </li>
+            </ul>
+          </section>
+        </div>
+        </div>
+
+        <!-- 1/10/2026 (Ruggi): footer fisso in fondo al pannello, sempre visibile; copiato da .panel-footer-sticky di prodotti-panel-static.html (sibling di .panel-body). Contiene le due azioni che prima stavano in .drop-panel-actions. -->
+        <div class="panel-footer-sticky">
+          <button class="btn-ghost danger" id="panelStopDropBtn">Interrompi drop</button>
+          <button class="btn-pill-dark primary" id="panelManageDropBtn">Gestisci Drop</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<script>
+  // Eccezione JS di questo file statico (richiesta esplicita di Ruggi 23/9/2026): stessa
+  // funzione "cerca in pagina" gia' presente in drop.html (la versione dinamica) — apri/chiudi
+  // della search box della toolbar. Nessuna logica di filtro reale sulle righe (drop.html non
+  // ce l'ha nemmeno lui): solo apertura/chiusura della casella di ricerca, identica ovunque.
+  (function () {
+    var dropToolbarActions = document.getElementById("dropToolbarActions");
+    var dropSearchBox = document.getElementById("dropSearchBox");
+    var dropSearchToggleBtn = document.getElementById("dropSearchToggleBtn");
+    var dropSearchInput = document.getElementById("dropSearchInput");
+    var dropSearchCloseBtn = document.getElementById("dropSearchCloseBtn");
+    if (!dropToolbarActions || !dropSearchBox || !dropSearchToggleBtn || !dropSearchInput || !dropSearchCloseBtn) return;
+    dropSearchToggleBtn.addEventListener("click", function () {
+      dropSearchBox.classList.add("open");
+      dropToolbarActions.classList.add("search-active");
+      dropSearchInput.tabIndex = 0;
+      dropSearchInput.focus({ preventScroll: true });
+    });
+    dropSearchCloseBtn.addEventListener("click", function () {
+      dropSearchBox.classList.remove("open");
+      dropToolbarActions.classList.remove("search-active");
+      dropSearchInput.value = "";
+      dropSearchInput.tabIndex = -1;
+      dropSearchInput.blur();
+    });
+  })();
+
+  // Seconda eccezione JS di questo file statico (23/9/2026, richiesta esplicita di Ruggi):
+  // overflow orizzontale della barra tab a pannello aperto — stessa logica di
+  // updateTabsFade/click su .tab già presente in prodotti.html (9/9, estesa oggi con
+  // l'avanzamento su penultima/seconda tab visibile). Con .tab a larghezza fissa (flex:none,
+  // vedi shell-lists.css) le tab che non entrano nello spazio disponibile non vanno mai a capo
+  // su una seconda riga — restano mascherate dal mask-image laterale (--fade-l/--fade-r,
+  // aggiornate qui in base alla posizione di scroll) e raggiungibili scrollando lateralmente
+  // .tabs (overflow-x:auto, scrollbar nativa nascosta via CSS, mai visibile). Il click porta
+  // sempre la tab cliccata interamente in vista; se era già del tutto visibile ed è la
+  // penultima (o la seconda) tra quelle visibili, la barra avanza/arretra di una tab in più per
+  // rivelarne un'altra ancora mascherata, verso il fondo o verso l'inizio a seconda del verso.
+  // Su questa pagina le tab sono solo due (Panoramica, Elenco drop) quindi oggi non scatta mai,
+  // ma il comportamento resta coerente con le altre pagine se in futuro le tab aumentano.
+  (function () {
+    var tabsEl = document.querySelector(".tabs");
+    if (!tabsEl) return;
+
+    function updateTabsFade() {
+      var maxScroll = tabsEl.scrollWidth - tabsEl.clientWidth;
+      var fadeL = tabsEl.scrollLeft > 1 ? "28px" : "0px";
+      var fadeR = tabsEl.scrollLeft < maxScroll - 1 ? "28px" : "0px";
+      tabsEl.style.setProperty("--fade-l", fadeL);
+      tabsEl.style.setProperty("--fade-r", fadeR);
+    }
+
+    updateTabsFade();
+    tabsEl.addEventListener("scroll", updateTabsFade, { passive: true });
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(updateTabsFade).observe(tabsEl);
+    }
+
+    tabsEl.addEventListener("click", function (event) {
+      var tab = event.target.closest(".tab");
+      if (!tab || !tabsEl.contains(tab)) return;
+      var allTabs = Array.prototype.slice.call(tabsEl.querySelectorAll(".tab"));
+      var containerRect = tabsEl.getBoundingClientRect();
+      var visibleTabs = allTabs.filter(function (t) {
+        var r = t.getBoundingClientRect();
+        return r.left >= containerRect.left - 0.5 && r.right <= containerRect.right + 0.5;
+      });
+      var isSecondToLastVisible = visibleTabs.length > 1 &&
+        visibleTabs[visibleTabs.length - 2] === tab &&
+        visibleTabs[visibleTabs.length - 1] !== allTabs[allTabs.length - 1];
+      var isSecondVisible = visibleTabs.length > 1 &&
+        visibleTabs[1] === tab &&
+        visibleTabs[0] !== allTabs[0];
+      var scrollTarget = tab;
+      var inlineAlign = "nearest";
+      if (isSecondToLastVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[visibleTabs.length - 1]) + 1];
+        inlineAlign = "end";
+      } else if (isSecondVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[0]) - 1];
+        inlineAlign = "start";
+      }
+      if (scrollTarget) { scrollTarget.scrollIntoView({ inline: inlineAlign, block: "nearest", behavior: "smooth" }); }
+      setTimeout(updateTabsFade, 300);
+    });
+  })();
+
+  // 1/10/2026 (Ruggi): copiata esatta da prodotti-panel-static.html (sesta eccezione JS di quel file) per le tab #panelMainTabs del pannello Drop. Solo toggle .active/aria-selected + linea animata; il body scrolla in alto al cambio tab.
+  // Originale: sesta eccezione JS di questo file statico (30/9/2026, richiesta Ruggi: creazione della tab
+  // "Scheda prodotto"): cambio tab del pannello (#panelMainTabs). Senza questo la nuova tab non
+  // sarebbe raggiungibile. Solo toggle di .active/aria-selected sulla tab e dell'attributo hidden
+  // sul pannello collegato (data-panel = id del pannello). "Interazioni" ora ha il suo pannello
+  // (#panelTabInterazioni): nessuna modifica allo script, funziona via data-panel. Nessuna animazione di transizione (non decisa).
+  (function () {
+    var nav = document.getElementById("panelMainTabs");
+    var body = document.getElementById("panelProductBody");
+    var line = nav ? nav.querySelector(".panel-tab-active-line") : null;
+    if (!nav) return;
+    // 30/9/2026 (Ruggi): la linea della tab attiva scorre verso la tab selezionata come
+    // .tab-active-line di prodotti.html (un solo elemento, translateX + width, transition già
+    // definita da .panel-tab-active-line: 280ms ease) invece del bordo che cambiava di scatto.
+    // Posizione iniziale senza animazione; ricalcolata al resize e a font caricato.
+    function moveLine(tab, animate) {
+      if (!line || !tab) return;
+      var tr = tab.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+      if (!animate) line.style.transition = "none";
+      line.style.width = tr.width + "px";
+      line.style.transform = "translateX(" + (tr.left - nr.left) + "px)";
+      if (!animate) { line.offsetHeight; line.style.transition = ""; }
+    }
+    function select(tab) {
+      if (!tab.getAttribute("data-panel")) return;
+      Array.prototype.forEach.call(nav.querySelectorAll(".panel-tab[data-panel]"), function (t) {
+        var on = t === tab;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        var p = document.getElementById(t.getAttribute("data-panel"));
+        if (p) p.hidden = !on;
+      });
+      if (body) body.scrollTop = 0;
+      moveLine(tab, true);
+    }
+    nav.addEventListener("click", function (e) {
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) select(t);
+    });
+    nav.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) { e.preventDefault(); select(t); }
+    });
+    function refreshLine() { moveLine(nav.querySelector(".panel-tab.active"), false); }
+    refreshLine();
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(refreshLine).observe(nav);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshLine);
+  })();
+</script>
+<script src="../page-search.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

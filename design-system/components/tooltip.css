@@ -1,0 +1,35 @@
+/* Tooltip condiviso.
+   Il posizionamento è gestito da tooltip.js: il layer viene montato in <body>,
+   sceglie sopra/sotto in base allo spazio nella viewport e resta sempre entro
+   un gutter di 8px. Non viene quindi tagliato dai pannelli con overflow o transform.
+   Il ritardo di apparizione (solo al primo tooltip) è gestito in tooltip.js, non con transition-delay. */
+
+.app-tooltip {
+  position: fixed;
+  z-index: var(--zIndex-50);
+  width: max-content;
+  max-width: min(240px, calc(100vw - var(--space-4)));
+  overflow-wrap: anywhere;
+  text-align: left;
+  background: var(--dark);
+  color: var(--color-text-inverse);
+  font-family: inherit;
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-regular);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition: opacity var(--motion-duration-150) var(--motion-easing-ease), transform var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.app-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity var(--motion-duration-280) var(--motion-easing-ease), transform var(--motion-duration-280) var(--motion-easing-ease);
+}
+
+/* 5/11/2026 (Ruggi): tutte le icone «i» che aprono un tooltip/spiegazione mostrano il cursore «?» in hover, in tutte le pagine. Per nuove icone: classe .bottega-info / .bottega-menu-info / .editor-tone-info oppure l'attributo data-tooltip-help. */
+.bottega-info, .bottega-menu-info, .editor-tone-info, [data-tooltip-help] { cursor: help; }

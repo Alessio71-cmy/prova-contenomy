@@ -1,0 +1,313 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+/* RF-01: author grid/flex rules must not reveal explicitly hidden HTML regions. */
+[hidden]:not([hidden="until-found"]) { display: none !important; }
+
+/* Low specificity reset for native controls replacing div/span, preserving component CSS. */
+:where(button.ds-control) {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  padding: 0;
+}
+
+* {
+  box-sizing: var(--app_shell--box_sizing);
+  margin: var(--app_shell--margin);
+  padding: var(--app_shell--padding);
+}
+
+:focus-visible {
+  outline: var(--app_shell-focus_visible-outline);
+  outline-offset: var(--app_shell-focus_visible-outline_offset);
+}
+
+body {
+  font-family: var(--app_shell-body-font_family);
+  color: var(--app_shell-body-color);
+  background: var(--app_shell-body-background);
+}
+
+.shell {
+  display: var(--app_shell-shell-display);
+  flex-direction: var(--app_shell-shell-flex_direction);
+  height: var(--app_shell-shell-height);
+}
+
+.topbar {
+  height: var(--topbar-topbar-height);
+  flex: var(--topbar-topbar-flex);
+  display: var(--topbar-topbar-display);
+  align-items: var(--topbar-topbar-align_items);
+  justify-content: var(--topbar-topbar-justify_content);
+  padding: var(--topbar-topbar-padding);
+  background: var(--topbar-topbar-background); /* 28/9/2026, richiesta Ruggi: topbar sfondo neutral-25 in tutte le pagine (nuovo token, prima assente). */
+}
+
+.topbar-left {
+  display: var(--topbar-topbar_left-display);
+  align-items: var(--topbar-topbar_left-align_items);
+  gap: var(--topbar-topbar_left-gap);
+  margin-left: var(--topbar-topbar_left-margin_left);
+}
+
+.topbar-right {
+  display: var(--topbar-topbar_right-display);
+  align-items: var(--topbar-topbar_right-align_items);
+  gap: var(--topbar-topbar_right-gap);
+}
+
+.topbar-right .icon-btn {
+  width: var(--topbar-topbar_right_icon_btn-width);
+  height: var(--topbar-topbar_right_icon_btn-height);
+}
+
+.topbar-right .icon-btn .svg-icon {
+  width: var(--topbar-topbar_right_icon_btn_svg_icon-width);
+  height: var(--topbar-topbar_right_icon_btn_svg_icon-height);
+}
+
+.avatar {
+  width: var(--topbar-avatar-width);
+  height: var(--topbar-avatar-height);
+  border-radius: var(--topbar-avatar-border_radius);
+  background: var(--topbar-avatar-background);
+  flex: var(--topbar-avatar-flex);
+  cursor: var(--topbar-avatar-cursor);
+}
+
+.shell-body {
+  display: var(--app_shell-shell_body-display);
+  flex-direction: var(--app_shell-shell_body-flex_direction);
+  flex: var(--app_shell-shell_body-flex);
+  min-height: var(--app_shell-shell_body-min_height);
+  background: var(--app_shell-shell_body-background); /* 28/9/2026, richiesta Ruggi: .shell-body sfondo neutral-25 in tutte le pagine, come workspace/topbar/sidebar. */
+}
+
+.body {
+  display: var(--workspace-body-display);
+  flex-direction: var(--workspace-body-flex_direction);
+  flex: var(--workspace-body-flex);
+  min-width: var(--workspace-body-min_width);
+  min-height: var(--workspace-body-min_height);
+  /* 12/10/2026, richiesta Ruggi: rimosso margin-top: var(--workspace-body-margin_top) (spacing-2) da .body — il token resta definito ma non e' piu' usato. */
+}
+
+.sidebar {
+  width: var(--sidebar-sidebar-width);
+  flex: var(--sidebar-sidebar-flex);
+  position: var(--sidebar-sidebar-position);
+  overflow: var(--sidebar-sidebar-overflow);
+  transition: var(--sidebar-sidebar-transition);
+}
+
+.sidebar-inner {
+  position: var(--sidebar-sidebar_inner-position);
+  top: var(--sidebar-sidebar_inner-top);
+  left: var(--sidebar-sidebar_inner-left);
+  bottom: var(--sidebar-sidebar_inner-bottom);
+  width: var(--sidebar-sidebar_inner-width);
+  z-index: var(--sidebar-sidebar_inner-z_index);
+  background: var(--sidebar-sidebar_inner-background);
+  padding: var(--sidebar-sidebar_inner-padding);
+  display: var(--sidebar-sidebar_inner-display);
+  flex-direction: var(--sidebar-sidebar_inner-flex_direction);
+  gap: var(--sidebar-sidebar_inner-gap);
+  overflow-y: var(--sidebar-sidebar_inner-overflow_y);
+  overflow-x: var(--sidebar-sidebar_inner-overflow_x);
+  transition: var(--sidebar-sidebar_inner-transition);
+}
+
+.sidebar-item-label {
+  white-space: var(--sidebar-sidebar_item_label-white_space);
+  opacity: var(--sidebar-sidebar_item_label-opacity);
+  transition: var(--sidebar-sidebar_item_label-transition);
+}
+
+.sidebar-footer {
+  margin: var(--sidebar-sidebar_footer-margin);
+}
+
+.sidebar-footer-content {
+  display: var(--sidebar-sidebar_footer_content-display);
+  align-items: var(--sidebar-sidebar_footer_content-align_items);
+  gap: var(--sidebar-sidebar_footer_content-gap);
+  padding: var(--sidebar-sidebar_footer_content-padding);
+}
+
+.sidebar-footer-text {
+  display: var(--sidebar-sidebar_footer_text-display);
+  flex-direction: var(--sidebar-sidebar_footer_text-flex_direction);
+  flex: var(--sidebar-sidebar_footer_text-flex);
+  min-width: var(--sidebar-sidebar_footer_text-min_width);
+  gap: var(--sidebar-sidebar_footer_text-gap);
+}
+
+.sidebar-footer-name {
+  font-size: var(--sidebar-sidebar_footer_name-font_size);
+  font-weight: var(--sidebar-sidebar_footer_name-font_weight);
+  color: var(--sidebar-sidebar_footer_name-color);
+  white-space: var(--sidebar-sidebar_footer_name-white_space);
+  overflow: var(--sidebar-sidebar_footer_name-overflow);
+  text-overflow: var(--sidebar-sidebar_footer_name-text_overflow);
+}
+
+.sidebar-footer-role {
+  font-size: var(--sidebar-sidebar_footer_role-font_size);
+  color: var(--sidebar-sidebar_footer_role-color);
+  white-space: var(--sidebar-sidebar_footer_role-white_space);
+  overflow: var(--sidebar-sidebar_footer_role-overflow);
+  text-overflow: var(--sidebar-sidebar_footer_role-text_overflow);
+}
+
+.sidebar-footer .chev {
+  transform: var(--sidebar-sidebar_footer_chev-transform);
+}
+
+.sidebar-logo-text {
+  font-size: var(--sidebar-sidebar_logo_text-font_size);
+  font-weight: var(--sidebar-sidebar_logo_text-font_weight);
+  color: var(--sidebar-sidebar_logo_text-color);
+  white-space: var(--sidebar-sidebar_logo_text-white_space);
+}
+
+.shell.sidebar-collapsed .sidebar {
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar-width);
+}
+
+.shell.sidebar-collapsed .sidebar-group-label {
+  display: var(--sidebar-shell_sidebar_collapsed_sidebar_group_label-display);
+}
+
+.shell.sidebar-collapsed .sidebar-item {
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_item-width);
+  height: var(--sidebar-shell_sidebar_collapsed_sidebar_item-height);
+  padding: var(--sidebar-shell_sidebar_collapsed_sidebar_item-padding);
+  justify-content: var(--sidebar-shell_sidebar_collapsed_sidebar_item-justify_content);
+  gap: var(--sidebar-shell_sidebar_collapsed_sidebar_item-gap);
+}
+
+.shell.sidebar-collapsed .sidebar-item-label {
+  opacity: var(--sidebar-shell_sidebar_collapsed_sidebar_item_label-opacity);
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_item_label-width);
+  margin: var(--sidebar-shell_sidebar_collapsed_sidebar_item_label-margin);
+  overflow: var(--sidebar-shell_sidebar_collapsed_sidebar_item_label-overflow);
+}
+
+.shell.sidebar-collapsed .sidebar-item-icon {
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_item_icon-width);
+  height: var(--sidebar-shell_sidebar_collapsed_sidebar_item_icon-height);
+}
+
+.shell.sidebar-collapsed .sidebar-footer-content {
+  justify-content: var(--sidebar-shell_sidebar_collapsed_sidebar_footer_content-justify_content);
+  gap: var(--sidebar-shell_sidebar_collapsed_sidebar_footer_content-gap);
+}
+
+.shell.sidebar-collapsed .sidebar-footer-text,
+.shell.sidebar-collapsed .sidebar-footer-content .chev {
+  opacity: var(--sidebar-shell_sidebar_collapsed_sidebar_footer_text_shell_sidebar_collapsed_sidebar_footer_content_chev-opacity);
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_footer_text_shell_sidebar_collapsed_sidebar_footer_content_chev-width);
+  margin: var(--sidebar-shell_sidebar_collapsed_sidebar_footer_text_shell_sidebar_collapsed_sidebar_footer_content_chev-margin);
+  overflow: var(--sidebar-shell_sidebar_collapsed_sidebar_footer_text_shell_sidebar_collapsed_sidebar_footer_content_chev-overflow);
+}
+
+/* 15/10/2026, richiesta Ruggi (tutte le pagine): la sidebar che si apre in hover PASSA SOPRA al workspace -> ombra molto leggera SOLO sul lato destro.
+   x = space-2, y = 0, spread negativo = ombra stretta; clip-path taglia tutto cio' che non e' a destra (niente ombra sopra/sotto/sinistra). Nessuna nuova variabile: alpha 6% sul colore scuro, piu' leggera dell'elevation dei tooltip (9%). */
+.shell.sidebar-collapsed .sidebar-inner {
+  box-shadow: 0 0 0 0 transparent;
+  clip-path: inset(0 calc(-1 * var(--space-8)) 0 0);
+  transition: var(--sidebar-sidebar_inner-transition), box-shadow var(--motion-duration-280) var(--motion-easing-ease);
+}
+.shell.sidebar-collapsed .sidebar:hover .sidebar-inner {
+  box-shadow: var(--space-2) 0 var(--space-6) calc(-1 * var(--space-2)) color-mix(in srgb, var(--dark) 6%, transparent);
+}
+
+.shell.sidebar-collapsed .sidebar:hover .sidebar-inner {
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_inner-width);
+  padding-right: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_inner-padding_right);
+}
+
+.shell.sidebar-collapsed .sidebar:hover .sidebar-item {
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item-width);
+  height: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item-height);
+  padding: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item-padding);
+  justify-content: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item-justify_content);
+  gap: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item-gap);
+}
+
+.shell.sidebar-collapsed .sidebar:hover .sidebar-item-label {
+  opacity: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item_label-opacity);
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item_label-width);
+  margin: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item_label-margin);
+}
+
+.shell.sidebar-collapsed .sidebar:hover .sidebar-item-icon {
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item_icon-width);
+  height: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_item_icon-height);
+}
+
+.shell.sidebar-collapsed .sidebar:hover .sidebar-footer-content {
+  justify-content: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_footer_content-justify_content);
+  gap: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_footer_content-gap);
+}
+
+.sidebar-group-label {
+  display: var(--sidebar-sidebar_group_label-display);
+  align-items: var(--sidebar-sidebar_group_label-align_items);
+  font-size: var(--sidebar-sidebar_group_label-font_size);
+  font-weight: var(--sidebar-sidebar_group_label-font_weight);
+  color: var(--sidebar-sidebar_group_label-color);
+  margin-bottom: var(--sidebar-sidebar_group_label-margin_bottom);
+}
+
+.sidebar-nav {
+  display: var(--sidebar-sidebar_nav-display);
+  flex-direction: var(--sidebar-sidebar_nav-flex_direction);
+  gap: var(--sidebar-sidebar_nav-gap);
+}
+
+.sidebar-item {
+  display: var(--sidebar-sidebar_item-display);
+  align-items: var(--sidebar-sidebar_item-align_items);
+  gap: var(--sidebar-sidebar_item-gap);
+  font-size: var(--sidebar-sidebar_item-font_size);
+  padding: var(--sidebar-sidebar_item-padding);
+  border-radius: var(--sidebar-sidebar_item-border_radius);
+  cursor: var(--sidebar-sidebar_item-cursor);
+  overflow: var(--sidebar-sidebar_item-overflow);
+  transition: var(--sidebar-sidebar_item-transition);
+}
+
+.sidebar-item-icon {
+  width: var(--sidebar-sidebar_item_icon-width);
+  height: var(--sidebar-sidebar_item_icon-height);
+  flex: var(--sidebar-sidebar_item_icon-flex);
+  background: var(--sidebar-sidebar_item_icon-background);
+  border-radius: var(--sidebar-sidebar_item_icon-border_radius);
+  transition: var(--sidebar-sidebar_item_icon-transition);
+}
+
+.sidebar-item:hover {
+  background: var(--sidebar-sidebar_item_hover-background);
+}
+
+.sidebar-item.active {
+  background: var(--sidebar-sidebar_item_active-background);
+  color: var(--sidebar-sidebar_item_active-color);
+  font-weight: var(--sidebar-sidebar_item_active-font_weight);
+}
+
+.sidebar-item.active .sidebar-item-icon {
+  background: var(--sidebar-sidebar_item_active_sidebar_item_icon-background);
+}
+
+.shell.sidebar-collapsed .workspace {
+  margin-left: var(--sidebar-shell_sidebar_collapsed_workspace-margin_left);
+}
+
+.workspace::-webkit-scrollbar {
+  display: var(--workspace-workspace_webkit_scrollbar-display);
+}

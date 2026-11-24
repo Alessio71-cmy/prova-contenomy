@@ -1,0 +1,31 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.product-row-category, .panel-product-category {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  max-width: 100%;
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  background: var(--item-active-bg);
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-row-category.cat-moda, .panel-product-category.cat-moda {
+  background: #f1eafb;
+  color: #6d4aa8;
+}
+
+.product-row-category.cat-accessori, .panel-product-category.cat-accessori {
+  background: #e8f1fc;
+  color: #2f6fb0;
+}
+
+.product-row-category.cat-casa, .panel-product-category.cat-casa {
+  background: #e6f7f4;
+  color: #007A64;
+}

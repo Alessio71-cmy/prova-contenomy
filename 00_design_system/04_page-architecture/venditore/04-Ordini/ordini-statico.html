@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Ordini (statico, pannello aperto) — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="ordini-statico.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell sidebar-collapsed">
+
+  <!-- ===================== TOPBAR (larghezza piena, sopra sidebar+workspace) ===================== -->
+  <!-- 17/9/2026, propagato da prodotti-panel-static.css su richiesta di Ruggi (fix bug: sidebar-header era finita dentro la sidebar invece che nella topbar): icona toggle sidebar + logo Contenomy tornano qui dentro .topbar-left (via .sidebar-header rimossa). -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+  <!-- ===================== SIDEBAR (piena altezza dell'area sotto la topbar) — identica a Cruscotto ===================== -->
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body panel-open">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Ordini</h1>
+          <p class="page-sub">Gestisci il catalogo della tua bottega</p>
+        </div>
+        <div class="page-header-actions">
+          <!-- CTA fissa, sempre visibile, non è una tab (IA_Venditore §2) -->
+          <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo prodotto</button>
+        </div>
+      </div>
+
+      <!-- TAB BAR — pagina unica "Prodotti" (IA_Venditore §2 + convenzione Panoramica 9/9) -->
+      <nav class="tabs">
+        <div class="tab" data-label="Panoramica">Panoramica</div>
+        <div class="tab active" data-tab="elenco" data-label="Elenco ordini">Elenco ordini</div>
+        <div class="tab" data-label="Rimborsi/resi">Rimborsi/resi</div>
+        <div class="tab" data-label="Richieste">Richieste</div>
+        <span class="tab-active-line" aria-hidden="true"></span>
+      </nav>
+
+      <!-- 5/10/2026 (Ruggi): Panoramica rimossa da questa copia statica (stessa scelta di drop-statico.html): la tab resta nella barra ma è inerte. -->
+
+      <!-- ELENCO PRODOTTI — nascosto di default (Panoramica è la tab attiva) -->
+      <div class="tab-panel-hidden" data-panel="elenco">
+
+      <!-- ELENCO PRODOTTI — variante badge A (sola icona), confermata. -->
+      <div class="grid">
+      <div class="products-panel span-12">
+
+        <div class="card-header">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Elenco ordini</div>
+            <div class="card-sub">Tutti gli ordini ricevuti</div>
+          </div>
+          <div class="table-pagination">
+            <span class="table-pagination-range">1 – 4</span>
+            <button class="pagination-arrow" disabled data-tooltip="Precedenti" aria-label="Precedenti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></button>
+            <button class="pagination-arrow" disabled data-tooltip="Successivi" aria-label="Successivi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <div class="table-toolbar">
+          <div class="status-chips">
+            <button class="status-chip active" data-status="da-preparare">Da preparare<span class="count">2</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="pronti">Pronti da spedire<span class="count">1</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="spediti">Spediti<span class="count">5</span></button>
+            <span class="status-chip-divider"></span>
+            <!-- Condizionali (IA_Venditore.md §5.1): "Erogati" solo se il venditore vende servizio/digitale, "Ticket/eventi" solo se vende esperienza. Entrambe mostrate qui come wireframe — nascondere/mostrare per venditore reale non ancora implementato. Manca ancora la tab dinamica "Sostegni" (compare solo al primo sostegno reale, vedi IA §5). -->
+            <button class="status-chip" data-status="erogati">Erogati<span class="count">0</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="ticket">Ticket/eventi<span class="count">0</span></button>
+          </div>
+          <div class="table-toolbar-actions" id="toolbarActions">
+            <div class="toolbar-icons-group" id="toolbarIconsGroup">
+              <div class="view-switch" id="viewSwitch">
+                <button class="view-switch-btn active" data-tooltip="Vista elenco" aria-label="Vista elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                <button class="view-switch-btn" data-tooltip="Vista griglia" aria-label="Vista griglia"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></button>
+              </div>
+              <div class="icon-btn" id="toggleFiltersBtn" data-tooltip="Filtri" aria-label="Filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></div>
+              <div class="icon-btn" id="sortBtn" data-tooltip="Ordina" aria-label="Ordina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></div>
+            </div>
+            <div class="search-box" id="searchBox">
+              <div class="icon-btn search-toggle" id="searchToggleBtn" data-tooltip="Cerca" aria-label="Cerca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+              <input type="text" class="search-input" id="searchInput" placeholder="Cerca" tabindex="-1">
+              <div class="search-close-btn" id="searchCloseBtn" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-collapse" id="filtersCollapse">
+          <div class="filters-collapse-inner">
+            <div class="filters-row" id="filtersRow">
+              <button class="filter-chip">Stato<span class="chev"></span></button>
+              <button class="filter-chip">Categoria<span class="chev"></span></button>
+              <button class="filter-chip">Data pubblicazione<span class="chev"></span></button>
+              <button class="filter-chip">Prezzo<span class="chev"></span></button>
+              <button class="filter-chip">Più venduti<span class="chev"></span></button>
+              <button class="filter-chip">Pezzi rimanenti<span class="chev"></span></button>
+            </div>
+            <div class="card-divider" id="filtersDivider"></div>
+          </div>
+        </div>
+
+      <!-- ELENCO ORDINI — struttura box-per-ordine (IA_Venditore.md §5.1). Righe interne
+           dietro chevron, riusando esattamente il pattern product-row/product-variants già
+           costruito per Prodotti (deciso con Ruggi 24/9/2026). Colonne allineate per indice tra
+           row principale e sub-row così da leggersi come lo stesso sistema (deciso 24/9/2026):
+           col1 identità (Cliente / Prodotto+thumbnail) · col2 classificazione (vuoto a livello
+           box, non esiste una "categoria" di un intero ordine / Categoria a livello riga) ·
+           col3 valore monetario (Importo totale / Prezzo di riga) · col4 conteggio (N prodotti /
+           Quantità di riga) · col5 stato (pill aggregato "N/M preparati", presente solo nelle
+           sotto-tab Da preparare/Pronti da spedire / pill di riga) · col6 rimborso (indicatore a
+           livello box, IA: mai gestito a livello riga qui) · col7 data ordine (solo box).
+           .order-row-thumb è un div segnaposto grigio (nessuna immagine reale collegata) —
+           candidato locale già dichiarato in ordini.css. -->
+      <div class="products-table">
+            <div class="product-row-head order-row-grid">
+              <div>Cliente</div>
+              <div>Importo totale</div>
+              <div>N prodotti</div>
+              <div>Stato</div>
+              <div class="col-rimborso-label">Rimborso</div>
+              <div class="col-data-label">Data ordine</div>
+            </div>
+            <div class="product-row order-row-grid selected" data-has-variants="true">
+              <div class="product-row-main">
+                <span class="product-row-chevron" data-tooltip="Mostra righe ordine" aria-label="Mostra righe ordine"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Giulia Bianchi</span>
+                </div>
+              </div>
+              <div class="product-row-price">€ 104,00</div>
+              <div class="product-row-stat">2</div>
+              <span class="status-pill bozza"><i class="dot"></i>1/2 preparati</span>
+              <div class="badge-cluster"><span class="badge-icon clickable" data-tooltip="1 di 2 righe in rimborso — vai a Rimborsi/resi" aria-label="1 di 2 righe in rimborso — vai a Rimborsi/resi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span><span class="panel-tab-count-badge">1</span></div>
+              <div class="product-row-date col-data-label">3 Set 2026</div>
+              <div class="row-actions">
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="product-variants">
+             <div class="product-variants-inner">
+              <div class="product-variant-head order-subrow-grid">
+                <div>Prodotto</div>
+                <div>Prezzo</div>
+                <div>Quantità</div>
+                <div>Stato</div>
+                <div class="col-rimborso-riga-label">Rimborso</div>
+                <div class="col-categoria-label">Categoria</div>
+              </div>
+              <div class="product-variant-row order-subrow-grid">
+                <div class="product-variant-name">
+                  <span class="order-row-thumb"></span>
+                  <div class="product-row-textblock">
+                    <span class="product-row-name">Maglione oversize</span>
+                    <span class="product-row-variant-count">Variante: Nero</span>
+                  </div>
+                </div>
+                <div class="product-variant-price">€ 49,00</div>
+                <div class="product-variant-qty">1</div>
+                <span class="status-pill pubblicato"><i class="dot"></i>Preparato</span>
+                <div class="col-rimborso-riga-label"></div>
+                <span class="product-row-category cat-moda">Moda</span>
+              </div>
+              <div class="product-variant-divider"></div>
+              <div class="product-variant-row order-subrow-grid">
+                <div class="product-variant-name">
+                  <span class="order-row-thumb"></span>
+                  <div class="product-row-textblock">
+                    <span class="product-row-name">Felpa logo</span>
+                    <span class="product-row-variant-count">Nessuna variante</span>
+                  </div>
+                </div>
+                <div class="product-variant-price">€ 55,00</div>
+                <div class="product-variant-qty">1</div>
+                <span class="status-pill bozza"><i class="dot"></i>Da preparare</span>
+                <span class="badge-icon clickable col-rimborso-riga-label" data-tooltip="Rimborso richiesto su questa riga" aria-label="Rimborso richiesto su questa riga"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span>
+                <span class="product-row-category cat-moda">Moda</span>
+              </div>
+             </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row order-row-grid">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder"></span>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Marco Rossi</span>
+                </div>
+              </div>
+              <div class="product-row-price">€ 32,00</div>
+              <div class="product-row-stat">1</div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pronto</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Nessun rimborso in corso" aria-label="Nessun rimborso in corso"></span></div>
+              <div class="product-row-date col-data-label">1 Set 2026</div>
+              <div class="row-actions">
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row order-row-grid">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder"></span>
+                <div class="product-row-textblock">
+                  <span class="product-row-name">Elena Conti</span>
+                </div>
+              </div>
+              <div class="product-row-price">€ 55,00</div>
+              <div class="product-row-stat">1</div>
+              <span class="status-pill esaurito"><i class="dot"></i>Spedito</span>
+              <div class="badge-cluster"><span class="badge-icon clickable" data-tooltip="Reso richiesto — vai a Rimborsi/resi" aria-label="Reso richiesto — vai a Rimborsi/resi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg></span></div>
+              <div class="product-row-date col-data-label">28 Ago 2026</div>
+              <div class="row-actions">
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+      </div>
+      </div>
+      </div>
+      </div>
+
+      </div>
+    </main>
+
+      <!-- 5/10/2026 (Ruggi): pannello destro dell'ordine — SCELTA A (nessuna etichetta del corriere generata dalla piattaforma).
+           Struttura: .panel-header-sticky (toolbar + tab) → .panel-body (scorre) → .panel-footer-sticky (UNA sola azione primaria che cambia con la tab).
+           Toolbar: X · prec/succ (due .panel-header-group, gap 16px) · menu ⋮ inerte. Tab (DESIGN-JUDGMENT): Preparazione (passo 1: righe come
+           .variant-card con checkbox "Preparato" e specifiche sempre visibili; sezione "Dettagli ordine" con "Apri fattura") / Spedizione (passo 2:
+           destinatario con "Copia indirizzo", scadenza, corriere + tracking facoltativo). Il biglietto/etichetta NON esiste: il venditore crea la
+           spedizione sul sito del corriere e incolla il tracking (modello_dati_order: corriere_selezionato + numero_tracking). -->
+      <aside class="product-detail-panel" id="productDetailPanel" aria-label="Dettaglio ordine">
+
+        <div class="panel-header-sticky">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-header-group">
+              <div class="panel-close-btn" id="panelCloseBtn" data-tooltip="Chiudi pannello" aria-label="Chiudi pannello">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </div>
+            </div>
+            <div class="panel-header-group">
+              <div class="panel-nav-btn" id="panelPrevBtn" data-tooltip="Ordine precedente" aria-label="Ordine precedente">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              </div>
+              <div class="panel-nav-btn" id="panelNextBtn" data-tooltip="Ordine successivo" aria-label="Ordine successivo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="panel-header-right">
+            <div class="panel-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <nav class="panel-tabs" id="panelMainTabs" role="tablist" aria-label="Passi dell'ordine">
+          <div class="panel-tab active" id="panelTabBtnPreparazione" role="tab" tabindex="0" aria-selected="true" aria-controls="panelTabPreparazione" data-tabpanel="panelTabPreparazione" data-label="Preparazione"><span class="panel-tab-inner">Preparazione</span></div>
+          <div class="panel-tab" id="panelTabBtnSpedizione" role="tab" tabindex="0" aria-selected="false" aria-disabled="true" data-tooltip="Prepara tutti i prodotti per continuare" aria-controls="panelTabSpedizione" data-tabpanel="panelTabSpedizione" data-label="Spedizione"><span class="panel-tab-inner">Spedizione</span></div>
+          <div class="panel-tab" id="panelTabBtnConsegna" role="tab" tabindex="0" aria-selected="false" aria-disabled="true" data-tooltip="Segna l'ordine come spedito per continuare" aria-controls="panelTabConsegna" data-tabpanel="panelTabConsegna" data-label="Consegna"><span class="panel-tab-inner">Consegna</span></div>
+          <span class="panel-tab-active-line" aria-hidden="true"></span>
+        </nav>
+        </div>
+
+        <div class="panel-body" id="panelProductBody">
+
+        <div class="panel-tabpanel" id="panelTabPreparazione" role="tabpanel" aria-labelledby="panelTabBtnPreparazione">
+
+          <!-- 5/10/2026 (Ruggi): banner verde "ordine spedito", visibile in Preparazione e Spedizione dopo la conferma (modale) di "Segna come spedito"; "Non mostrare più" lo chiude. Variante .success di .panel-alert-banner (candidato locale). -->
+          <div class="panel-alert-banner success js-shipped-banner" hidden>
+            <div class="panel-alert-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></div>
+            <div class="panel-alert-body">
+              <div class="panel-alert-title">Ordine spedito</div>
+              <span class="panel-alert-text">L'ordine è stato registrato correttamente come spedito.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss js-shipped-dismiss">Non mostrare più</button>
+              </div>
+            </div>
+            <button type="button" class="panel-alert-close js-shipped-dismiss" aria-label="Chiudi avviso">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg" data-order-title>Ordine di Giulia Bianchi</div>
+              </div>
+              <span class="panel-product-date" data-tooltip="Data ordine (data_ordine)" aria-label="Data ordine (data_ordine)">3 Set 2026</span>
+            </div>
+            <div class="submetrics-row span-12 panel-order-metrics">
+              <div class="submetric">
+                <span class="submetric-value">2</span>
+                <span class="submetric-label">Prodotti</span>
+              </div>
+              <div class="submetric">
+                <span class="submetric-value">€ 104<span class="unit">,00</span></span>
+                <span class="submetric-label">Totale ordine</span>
+              </div>
+            </div>
+            <div class="panel-header-divider" role="separator"></div>
+            <div class="panel-order-summary">
+              <div class="panel-order-number"><span class="js-prepared-count">1/2</span><span>prodotti preparati</span></div>
+              <div class="order-progress" role="img" aria-label="Prodotti preparati">
+                <span class="order-progress-seg done"></span>
+                <span class="order-progress-seg"></span>
+              </div>
+            </div>
+          </div>
+
+          <section class="panel-section prep-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Prodotti da preparare</div>
+              </div>
+              <span class="panel-variant-section-desc">Controlla le specifiche e segna ogni prodotto quando è pronto</span>
+            </div>
+            <div class="panel-variant-list">
+
+            <article class="variant-card order-line checked">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <div class="variant-card-header-left">
+                    <div class="panel-image-thumb" aria-hidden="true"></div>
+                    <div class="variant-card-title">Maglione oversize</div>
+                    <span class="panel-meta-sep">•</span>
+                    <span class="product-row-price">€ 49</span>
+                  </div>
+                  <button type="button" class="order-line-check" role="checkbox" aria-checked="true" aria-label="Segna Maglione oversize come preparato"><span class="order-line-check-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Preparato</button>
+                </div>
+              </div>
+              <div class="order-fields">
+                <div class="panel-field-row"><span class="panel-field-label">Variante</span><span class="panel-field-value">Nero</span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Taglia</span><span class="panel-field-value"><span class="panel-subvariant-chip">M</span></span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Quantità</span><span class="panel-field-value">1</span></div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Numero pezzo</span><span class="panel-field-value">12 di 30</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Categoria</span><span class="panel-field-value">Moda</span></div>
+                  <span class="panel-field-label">Immagini della variante Nero</span>
+                  <div class="panel-image-grid"><div class="panel-image-thumb"></div><div class="panel-image-thumb"></div><div class="panel-image-thumb"></div></div>
+                </div>
+              </details>
+            </article>
+
+            <article class="variant-card order-line">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <div class="variant-card-header-left">
+                    <div class="panel-image-thumb" aria-hidden="true"></div>
+                    <div class="variant-card-title">Felpa logo</div>
+                    <span class="panel-meta-sep">•</span>
+                    <span class="product-row-price">€ 55</span>
+                  </div>
+                  <button type="button" class="order-line-check" role="checkbox" aria-checked="false" aria-label="Segna Felpa logo come preparato"><span class="order-line-check-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Preparato</button>
+                </div>
+              </div>
+              <div class="order-fields">
+                <div class="panel-field-row"><span class="panel-field-label">Taglia</span><span class="panel-field-value"><span class="panel-subvariant-chip">L</span></span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Quantità</span><span class="panel-field-value">1</span></div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Categoria</span><span class="panel-field-value">Moda</span></div>
+                  <div class="panel-field-row stacked"><span class="panel-field-label">Messaggio regalo</span><span class="panel-field-value">Buon compleanno!</span></div>
+                  <span class="panel-field-label">Immagini del prodotto</span>
+                  <div class="panel-image-grid"><div class="panel-image-thumb"></div><div class="panel-image-thumb"></div><div class="panel-image-thumb"></div><div class="panel-image-thumb"></div></div>
+                </div>
+              </details>
+            </article>
+
+            </div>
+          </section>
+
+          <div class="panel-header-divider" role="separator"></div>
+
+          <section class="panel-section details-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Dettagli ordine</div>
+                <a class="btn-pill-dark sm secondary" href="#" id="orderInvoiceBtn" aria-label="Apri la fattura"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>Apri fattura</a>
+              </div>
+              <span class="panel-variant-section-desc">Riferimenti del cliente e dell'ordine</span>
+            </div>
+            <div class="panel-field-row"><span class="panel-field-label">Email del cliente</span><span class="panel-field-value">giulia.bianchi@example.com</span></div>
+            <div class="panel-field-row"><span class="panel-field-label">Tipo ordine</span><span class="panel-field-value">Standard</span></div>
+          </section>
+        </div>
+
+        <!-- 5/10/2026 (Ruggi): tab Spedizione rifatta. Card "Riepilogo ordine" (modello .panel-gradimento di Prodotti: titolo, numero + unità, card-divider) con righe prodotto tipo .drop-product-row il cui indicatore è + / − e che aprono le specifiche; divider (space-12) e sezione Destinatario con tutti i dati da ricopiare sul sito del corriere, un'icona copia per campo (diventa spunta verde). -->
+        <div class="panel-tabpanel" id="panelTabSpedizione" role="tabpanel" aria-labelledby="panelTabBtnSpedizione" hidden>
+
+          <!-- 5/10/2026 (Ruggi): banner verde "ordine spedito", visibile in Preparazione e Spedizione dopo la conferma (modale) di "Segna come spedito"; "Non mostrare più" lo chiude. Variante .success di .panel-alert-banner (candidato locale). -->
+          <div class="panel-alert-banner success js-shipped-banner" hidden>
+            <div class="panel-alert-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></div>
+            <div class="panel-alert-body">
+              <div class="panel-alert-title">Ordine spedito</div>
+              <span class="panel-alert-text">L'ordine è stato registrato correttamente come spedito.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss js-shipped-dismiss">Non mostrare più</button>
+              </div>
+            </div>
+            <button type="button" class="panel-alert-close js-shipped-dismiss" aria-label="Chiudi avviso">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg" data-order-title>Ordine di Giulia Bianchi</div>
+              </div>
+              <span class="panel-product-date" data-tooltip="Data ordine (data_ordine)" aria-label="Data ordine (data_ordine)">3 Set 2026</span>
+            </div>
+          </div>
+
+          <section class="card panel-scadenza" aria-label="Da spedire entro">
+            <h3 class="panel-card-title">Da spedire entro</h3>
+            <div class="panel-gradimento-summary">
+              <span class="submetric-value">8 Set 2026</span>
+            </div>
+          </section>
+
+          <section class="card panel-riepilogo" aria-label="Riepilogo ordine">
+            <h3 class="panel-card-title">Riepilogo ordine</h3>
+            <div class="panel-gradimento-summary">
+              <span class="submetric-value">2<span class="unit unit-text">prodotti</span></span>
+            </div>
+            <div class="card-divider"></div>
+            <div class="order-acc-list">
+              <div class="order-acc">
+                <button type="button" class="drop-product-row order-acc-toggle" aria-expanded="false" aria-controls="orderAccBody1">
+                  <div class="panel-image-thumb" aria-hidden="true"></div>
+                  <div class="drop-product-col"><span class="drop-product-name">Maglione oversize</span><span class="drop-product-sub">Quantità 1</span></div>
+                  <span class="drop-product-price">€ 49,00</span>
+                  <span class="drop-product-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path class="v-line" d="M12 5v14"/></svg></span>
+                </button>
+                <div class="order-acc-body" id="orderAccBody1" hidden>
+                  <div class="order-fields">
+                <div class="panel-field-row"><span class="panel-field-label">Variante</span><span class="panel-field-value">Nero</span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Taglia</span><span class="panel-field-value"><span class="panel-subvariant-chip">M</span></span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Quantità</span><span class="panel-field-value">1</span></div>
+              </div>
+              <div class="order-details">
+                <div class="order-details-title">Dettagli e gestione</div>
+                <div class="panel-field-row"><span class="panel-field-label">Numero pezzo</span><span class="panel-field-value">12 di 30</span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Categoria</span><span class="panel-field-value">Moda</span></div>
+              </div>
+                </div>
+              </div>
+              <div class="order-acc">
+                <button type="button" class="drop-product-row order-acc-toggle" aria-expanded="false" aria-controls="orderAccBody2">
+                  <div class="panel-image-thumb" aria-hidden="true"></div>
+                  <div class="drop-product-col"><span class="drop-product-name">Felpa logo</span><span class="drop-product-sub">Quantità 1</span></div>
+                  <span class="drop-product-price">€ 55,00</span>
+                  <span class="drop-product-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path class="v-line" d="M12 5v14"/></svg></span>
+                </button>
+                <div class="order-acc-body" id="orderAccBody2" hidden>
+                  <div class="order-fields">
+                <div class="panel-field-row"><span class="panel-field-label">Taglia</span><span class="panel-field-value"><span class="panel-subvariant-chip">L</span></span></div>
+                <div class="panel-field-row"><span class="panel-field-label">Quantità</span><span class="panel-field-value">1</span></div>
+              </div>
+              <div class="order-details">
+                <div class="order-details-title">Dettagli e gestione</div>
+                <div class="panel-field-row"><span class="panel-field-label">Categoria</span><span class="panel-field-value">Moda</span></div>
+                <div class="panel-field-row stacked"><span class="panel-field-label">Messaggio regalo</span><span class="panel-field-value">Buon compleanno!</span></div>
+              </div>
+                </div>
+              </div>
+            </div>
+            <div class="order-total-row"><span>Totale ordine</span><span class="order-total-value">€ 104,00</span></div>
+          </section>
+
+          <div class="panel-header-divider" role="separator"></div>
+
+          <section class="panel-section ship-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Destinatario</div>
+              </div>
+              <span class="panel-variant-section-desc">Dati da inserire sul sito del corriere per creare la spedizione</span>
+            </div>
+            <div class="panel-field-row"><span class="panel-field-label">Nome e cognome</span><span class="panel-field-value order-copy-wrap">Giulia Bianchi<button type="button" class="order-copy" data-copy="Giulia Bianchi" aria-label="Copia nome e cognome"><svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></button></span></div>
+            <div class="panel-field-row"><span class="panel-field-label">Indirizzo</span><span class="panel-field-value order-copy-wrap">Via Esempio 12<button type="button" class="order-copy" data-copy="Via Esempio 12" aria-label="Copia indirizzo"><svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></button></span></div>
+            <div class="panel-field-row"><span class="panel-field-label">CAP</span><span class="panel-field-value order-copy-wrap">38100<button type="button" class="order-copy" data-copy="38100" aria-label="Copia cap"><svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></button></span></div>
+            <div class="panel-field-row"><span class="panel-field-label">Città</span><span class="panel-field-value order-copy-wrap">Trento<button type="button" class="order-copy" data-copy="Trento" aria-label="Copia città"><svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></button></span></div>
+            <div class="panel-field-row"><span class="panel-field-label">Provincia</span><span class="panel-field-value order-copy-wrap">TN<button type="button" class="order-copy" data-copy="TN" aria-label="Copia provincia"><svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></button></span></div>
+            <div class="panel-field-row"><span class="panel-field-label">Email</span><span class="panel-field-value order-copy-wrap">giulia.bianchi@example.com<button type="button" class="order-copy" data-copy="giulia.bianchi@example.com" aria-label="Copia email"><svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l4 4 10-10"/></svg></button></span></div>
+          </section>
+        </div>
+
+        <!-- 5/10/2026 (Ruggi): nuova tab Consegna, raggiungibile solo dopo "Segna come spedito" (Spedizione). Banner info con solo "Non mostrare più"; corriere = dropdown custom (pannello bianco con ombra Foundation elevation, hover sulle voci) con "Altro" + testo libero; tracciamento: vedi nota in A-log (9j). "Invia" inerte. -->
+        <div class="panel-tabpanel" id="panelTabConsegna" role="tabpanel" aria-labelledby="panelTabBtnConsegna" hidden>
+
+          <div class="panel-alert-banner info" id="orderTrackingBanner">
+            <div class="panel-alert-icon" aria-hidden="true">i</div>
+            <div class="panel-alert-body">
+              <div class="panel-alert-title">Numero di tracciamento</div>
+              <span class="panel-alert-text">Inserisci il numero di tracciamento, il cliente riceverà il link di tracciamento insieme alla notifica di spedizione.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss" id="orderTrackingBannerDismiss">Non mostrare più</button>
+              </div>
+            </div>
+            <button type="button" class="panel-alert-close" id="orderTrackingBannerClose" aria-label="Chiudi avviso">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg" data-order-title>Ordine di Giulia Bianchi</div>
+              </div>
+              <span class="panel-product-date" data-tooltip="Data ordine (data_ordine)" aria-label="Data ordine (data_ordine)">3 Set 2026</span>
+            </div>
+          </div>
+
+          <section class="panel-section ship-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Consegna</div>
+              </div>
+              <span class="panel-variant-section-desc">Indica il corriere a cui hai affidato il pacco</span>
+            </div>
+            <div class="order-form">
+              <div class="order-field">
+                <span class="panel-field-label" id="orderCarrierLabel">Corriere</span>
+                <div class="order-select" id="orderCarrierSelect">
+                  <button type="button" class="order-input order-select-btn" id="orderCarrierBtn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="orderCarrierLabel orderCarrierBtn"><span class="order-select-value" id="orderCarrierValue">Poste Italiane</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+                  <ul class="order-select-menu" role="listbox" aria-labelledby="orderCarrierLabel" hidden>
+                    <li role="option" tabindex="-1" aria-selected="true">Poste Italiane</li>
+                    <li role="option" tabindex="-1" aria-selected="false">BRT</li>
+                    <li role="option" tabindex="-1" aria-selected="false">GLS</li>
+                    <li role="option" tabindex="-1" aria-selected="false">SDA</li>
+                    <li role="option" tabindex="-1" aria-selected="false">DHL</li>
+                    <li role="option" tabindex="-1" aria-selected="false">Altro</li>
+                  </ul>
+                </div>
+              </div>
+              <label class="order-field" id="orderOtherField" hidden><span class="panel-field-label">Nome del corriere</span>
+                <input class="order-input" id="orderOtherName" type="text" placeholder="Scrivi il nome del corriere">
+              </label>
+              <div class="order-field-group">
+                <label class="order-field"><span class="panel-field-label">Numero di tracciamento<span class="order-required" id="orderTrackingReq" aria-hidden="true">*</span></span>
+                  <input class="order-input" id="orderTracking" type="text" placeholder="Incolla il numero di tracciamento">
+                </label>
+                <button type="button" class="order-checkbox" id="orderNoTracking" role="checkbox" aria-checked="false"><span class="order-checkbox-box"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Spedizione senza tracciamento</button>
+              </div>
+            </div>
+          </section>
+        </div>
+        </div>
+
+        <!-- Footer fisso: una sola azione primaria, il testo cambia con la tab. "Vai alla spedizione" è DISABILITATA finché tutti i prodotti non sono preparati (Ruggi 5/10); la tab Spedizione è bloccata allo stesso modo. "Segna come spedito" è inerte in questa pagina statica. -->
+        <div class="panel-footer-sticky">
+          <span class="order-footer-hint" id="orderFooterHint"></span>
+          <button type="button" class="btn-ghost" id="orderReopenBtn" hidden>Riapri ordine</button>
+          <button type="button" class="btn-pill-dark primary" id="orderPrimaryAction">Vai alla spedizione</button>
+        </div>
+      </aside>
+
+  <!-- 5/10/2026 (Ruggi): modale di conferma di "Segna come spedito". Nessun componente modale nel DS (solo z-index riservato): pattern locale/candidato. -->
+  <div class="order-modal-backdrop" id="orderShipModal" hidden>
+    <div class="order-modal" role="alertdialog" aria-modal="true" aria-labelledby="orderShipModalTitle" aria-describedby="orderShipModalText">
+      <div class="order-modal-title" id="orderShipModalTitle">Sei sicuro di voler spedire?</div>
+      <p class="order-modal-text" id="orderShipModalText">Controlla bene i dati nel portale del corriere prima di confermare.</p>
+      <div class="order-modal-actions">
+        <button type="button" class="btn-ghost danger" data-modal-cancel>Annulla</button>
+        <button type="button" class="btn-pill-dark primary" data-modal-confirm>Conferma</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+<script>
+  // Sidebar comprimibile a sola-icona — stessa logica di cruscotto.js, mai inclusa qui: il
+  // pulsante #sidebarToggle esisteva già in markup/CSS ma senza alcun listener (9/9).
+  var sidebarToggleBtn = document.getElementById('sidebarToggle');
+  var shellEl = document.querySelector('.shell');
+  if (sidebarToggleBtn && shellEl) {
+    sidebarToggleBtn.addEventListener('click', function () {
+      shellEl.classList.toggle('sidebar-collapsed');
+      // Se l'utente riapre manualmente la sidebar sinistra mentre il pannello dettaglio è
+      // aperto, il pannello si chiude (i due non stanno mai aperti insieme) — nessun
+      // ripristino automatico dello stato sidebar dopo: la scelta è appena stata fatta
+      // dall'utente stesso (9/9)
+      if (!shellEl.classList.contains('sidebar-collapsed') && bodyEl.classList.contains('panel-open')) {
+        bodyEl.classList.remove('panel-open');
+        document.querySelectorAll('.product-row.selected').forEach(function (r) { r.classList.remove('selected'); });
+        setTimeout(function () { updateTabsFade(); updateStatusChipsFade(); }, 300);
+      }
+    });
+  }
+
+  // Dissolvenza dinamica della tab bar quando il pannello è aperto: --fade-l/--fade-r
+  // riflettono lo scroll reale (0px se non c'è nulla da nascondere da quel lato, altrimenti
+  // 28px), così la prima tab non viene mai tagliata quando si è già all'inizio (9/9).
+  var tabsEl = document.querySelector('.tabs');
+  function updateTabsFade() {
+    if (!tabsEl) { return; }
+    var maxScroll = tabsEl.scrollWidth - tabsEl.clientWidth;
+    var fadeL = tabsEl.scrollLeft > 1 ? '28px' : '0px';
+    var fadeR = tabsEl.scrollLeft < maxScroll - 1 ? '28px' : '0px';
+    tabsEl.style.setProperty('--fade-l', fadeL);
+    tabsEl.style.setProperty('--fade-r', fadeR);
+  }
+  if (tabsEl) {
+    tabsEl.addEventListener('scroll', updateTabsFade);
+  }
+
+  // Linea della tab attiva: un solo elemento (.tab-active-line) che trasla verso la tab
+  // cliccata invece di un bordo colorato per-tab che appariva/spariva di scatto (14/9/2026,
+  // segnalato da Ruggi). Posizione/larghezza calcolate dalla tab reale (getBoundingClientRect
+  // - offset del contenitore, + scrollLeft per restare solidale al contenuto anche con la
+  // barra scorsa) e animate con transform/width, stessa durata/curva già in uso nel sistema
+  // per gli spostamenti di posizione (motion/duration/standard 280ms + motion/easing/standard
+  // ease, es. motion/panel-slide) — candidato locale, non una nuova primitiva.
+  var tabActiveLine = document.querySelector('.tab-active-line');
+  // 15/9/2026, richiesta Ruggi: al caricamento pagina la linea deve comparire gia' posizionata,
+  // statica (nessuna animazione di "entrata") -- si anima solo al click su una tab successiva.
+  // Fix: sul posizionamento iniziale disattivo transition, forzo un reflow, poi la riattivo --
+  // altrimenti il primo set di transform/width (da 0/translateX(0) dichiarati in CSS al valore
+  // vero della tab attiva) veniva comunque animato dalla transition sempre attiva sulla regola base.
+  function updateTabActiveLine(tab, animate) {
+    if (!tabsEl || !tabActiveLine || !tab) { return; }
+    var tabRect = tab.getBoundingClientRect();
+    var navRect = tabsEl.getBoundingClientRect();
+    var left = (tabRect.left - navRect.left) + tabsEl.scrollLeft;
+    if (!animate) { tabActiveLine.style.transition = 'none'; }
+    tabActiveLine.style.width = tabRect.width + 'px';
+    tabActiveLine.style.transform = 'translateX(' + left + 'px)';
+    if (!animate) {
+      tabActiveLine.offsetHeight; // forza il reflow prima di riabilitare la transition
+      tabActiveLine.style.transition = '';
+    }
+  }
+  var initialActiveTab = document.querySelector('.tab[data-tab].active') || document.querySelector('.tab[data-tab]');
+  updateTabActiveLine(initialActiveTab, false);
+  if (tabsEl && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(function () {
+      updateTabActiveLine(document.querySelector('.tab[data-tab].active'), false);
+    }).observe(tabsEl);
+  }
+
+  // Solo Panoramica/Elenco prodotti sono cablate per ora; le altre tab restano statiche.
+  // Ogni click porta comunque la tab cliccata in vista (scrollIntoView orizzontale): con il
+  // pannello aperto la barra tab è scorrevole e mascherata ai bordi, quindi una tab selezionata
+  // che era tagliata sotto la maschera deve spostarsi a sinistra e risultare intera, mai
+  // rimanere nascosta dietro la dissolvenza (9/9). Cambiare tab mentre il pannello dettaglio è
+  // aperto lo chiude (le due cose non hanno senso insieme: il pannello è per un prodotto della
+  // tabella Elenco, non ha senso restare aperto su un'altra tab).
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var isRealTab = tab.hasAttribute('data-tab');
+      // 23/9/2026, richiesta esplicita di Ruggi: la chiusura del pannello al cambio tab (9/9,
+      // sopra) resta ma solo per le tab reali (Panoramica/Elenco prodotti, con data-tab) — le tab
+      // non cablate (Modelli di garanzia/Recensioni/Prezzi da rivedere) non navigano da nessuna
+      // parte, quindi cliccarle deve solo far scorrere la barra, mai chiudere il pannello:
+      // altrimenti lo spostamento richiesto qui sotto non sarebbe mai visibile (il pannello si
+      // chiuderebbe subito, la barra tornerebbe larga e non ci sarebbe più nulla da scorrere).
+      if (isRealTab && bodyEl.classList.contains('panel-open')) { closeProductPanel(); }
+      // Con .tab a larghezza fissa (flex:none, vedi shell-lists.css) le tab in eccesso restano
+      // mascherate e raggiungibili solo scorrendo lateralmente .tabs. Oltre a portare sempre la
+      // tab cliccata interamente in vista (già dal 9/9), se la tab cliccata è già del tutto
+      // visibile ed è la penultima (o la seconda) tra quelle visibili, la barra avanza/arretra di
+      // una tab in più per rivelarne un'altra ancora mascherata — altrimenti cliccare una tab già
+      // visibile non sposterebbe nulla e l'utente non scoprirebbe mai le tab nascoste senza
+      // centrare esattamente lo spicchio mascherato.
+      var allTabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+      var containerRect = tabsEl.getBoundingClientRect();
+      var visibleTabs = allTabs.filter(function (t) {
+        var r = t.getBoundingClientRect();
+        return r.left >= containerRect.left - 0.5 && r.right <= containerRect.right + 0.5;
+      });
+      var isSecondToLastVisible = visibleTabs.length > 1 &&
+        visibleTabs[visibleTabs.length - 2] === tab &&
+        visibleTabs[visibleTabs.length - 1] !== allTabs[allTabs.length - 1];
+      var isSecondVisible = visibleTabs.length > 1 &&
+        visibleTabs[1] === tab &&
+        visibleTabs[0] !== allTabs[0];
+      var scrollTarget = tab;
+      var inlineAlign = 'nearest';
+      if (isSecondToLastVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[visibleTabs.length - 1]) + 1];
+        inlineAlign = 'end';
+      } else if (isSecondVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[0]) - 1];
+        inlineAlign = 'start';
+      }
+      if (scrollTarget) { scrollTarget.scrollIntoView({ behavior: 'smooth', inline: inlineAlign, block: 'nearest' }); }
+      setTimeout(function () { updateTabsFade(); updateStatusChipsFade(); }, 300); // dopo lo scroll animato (300ms > .28s del motion)
+      if (!isRealTab) { return; }
+      document.querySelectorAll('.tab[data-tab]').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      updateTabActiveLine(tab, true);
+      var target = tab.getAttribute('data-tab');
+      document.querySelectorAll('[data-panel]').forEach(function (panel) {
+        panel.hidden = panel.getAttribute('data-panel') !== target;
+      });
+    });
+  });
+
+  // Icona Ordina: solo stato visivo cliccato per ora (stesso colore neutro del filtro/riga
+  // selezionata) — la logica di ordinamento reale non è ancora cablata.
+  var sortBtn = document.getElementById('sortBtn');
+  if (sortBtn) {
+    sortBtn.addEventListener('click', function () {
+      sortBtn.classList.toggle('active');
+    });
+  }
+
+  // Ricerca in tabella: l'icona si espande in una search box (motion .28s ease, la stessa
+  // della sidebar sinistra). Mentre è aperta le altre icone della toolbar (vista/filtro/ordina)
+  // spariscono del tutto, altrimenti in spazi stretti (es. pannello dettaglio aperto) finirebbero
+  // sotto gli altri elementi. La chiusura (x in fondo) svuota il campo e richiude la box.
+  var toolbarActions = document.getElementById('toolbarActions');
+  var searchBox = document.getElementById('searchBox');
+  var searchToggleBtn = document.getElementById('searchToggleBtn');
+  var searchInput = document.getElementById('searchInput');
+  var searchCloseBtn = document.getElementById('searchCloseBtn');
+  if (toolbarActions && searchBox && searchToggleBtn && searchInput && searchCloseBtn) {
+    searchToggleBtn.addEventListener('click', function () {
+      searchBox.classList.add('open');
+      toolbarActions.classList.add('search-active');
+      searchInput.tabIndex = 0;
+      searchInput.focus({ preventScroll: true });
+    });
+    searchCloseBtn.addEventListener('click', function () {
+      searchBox.classList.remove('open');
+      toolbarActions.classList.remove('search-active');
+      searchInput.value = '';
+      searchInput.tabIndex = -1;
+      searchInput.blur();
+    });
+  }
+
+  // Toggle riga filtri (Stato/Categoria/...): nascosta di default, mostrata dall'icona filtro
+  // Apertura/chiusura filtri animata con grid-template-rows 0fr/1fr (stessa durata/easing
+  // della sidebar: .28s ease, coerenza motion 9/9) — l'attributo hidden non è animabile.
+  var toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+  var filtersCollapse = document.getElementById('filtersCollapse');
+  if (toggleFiltersBtn && filtersCollapse) {
+    toggleFiltersBtn.addEventListener('click', function () {
+      filtersCollapse.classList.toggle('open');
+      toggleFiltersBtn.classList.toggle('active', filtersCollapse.classList.contains('open'));
+    });
+  }
+
+  // Striscia dei filtri rapidi con pannello aperto: dissolve solo i bordi che hanno
+  // contenuto oltre la vista e fa avanzare/arretrare la striscia dai chip mascherati.
+  var statusChipsEl = document.querySelector('.status-chips');
+  function updateStatusChipsFade() {
+    if (!statusChipsEl) { return; }
+    var maxScroll = statusChipsEl.scrollWidth - statusChipsEl.clientWidth;
+    statusChipsEl.style.setProperty('--status-chips-fade-l', statusChipsEl.scrollLeft > 1 ? '48px' : '0px');
+    statusChipsEl.style.setProperty('--status-chips-fade-r', statusChipsEl.scrollLeft < maxScroll - 1 ? '48px' : '0px');
+  }
+  if (statusChipsEl) {
+    updateStatusChipsFade();
+    statusChipsEl.addEventListener('scroll', updateStatusChipsFade, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(updateStatusChipsFade).observe(statusChipsEl); }
+  }
+
+  function revealStatusChipNeighbour(chip) {
+    var pageBody = document.querySelector('.body');
+    if (!statusChipsEl || !pageBody || !pageBody.classList.contains('panel-open')) { return; }
+    var chips = Array.prototype.slice.call(statusChipsEl.querySelectorAll('.status-chip'));
+    var index = chips.indexOf(chip);
+    if (index === -1) { return; }
+    var stripRect = statusChipsEl.getBoundingClientRect();
+    var chipRect = chip.getBoundingClientRect();
+    var target = chip;
+    var nextScrollLeft;
+    if (chipRect.right > stripRect.right + 1) {
+      target = chips[index + 1] || chip;
+      nextScrollLeft = target.offsetLeft + target.offsetWidth - statusChipsEl.clientWidth + 16;
+    } else if (chipRect.left < stripRect.left - 1) {
+      target = chips[index - 1] || chip;
+      nextScrollLeft = target.offsetLeft - 16;
+    } else { return; }
+    statusChipsEl.scrollTo({ left: Math.max(0, nextScrollLeft), behavior: 'smooth' });
+  }
+
+  // Chip di stato veloce: evidenziazione, filtro reale non cablato.
+  document.querySelectorAll('.status-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.status-chip').forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      revealStatusChipNeighbour(chip);
+    });
+  });
+
+  // Pannello dettaglio prodotto (click riga): affiancato, non overlay (9/9).
+  // All'apertura la sidebar sinistra si chiude sempre; alla chiusura del pannello la sidebar
+  // resta chiusa (non si riapre più automaticamente — non serve, l'utente la riapre lui se
+  // vuole tramite il pulsante dedicato, che chiude a sua volta il pannello se aperto).
+  var bodyEl = document.querySelector('.body');
+  var productDetailPanel = document.getElementById('productDetailPanel');
+  var panelCloseBtn = document.getElementById('panelCloseBtn');
+
+  function openProductPanel(row) {
+    // 5/10/2026: pannello statico — il contenuto resta quello di Giulia Bianchi, il click riga riapre soltanto il pannello.
+
+    // La riga resta evidenziata (selected) finché il pannello è aperto su di essa; cliccarne
+    // un'altra sposta l'evidenziazione, non la accumula.
+    document.querySelectorAll('.product-row.selected').forEach(function (r) { r.classList.remove('selected'); });
+    row.classList.add('selected');
+
+    shellEl.classList.add('sidebar-collapsed');
+    bodyEl.classList.add('panel-open');
+    setTimeout(function () {
+      updateTabsFade();
+      updateStatusChipsFade();
+      updateTabActiveLine(document.querySelector('.tab[data-tab].active'), false);
+    }, 300); // dopo il restringimento animato del workspace (.28s ease)
+  }
+
+  function closeProductPanel() {
+    bodyEl.classList.remove('panel-open');
+    document.querySelectorAll('.product-row.selected').forEach(function (r) { r.classList.remove('selected'); });
+    setTimeout(function () {
+      updateTabsFade();
+      updateStatusChipsFade();
+      updateTabActiveLine(document.querySelector('.tab[data-tab].active'), false);
+    }, 300);
+  }
+
+  document.querySelectorAll('.product-row').forEach(function (row) {
+    row.addEventListener('click', function (event) {
+      if (event.target.closest('.row-menu-btn')) { return; } // i tre puntini apriranno un menu, non il pannello
+      if (event.target.closest('.row-goto-btn')) { return; } // la freccia porta alla pagina del prodotto, non al pannello (11/9)
+      if (event.target.closest('.product-row-chevron')) { return; } // la chevron espande/collassa, non apre il pannello
+      openProductPanel(row);
+    });
+  });
+
+  // Chevron varianti: espande/collassa la riga (10/9). Le righe senza varianti hanno uno
+  // slot .placeholder senza handler (non cliccabile, solo per allineamento). stopPropagation
+  // evita che il click salga alla riga e apra il pannello dettaglio.
+  document.querySelectorAll('.product-row-chevron:not(.placeholder)').forEach(function (chevron) {
+    chevron.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var row = chevron.closest('.product-row');
+      row.classList.toggle('expanded');
+    });
+  });
+
+  if (panelCloseBtn) {
+    panelCloseBtn.addEventListener('click', closeProductPanel);
+  }
+
+  // 5/10/2026 (Ruggi): cambio tab del pannello (#panelMainTabs), copiato da clienti.html / prodotti-panel-static.html (data-tabpanel = id del pannello; NON data-panel, già usato in questa pagina). La linea animata scorre sulla tab attiva.
+  // Aggiunte locali: azione primaria del footer che cambia con la tab; checkbox "Preparato" per riga che aggiorna pill, barra a segmenti e sblocca/blocca "Vai alla spedizione" + tab Spedizione.
+  (function () {
+    var nav = document.getElementById("panelMainTabs");
+    var body = document.getElementById("panelProductBody");
+    var line = nav ? nav.querySelector(".panel-tab-active-line") : null;
+    var primary = document.getElementById("orderPrimaryAction");
+    var hint = document.getElementById("orderFooterHint");
+    var shipTab = document.getElementById("panelTabBtnSpedizione");
+    var consTab = document.getElementById("panelTabBtnConsegna");
+    var consValid = function () { return typeof window.__orderConsegnaValid === "function" ? window.__orderConsegnaValid() : false; };
+    if (!nav) return;
+    var LABELS = { panelTabPreparazione: "Vai alla spedizione", panelTabSpedizione: "Segna come spedito", panelTabConsegna: "Invia" };
+    var allPrepared = false;
+    var shipped = false, bannerDismissed = false;
+    function moveLine(tab, animate) {
+      if (!line || !tab) return;
+      var tr = tab.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+      if (!animate) line.style.transition = "none";
+      line.style.width = tr.width + "px";
+      line.style.transform = "translateX(" + (tr.left - nr.left) + "px)";
+      if (!animate) { line.offsetHeight; line.style.transition = ""; }
+    }
+    function updateFooter() {
+      var active = nav.querySelector(".panel-tab.active");
+      var id = active ? active.getAttribute("data-tabpanel") : "";
+      if (primary && LABELS[id]) primary.textContent = LABELS[id];
+      var onPrep = id === "panelTabPreparazione";
+      var onCons = id === "panelTabConsegna";
+      if (primary) primary.disabled = (onPrep && !allPrepared) || (onCons && !consValid());
+      if (hint) hint.textContent = (onPrep && !allPrepared) ? hint.getAttribute("data-text") : "";
+      var ft = document.querySelector(".panel-footer-sticky"); if (ft) ft.hidden = shipped && !onCons;
+      var rb = document.getElementById("orderReopenBtn"); if (rb) rb.hidden = !(shipped && onCons);
+    }
+    function select(tab) {
+      var id = tab.getAttribute("data-tabpanel");
+      if (!id || tab.getAttribute("aria-disabled") === "true") return;
+      Array.prototype.forEach.call(nav.querySelectorAll(".panel-tab[data-tabpanel]"), function (t) {
+        var on = t === tab;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        var p = document.getElementById(t.getAttribute("data-tabpanel"));
+        if (p) p.hidden = !on;
+      });
+      if (body) body.scrollTop = 0;
+      updateFooter();
+      moveLine(tab, true);
+    }
+    nav.addEventListener("click", function (e) {
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) select(t);
+    });
+    nav.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) { e.preventDefault(); select(t); }
+    });
+    if (primary) primary.addEventListener("click", function () {
+      var active = nav.querySelector(".panel-tab.active");
+      var cur = active ? active.getAttribute("data-tabpanel") : "";
+      if (cur === "panelTabPreparazione" && allPrepared) select(shipTab);
+      else if (cur === "panelTabSpedizione") openModal();
+    });
+    // Modale di conferma + stato "spedito": Preparazione di sola lettura, footer nascosto fuori da Consegna, "Riapri ordine" per tornare indietro.
+    // 24/11/2026 (Ruggi): notifica di successo della piattaforma (stesso toast di Cruscotto e bottega-editor: .onb-toast.success in basso a destra, anello-timer + chiudi, 5s).
+  var okStack = null;
+  function dismissOk(t) { if (!t.isConnected || t.classList.contains('is-leaving')) return; clearTimeout(t.dismissTimer); t.classList.remove('is-visible'); t.classList.add('is-leaving'); setTimeout(function () { t.remove(); }, 560); }
+  function showSuccessToast(msg) {
+    if (!okStack) { okStack = document.createElement('div'); okStack.className = 'onb-toast-stack'; document.body.appendChild(okStack); }
+    var t = document.createElement('div'); t.className = 'onb-toast success'; t.setAttribute('role', 'status');
+    t.innerHTML = '<span class="onb-toast-message"></span><span class="onb-toast-close-wrap"><svg class="onb-toast-timer" viewBox="0 0 20 20" aria-hidden="true"><circle class="onb-toast-timer-track" cx="10" cy="10" r="8"/><circle class="onb-toast-timer-fill" cx="10" cy="10" r="8"/></svg><button class="onb-toast-dismiss" type="button" aria-label="Chiudi notifica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></span>';
+    t.querySelector('.onb-toast-message').textContent = msg;
+    t.querySelector('.onb-toast-dismiss').addEventListener('click', function () { dismissOk(t); });
+    okStack.appendChild(t); requestAnimationFrame(function () { t.classList.add('is-visible'); });
+    t.dismissTimer = setTimeout(function () { dismissOk(t); }, 5000);
+  }
+    var modal = document.getElementById("orderShipModal");
+    function openModal() { if (!modal) return; modal.hidden = false; var c = modal.querySelector("[data-modal-confirm]"); if (c) c.focus(); }
+    function closeModal() { if (modal) modal.hidden = true; }
+    function showShippedBanners() { Array.prototype.forEach.call(document.querySelectorAll(".js-shipped-banner"), function (b) { b.hidden = !shipped || bannerDismissed; }); }
+    function lockChecks(on) { Array.prototype.forEach.call(document.querySelectorAll(".order-line-check"), function (c) { c.setAttribute("aria-disabled", on ? "true" : "false"); }); }
+    function setShipped(on) {
+      shipped = on;
+      if (!on) bannerDismissed = false;
+      showShippedBanners(); lockChecks(on); setConsegna(on);
+      select(on ? consTab : document.getElementById("panelTabBtnPreparazione"));
+      updateFooter();
+    }
+    if (modal) {
+      modal.addEventListener("click", function (e) { if (e.target.closest("[data-modal-cancel]")) closeModal(); /* 24/11/2026 (Ruggi): la conferma non si chiude col click sullo sfondo */ });
+      modal.querySelector("[data-modal-confirm]").addEventListener("click", function () { closeModal(); setShipped(true); showSuccessToast("Ordine segnato come spedito. Il cliente è stato avvisato."); });
+      document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeModal(); });
+    }
+    var reopen = document.getElementById("orderReopenBtn");
+    if (reopen) reopen.addEventListener("click", function () { setShipped(false); });
+    Array.prototype.forEach.call(document.querySelectorAll(".js-shipped-dismiss"), function (b) { b.addEventListener("click", function () { bannerDismissed = true; showShippedBanners(); }); });
+    // Tab Consegna: si sblocca con "Segna come spedito", si richiude se un prodotto torna "da preparare".
+    function setConsegna(on) {
+      if (!consTab) return;
+      consTab.setAttribute("aria-disabled", on ? "false" : "true");
+      if (on) consTab.removeAttribute("data-tooltip"); else consTab.setAttribute("data-tooltip", "Segna l'ordine come spedito per continuare");
+    }
+    function refreshLine() { moveLine(nav.querySelector(".panel-tab.active"), false); }
+    refreshLine();
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(refreshLine).observe(nav);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshLine);
+
+    // Checkbox "Preparato": l'header è ripetuto in ogni tab, quindi si aggiornano TUTTE le copie (classi, non id).
+    var checks = Array.prototype.slice.call(document.querySelectorAll(".order-line-check"));
+    function refreshPrepared() {
+      var total = checks.length, done = 0;
+      checks.forEach(function (c) { if (c.getAttribute("aria-checked") === "true") done++; });
+      allPrepared = done === total;
+      document.querySelectorAll(".js-prepared-count").forEach(function (el) { el.textContent = done + "/" + total; });
+      document.querySelectorAll(".order-progress").forEach(function (bar) {
+        Array.prototype.forEach.call(bar.children, function (seg, i) { seg.classList.toggle("done", i < done); });
+      });
+      if (hint) { var missing = total - done; hint.setAttribute("data-text", missing + (missing === 1 ? " prodotto da preparare" : " prodotti da preparare")); }
+      if (!allPrepared) setConsegna(false);
+      if (shipTab) {
+        shipTab.setAttribute("aria-disabled", allPrepared ? "false" : "true");
+        if (allPrepared) shipTab.removeAttribute("data-tooltip"); else shipTab.setAttribute("data-tooltip", "Prepara tutti i prodotti per continuare");
+      }
+      updateFooter();
+    }
+    checks.forEach(function (c, idx) {
+      c.addEventListener("click", function () {
+        if (shipped) return;
+        var on = c.getAttribute("aria-checked") !== "true";
+        c.setAttribute("aria-checked", on ? "true" : "false");
+        c.closest(".order-line").classList.toggle("checked", on);
+        refreshPrepared();
+      });
+    });
+    refreshPrepared();
+  })();
+  // 5/10/2026 (Ruggi): tab Spedizione/Consegna — accordion righe prodotto, copia per campo (icona → spunta verde), dropdown corriere custom, validità del form "Invia".
+  (function () {
+    Array.prototype.forEach.call(document.querySelectorAll(".order-acc-toggle"), function (b) {
+      b.addEventListener("click", function () {
+        var open = b.getAttribute("aria-expanded") !== "true";
+        b.setAttribute("aria-expanded", open ? "true" : "false");
+        var body = document.getElementById(b.getAttribute("aria-controls"));
+        if (body) body.hidden = !open;
+      });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".order-copy"), function (b) {
+      b.addEventListener("click", function () {
+        var v = b.getAttribute("data-copy") || "";
+        try { if (navigator.clipboard) navigator.clipboard.writeText(v).catch(function () {}); } catch (err) {}
+        b.classList.add("copied");
+        clearTimeout(b._t);
+        b._t = setTimeout(function () { b.classList.remove("copied"); }, 2000);
+      });
+    });
+    var ban = document.getElementById("orderTrackingBanner"), banBtn = document.getElementById("orderTrackingBannerDismiss");
+    if (ban && banBtn) banBtn.addEventListener("click", function () { ban.hidden = true; });
+    var banX = document.getElementById("orderTrackingBannerClose");
+    if (ban && banX) banX.addEventListener("click", function () { ban.hidden = true; });
+    var sel = document.getElementById("orderCarrierSelect");
+    if (!sel) return;
+    var btn = document.getElementById("orderCarrierBtn"), menu = sel.querySelector(".order-select-menu"), val = document.getElementById("orderCarrierValue");
+    var other = document.getElementById("orderOtherField"), otherName = document.getElementById("orderOtherName");
+    var track = document.getElementById("orderTracking"), noTrack = document.getElementById("orderNoTracking");
+    var primary = document.getElementById("orderPrimaryAction");
+    function setOpen(o) { menu.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+    btn.addEventListener("click", function () { setOpen(menu.hidden); });
+    document.addEventListener("click", function (e) { if (!sel.contains(e.target)) setOpen(false); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
+    Array.prototype.forEach.call(menu.querySelectorAll("[role=option]"), function (o) {
+      o.addEventListener("click", function () {
+        Array.prototype.forEach.call(menu.querySelectorAll("[role=option]"), function (x) { x.setAttribute("aria-selected", x === o ? "true" : "false"); });
+        val.textContent = o.textContent;
+        other.hidden = o.textContent !== "Altro";
+        setOpen(false);
+        refresh();
+      });
+    });
+    noTrack.addEventListener("click", function () { var on = noTrack.getAttribute("aria-checked") !== "true"; noTrack.setAttribute("aria-checked", String(on)); track.disabled = on; var rq = document.getElementById("orderTrackingReq"); if (rq) rq.hidden = on; refresh(); });
+    track.addEventListener("input", refresh);
+    otherName.addEventListener("input", refresh);
+    function valid() {
+      var okCarrier = other.hidden || otherName.value.trim() !== "";
+      var okTrack = noTrack.getAttribute("aria-checked") === "true" || track.value.trim() !== "";
+      return okCarrier && okTrack;
+    }
+    function refresh() {
+      var act = document.querySelector("#panelMainTabs .panel-tab.active");
+      if (primary && act && act.getAttribute("data-tabpanel") === "panelTabConsegna") primary.disabled = !valid();
+    }
+    window.__orderConsegnaValid = valid;
+  })();
+</script>
+<script src="../page-search.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

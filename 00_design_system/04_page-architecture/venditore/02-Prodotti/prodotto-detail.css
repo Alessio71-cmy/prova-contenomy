@@ -1,0 +1,88 @@
+/* ==========================================================================
+   prodotto-detail.css — Pagina dettaglio prodotto (Venditore), Protocollo 04
+   ==========================================================================
+   Nota per chi riprende: questo file NON duplica i token/alias/componenti già
+   decisi sul pannello laterale (prodotti-panel-static.css, 10-11/9) — viene
+   linkato DOPO quel foglio e contiene solo le regole di layout necessarie per
+   passare da "pannello 528px affiancato" a "pagina a piena larghezza".
+   Le classi .panel-* (summary, badge-row, accordion, variant-section, tabs,
+   image-grid, ecc.) restano quelle esistenti e si eredita il loro stile.
+
+   STATO: primo passaggio — solo contenitore a piena larghezza (max-width
+   70rem, coerente con Cruscotto/Prodotti) + header di pagina (freccia
+   indietro invece della X di chiusura overlay). Il resto (dimensione
+   immagine, eventuale griglia a due colonne, galleria) è deliberatamente
+   NON ridisegnato ora — da fare insieme a Ruggi (15/9 conversazione), non
+   è un'omissione.
+
+   Se nel farlo emerge un 13px, un valore non-token, o un conflitto con
+   DEC-039 (accent vs semantico) su un elemento qui dentro: segnalarlo,
+   non correggerlo di propria iniziativa (STRUTTURA_E_STATO.md §6.2).
+   ========================================================================== */
+
+/* ---------- Header di pagina (sostituisce panel-header dell'overlay) ---------- */
+
+.product-detail-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-6) 0;
+}
+
+.product-detail-page-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.product-detail-page-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Freccia indietro — ghost button, stessa identità visiva (dimensione, hover,
+   colore a riposo) dei .panel-nav-btn/.panel-close-btn già decisi nel cluster
+   header del pannello (11/9-14/9): riuso quelle regole di hover/colore invece
+   di inventarne di nuove, cambia solo la classe per motivi semantici
+   (qui non si "chiude" un overlay, si torna all'elenco). */
+.product-detail-back-btn {
+  width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); cursor: pointer;
+  text-decoration: none;
+  border: var(--border-width-hairline) solid var(--border);
+  transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease);
+}
+.product-detail-back-btn:hover { background: var(--item-hover-bg); color: var(--text); }
+.product-detail-back-btn svg { display: block; }
+
+.product-detail-page-title {
+  font-size: var(--font-size-20); font-weight: var(--font-weight-bold); line-height: var(--font-lineHeight-24);
+  color: var(--text);
+  margin: 0 0 0 var(--space-2);
+}
+
+/* ---------- Corpo pagina: stesso contenuto del panel-body, a piena larghezza ---------- */
+
+.product-detail-body {
+  max-width: 70rem;
+  margin: 0 auto;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Il blocco riepilogo (.panel-summary-block/.panel-product-summary) nel pannello
+   era vincolato a 528px di larghezza — qui il contenitore è largo, ma l'interno
+   resta invariato per ora (immagine 224px, ecc.): a schermo intero risulterà con
+   molto spazio vuoto a destra. Punto esplicito da discutere con Ruggi, non
+   risolto qui con un valore inventato. */
+.product-detail-body .panel-summary-block,
+.product-detail-body .panel-product-summary {
+  max-width: 100%;
+}

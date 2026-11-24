@@ -1,0 +1,192 @@
+@import url("../../../../design-system/build/css/tokens.css");
+@import url("../../../../design-system/build/css/compatibility.css");
+@import url("../../../../design-system/components/shell.css");
+@import url("../../../../design-system/components/shell-dashboard-and-products.css");
+@import url("../../../../design-system/components/shell-interactive.css");
+@import url("../../../../design-system/components/button.css");
+@import url("../../../../design-system/components/card.css");
+@import url("../../../../design-system/components/navigation.css");
+@import url("../../../../design-system/components/product-panel.css");
+@import url("../../../../design-system/components/tooltip.css");
+@import url("../../../../design-system/components/feedback-lists.css"); /* serve solo per coerenza con cruscotto-onboarding.css (stessa catena di import) */
+
+
+/* =====================================================================
+   BACHECA ONBOARDING — 12/10/2026
+   Stessa struttura di cruscotto-onboarding.css (import, alias di :root,
+   hover contestuale, icon-btn, workspace). Tolto tutto ciò che serve solo
+   al contenuto del Cruscotto (banner, metriche, card, ecc.).
+   Nessuna nuova variabile: solo Foundation/alias esistenti.
+   ===================================================================== */
+
+:root {
+
+  --item-active-hover-bg: var(--color-neutral-100); /* 16/9/2026, decisione Ruggi: da color-mix a valore fisso (scalabilita' e modifica precisa in caso di cambi futuri, invece di una formula derivata) — riuso diretto della Foundation neutral.100 esistente, nessun nuovo valore. Numericamente quasi identico al risultato del vecchio mix (~#e0dee1 vs #e5e3e6): stessa leggerezza visiva di oggi, solo scritto come letterale invece che come formula. Vedi STRUTTURA_E_STATO.md per il ragionamento completo (contrasto, bucket bianco/neutral, scelta leggerezza su accessibilita' stretta). */
+
+  --hover-bg: var(--item-hover-bg); /* 21/9/2026: default = superficie BIANCA (#F3F1F4). Le superfici neutral lo sovrascrivono a --item-active-hover-bg (#E5E3E6) — vedi blocco dopo :root. */
+
+  --progress-stacked-primary-fill: var(--text-muted); /* alias: progress-stacked-primary-fill — segmento "netto" della barra incassi (DEC-039, decisione Ruggi 11/9); prima condiviso con rank-bar/drop sotto il nome data-fill-neutral, ora ruolo proprio, agganciato a progress-stacked-secondary-fill (lordo) nella stessa scala */
+  --progress-stacked-secondary-fill: #b5b5bd; /* alias: progress-stacked-secondary-fill — segmento "lordo" della barra incassi (11/9); prima valore fisso, ora tokenizzato e agganciato a progress-stacked-primary-fill (netto) come coppia della stessa scala */
+  --progress-segmented-fill: var(--text-muted); /* alias: progress-segmented-fill — riempimento barra avanzamento drop (DEC-039, decisione Ruggi 11/9); prima condiviso con incassi/rank-bar sotto il nome data-fill-neutral, ora ruolo indipendente perche' potra' avere un colore proprio in futuro */
+  --success: var(--status-success-fg); /* alias: success — stato positivo/completato (DEC-039, decisione Ruggi 11/9); 15/9/2026: ripuntato a status-success-fg (feedback.success, green.500) per coerenza totale con trend/status-pill — non più isolato, decisione Ruggi. Verificato: 5.38:1 testo bianco su questo sfondo (.status-dot.done) e 5.38:1 come stroke su bianco (.ring-fill) */
+
+  /* Alias feedback (success/warning/danger) — 15/9/2026, decisione Ruggi: stesso "salto"
+     sfondo-50/testo+pallino-500 per tutte e 3 le famiglie, verificato AA (4.7:1-5.1:1
+     sul proprio chip). Vedi tokens/alias/color/feedback.json e tokens-preview.css. */
+
+}
+
+/* 21/9/2026, decisione Ruggi — HOVER CONTESTUALE per icone e chip (icon-btn, icon-btn-ghost, btn-ghost, status-chip, filter-pill, view-switch-btn, filter-chip, badge cliccabili, frecce paginazione, chiudi/naviga pannello, chevron riga).
+   Regola: su sfondo BIANCO -> #F3F1F4 (--item-hover-bg); su sfondo NEUTRAL (25/50) -> #E5E3E6 (--item-active-hover-bg). Stesso valore per icone e chip.
+   --hover-bg e' impostata dalla superficie che contiene l'elemento e si eredita ai figli; dove la superficie cambia con .body.panel-open, l'override e' invertito.
+   Nessun nuovo valore Foundation. Candidato locale (4 file pilota), non alias formale. NON toccati: righe tabella, .sidebar-item (neutral-200), bottoni scuri, stati :active. */
+.topbar, .card, .filter-row { --hover-bg: var(--item-active-hover-bg); }
+.card.incassi-card { --hover-bg: var(--item-hover-bg); }
+
+ /* 17/9/2026, propagato da prodotti-panel-static.css. */
+
+.icon-btn {
+  width: var(--spacing-8); height: var(--spacing-8);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease); /* 11/9: mancava, aggiunta per coerenza con gli altri pulsanti */
+}
+.icon-btn:hover { background: var(--hover-bg); }
+
+/* --- Workspace --- */
+.workspace {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 var(--space-4) 0;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--color-neutral-100);
+  border-bottom: 0;
+  background: var(--color-background-default);
+}
+/* 13/10/2026: la regola .workspace.workspace-content-fit e' ora condivisa (venditore/workspace-fit.css + workspace-fit.js), uguale per tutte le pagine. */
+/* 12/10/2026, richiesta Ruggi: a sidebar chiusa il workspace si appoggia alla sidebar compressa — margin-left 0 (shell.css lo portava a var(--sidebar-shell_sidebar_collapsed_workspace-margin_left) = spacing-2); top 0, right e bottom restano space-4 dalla regola base. Solo margin-left, di proposito: così non interferisce con `.body.panel-open .workspace { margin-right }` (stessa specificità). */
+.shell.sidebar-collapsed .workspace { margin-left: 0; }
+
+/* 21/9/2026, su richiesta di Ruggi: RIMOSSO l'override `.shell.sidebar-collapsed .workspace-inner { max-width: 70rem; }` (17/9). A sidebar chiusa .workspace-inner resta a 80rem, come a sidebar aperta: le tabelle guadagnano spazio invece di restare a 70rem. */
+
+
+.btn-icon { flex: none; display: block; }
+
+/* --- Onboarding Bottega: introduzione + anteprime delle botteghe pubbliche --- */
+.workspace-inner.bottega-onboarding {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.bottega-page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-6); border-bottom: 1px solid var(--color-neutral-100); }
+.bottega-page-header .page-title { margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); }
+.bottega-page-header .page-sub { margin: var(--space-2) 0 0; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.bottega-page-header .page-header-actions { display: flex; align-items: flex-start; gap: var(--space-2); flex: none; }
+.theme-exploration { margin-top: var(--space-16); }
+.theme-section-heading { display: flex; align-items: flex-start; justify-content: flex-start; gap: var(--space-4); margin-bottom: var(--space-6); }
+.theme-section-heading h2 { margin: 0; }
+.theme-section-heading p { margin: var(--space-2) 0 0; color: var(--text-muted); font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); font-weight: var(--font-weight-regular); }
+.theme-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.theme-preview { min-width: 0; display: flex; flex-direction: column; }
+.theme-art { position: relative; height: 13rem; overflow: hidden; padding: 1.35rem; box-sizing: border-box; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.theme-art-story { background: linear-gradient(135deg, #eee9e3 0%, #ded2c5 100%); }
+.preview-window { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: 57%; height: 100%; box-sizing: border-box; padding: 1rem; background: #faf8f4; border-radius: .4rem; box-shadow: 0 5px 18px #3d32221a; }
+.preview-kicker { color: var(--text-muted); font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; }
+.preview-line { display: block; height: .35rem; margin-top: .5rem; border-radius: 1rem; background: #b9b2a7; }
+.preview-line.long { width: 88%; }
+.preview-line.short { width: 58%; }
+.preview-cta { width: 2.4rem; height: .45rem; margin-top: auto; border-radius: 1rem; background: #29272b; }
+.preview-orb { position: absolute; width: 8rem; height: 8rem; right: 8%; top: 20%; border-radius: 50%; background: #c6a990; }
+.theme-art-collection { background: #e8e9e4; padding: 1.25rem; }
+.preview-collection-title { display: flex; align-items: center; gap: .7rem; }
+.preview-collection-title .preview-line { width: 6rem; margin: 0; background: #9ca293; }
+.preview-product-row { display: flex; gap: .6rem; margin-top: 1rem; }
+.preview-product-row span { flex: 1; height: 8rem; border-radius: .35rem; background: linear-gradient(145deg, #c7c9bf 0 48%, #e2dfd5 48%); }
+.preview-product-row span:nth-child(2) { background: linear-gradient(145deg, #b9c5be 0 48%, #e6e4dc 48%); }
+.preview-product-row span:nth-child(3) { background: linear-gradient(145deg, #d2c2b3 0 48%, #e8e2d8 48%); }
+.theme-art-news { display: flex; align-items: center; gap: 1rem; background: linear-gradient(135deg, #f0e6e0, #e4d0c5); }
+.preview-news-image { position: relative; flex: 1; height: 100%; border-radius: .35rem; background: linear-gradient(150deg, #bd8b75, #e3c9b6); }
+.preview-sun { position: absolute; width: 2.5rem; height: 2.5rem; top: 20%; left: 28%; border-radius: 50%; background: #f1dfc3; }
+.preview-news-copy { display: flex; flex: 1; flex-direction: column; align-items: flex-start; }
+.preview-news-copy .preview-line { background: #af8b7b; }
+.theme-preview-copy { flex: 1; display: flex; flex-direction: column; padding: var(--space-6); border: 1px solid var(--color-neutral-100); border-top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: var(--color-background-default); }
+.theme-preview-title { overflow: hidden; color: var(--text); font-size: var(--font-size-16); font-weight: var(--font-weight-regular); text-overflow: ellipsis; white-space: nowrap; }
+.theme-preview-titles .card-sub { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.btn-ghost.sm { padding: var(--space-2) var(--space-3); font-size: var(--font-size-14); }
+.theme-preview-action { align-self: flex-start; margin-top: var(--space-6); text-decoration: none; }
+@media (max-width: 760px) {
+  .bottega-page-header { flex-direction: column; }
+  .bottega-page-header { padding-bottom: var(--space-4); }
+  .theme-section-heading { margin-bottom: var(--space-4); }
+  .theme-preview-grid { grid-template-columns: 1fr; }
+  .theme-art { height: 12rem; }
+}
+
+[hidden] { display: none !important; }
+
+/* =====================================================================
+   16/10/2026 (Ruggi) — stato ELENCO della pagina Bottega: card delle botteghe create (una Pubblicata al massimo, le altre Bozza).
+   Riusa .theme-preview/.theme-art/.preview-window e .status-pill del DS; nessuna nuova variabile.
+   ===================================================================== */
+.bottega-list { margin-top: var(--space-6); }
+.bottega-list .theme-section-heading { margin-bottom: var(--space-6); }
+/* banner di completamento account (onboarding-banner.css): sotto il divider dell'header, sopra il titolo di sezione */
+.onb-banner { margin: var(--space-6) 0 0; }
+.onb-banner:not([hidden]) + .bottega-list { margin-top: var(--space-8); }
+.bottega-card-actions { position: relative; z-index: 3; margin-top: var(--space-3); } /* sopra il link stretto della card */
+
+.bottega-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.bottega-card { position: relative; }
+.bottega-card-link { position: absolute; inset: 0; z-index: 2; /* sopra .preview-window (z-index 1), altrimenti intercetta il clic */ border-radius: var(--radius-lg); }
+.bottega-card-media .status-pill { position: absolute; top: var(--space-3); left: var(--space-3); z-index: 3; pointer-events: none; }
+.bottega-card-menu { position: absolute; top: var(--space-2); right: var(--space-2); z-index: 3; --hover-bg: var(--item-hover-bg); }
+.bottega-card-menu > .icon-btn { border: 0; background: var(--color-neutral-100); } /* stesso sfondo della freccia .bottega-back (bottega-creazione.css), senza bordo */
+.bottega-card-menu > .icon-btn:hover { background: var(--color-neutral-200); }
+.bottega-card-menu-list { position: absolute; top: calc(100% + var(--space-1)); right: 0; min-width: 280px; padding: var(--space-2); display: flex; flex-direction: column; gap: var(--space-0-5); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); }
+.bottega-card-menu-list[hidden] { display: none; }
+.bottega-menu-row { display: flex; align-items: center; border-radius: var(--sidebar-sidebar_item-border_radius); transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.bottega-menu-row:not(.is-disabled):hover { background: var(--hover-bg); }
+.bottega-menu-row > button { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: var(--space-3); padding: var(--sidebar-sidebar_item-padding); border: 0; border-radius: var(--sidebar-sidebar_item-border_radius); background: none; color: var(--text); font: inherit; font-size: var(--font-size-14); text-align: left; cursor: pointer; }
+.bottega-menu-row.is-disabled > button { color: var(--text-muted); cursor: default; }
+.bottega-menu-ico { flex: none; }
+.bottega-menu-info { flex: none; display: inline-flex; margin-right: var(--space-3); color: var(--color-blue-500); cursor: help; border-radius: var(--radius-full); }
+.bottega-menu-info:hover { color: var(--color-blue-500); }
+.bottega-card-menu-list .is-danger { color: var(--status-danger-fg); }
+@media (max-width: 1100px) { .bottega-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .bottega-grid { grid-template-columns: 1fr; } }
+
+/* Riquadro tratteggiato = .product-new-card del Cruscotto (copia locale, candidato): segnaposto "Qui appariranno le tue botteghe" e azione Crea; in elenco sta in fondo alle card. */
+.product-new-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2); box-sizing: border-box; min-height: 20rem; padding: var(--space-6); text-align: center; text-decoration: none;
+  border: var(--border-width-moderate) dashed var(--border); border-radius: var(--radius-md);
+  background: transparent; color: var(--text-muted); font-size: var(--font-size-14); cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease);
+}
+.product-new-card:hover { background: var(--item-hover-bg); color: var(--text); }
+.product-new-icon { width: var(--spacing-9); height: var(--spacing-9); border-radius: var(--radius-full); border: var(--border-width-hairline) solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text); }
+.product-new-card .product-new-label { color: var(--text); font-weight: var(--font-weight-semibold); }
+
+/* Anteprima del tema nelle card delle botteghe: stessi riquadro/iframe delle card tema di bottega-creazione.css (copia locale). */
+.bottega-card-media { position: relative; }
+.theme-thumb { position: relative; overflow: hidden; aspect-ratio: 16 / 10; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--bg); }
+.theme-frame { position: absolute; top: 0; left: 0; display: block; max-width: none; border: 0; background: #fff; transform-origin: 0 0; pointer-events: none; }
+/* .panel-product-date = copia locale della regola del DS (product-panel-products.css, 12px muted) — quel file non è nella catena di import di questa pagina, come già fanno ordini/drop-statico. */
+.panel-product-date { font-size: var(--font-size-12); color: var(--text-muted); }
+.bottega-card .panel-product-date { display: block; margin-top: var(--space-2); }
+
+/* 10/11/2026 (Ruggi): modale di conferma eliminazione. Candidata locale: stessa struttura e misure della modale dell'editor (.editor-modal): header titolo+X, body con divider, footer; padding space-8, button taglia normale. Annulla primary, Elimina ghost rosso (regola ghost Annulla/Elimina). */
+.del-modal { position: fixed; inset: 0; z-index: var(--zIndex-50); display: flex; align-items: center; justify-content: center; padding: var(--space-6); }
+.del-modal[hidden] { display: none; }
+.del-modal-backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--dark) 45%, transparent); }
+.del-modal-box { position: relative; display: flex; flex-direction: column; width: min(32rem, 100%); outline: none; background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; }
+.del-modal-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-8); }
+.del-modal-close { width: var(--spacing-7); height: var(--spacing-7); padding: 0; border: 0; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center; background: none; color: var(--text-muted); cursor: pointer; }
+.del-modal-body { padding: var(--space-8); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+.del-modal-body p { margin: 0; }
+.del-modal-foot { display: flex; justify-content: flex-end; gap: var(--space-2); padding: var(--space-8); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+/* 24/11/2026: bordo + label rossi dei ghost di annullamento/eliminazione = .btn-ghost.danger in design-system/components/button.css; primario distruttivo = .btn-pill-dark.danger (rosso pieno) */

@@ -1,0 +1,25 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.tabs {
+  position: var(--tabs-tabs-position);
+  display: var(--tabs-tabs-display);
+  gap: var(--tabs-tabs-gap);
+  border-bottom: var(--tabs-tabs-border_bottom);
+  margin-bottom: var(--tabs-tabs-margin_bottom);
+}
+
+.tab.active {
+  color: var(--tabs-tab_active-color);
+  font-weight: var(--tabs-tab_active-font_weight);
+}
+
+.tab-active-line {
+  position: var(--tabs-tab_active_line-position);
+  left: var(--tabs-tab_active_line-left);
+  bottom: var(--tabs-tab_active_line-bottom);
+  height: var(--tabs-tab_active_line-height);
+  width: var(--tabs-tab_active_line-width);
+  background: var(--tabs-tab_active_line-background);
+  transform: var(--tabs-tab_active_line-transform);
+  transition: var(--tabs-tab_active_line-transition);
+  pointer-events: var(--tabs-tab_active_line-pointer_events);
+}

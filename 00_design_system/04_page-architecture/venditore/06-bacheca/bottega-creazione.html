@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Creazione bottega — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="bottega-creazione.css">
+<link rel="stylesheet" href="../workspace-fit.css">
+<link rel="stylesheet" href="../breadcrumb.css"> <!-- 15/10/2026: breadcrumb di secondo livello (topbar) --> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<!-- 13/10/2026 (Ruggi): pagina di creazione Bottega. Struttura di base da bottega-onboarding.html. Flusso: FLUSSO_CREAZIONE_BOTTEGA.md (proposta).
+     Sidebar SEMPRE chiusa in questa fase (nessun toggle). Stati dimostrativi: ?stripe=on simula Stripe connesso. -->
+<div class="shell sidebar-collapsed">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle" role="button" aria-disabled="true" data-tooltip="Sidebar chiusa durante la creazione" aria-label="Sidebar chiusa durante la creazione"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+    <!-- 15/10/2026 (Ruggi): breadcrumb di secondo livello. "Bottega" torna alla sezione, "Creazione" e' la pagina corrente (statica: i passi stanno nello stepper). -->
+    <nav class="breadcrumb" aria-label="Percorso di navigazione">
+      <ol>
+        <li><a href="bottega-onboarding.html">Bottega</a></li>
+        <li aria-current="page">Creazione</li>
+      </ol>
+    </nav>
+  </header>
+
+  <div class="shell-body">
+
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body" id="pageBody">
+
+    <main class="workspace">
+      <div class="workspace-inner bottega-creazione" id="bottegaFlow" data-step="1">
+
+
+
+
+        <div class="bottega-scroll" id="bottegaScroll">
+
+        <header class="page-header bottega-page-header">
+          <div>
+            <h1 class="page-title" id="stepTitle">Seleziona il tuo tema</h1>
+            <div class="panel-header-title-meta-row theme-detail-meta bottega-theme-meta" id="stepMeta" hidden><span class="theme-detail-cats" id="stepCat"></span></div>
+            <p class="page-sub" id="stepSub"></p>
+          </div>
+          <a class="bottega-cancel-link" id="cancelLink" href="bottega-onboarding.html">Annulla creazione</a>
+        </header>
+
+
+        <div class="bottega-main">
+        <!-- ===== PASSO 1 — Tema ===== -->
+        <section class="bottega-step-panel" data-step-panel="1" aria-labelledby="stepTitle">
+          <div class="theme-filters" id="themeFilters" role="toolbar" aria-label="Filtra i temi">
+            <div class="theme-filter" data-filter="cat"><button type="button" class="theme-filter-btn" aria-haspopup="true" aria-expanded="false"><span class="theme-filter-label">Categoria</span><svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="theme-filter-menu" role="group" aria-label="Categoria" hidden><label class="theme-filter-opt"><input type="radio" name="f-cat" value="artigiane"><span class="theme-filter-radio" aria-hidden="true"></span><span>Botteghe artigiane</span></label><label class="theme-filter-opt"><input type="radio" name="f-cat" value="editoriale"><span class="theme-filter-radio" aria-hidden="true"></span><span>Editoriale</span></label></div></div>
+            <div class="theme-filter" data-filter="font"><button type="button" class="theme-filter-btn" aria-haspopup="true" aria-expanded="false"><span class="theme-filter-label">Font</span><svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="theme-filter-menu" role="group" aria-label="Font" hidden><label class="theme-filter-opt"><input type="radio" name="f-font" value="sans"><span class="theme-filter-radio" aria-hidden="true"></span><span>Sans-serif</span></label><label class="theme-filter-opt"><input type="radio" name="f-font" value="serif"><span class="theme-filter-radio" aria-hidden="true"></span><span>Serif</span></label><label class="theme-filter-opt"><input type="radio" name="f-font" value="condensato"><span class="theme-filter-radio" aria-hidden="true"></span><span>Condensato</span></label><label class="theme-filter-opt"><input type="radio" name="f-font" value="mono"><span class="theme-filter-radio" aria-hidden="true"></span><span>Monospazio</span></label></div></div>
+            <div class="theme-filter" data-filter="stile"><button type="button" class="theme-filter-btn" aria-haspopup="true" aria-expanded="false"><span class="theme-filter-label">Stile</span><svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="theme-filter-menu" role="group" aria-label="Stile" hidden><label class="theme-filter-opt"><input type="radio" name="f-stile" value="colore"><span class="theme-filter-radio" aria-hidden="true"></span><span>A blocchi di colore</span></label><label class="theme-filter-opt"><input type="radio" name="f-stile" value="editoriale"><span class="theme-filter-radio" aria-hidden="true"></span><span>Editoriale</span></label></div></div>
+            <div class="theme-filter" data-filter="sort" data-single="1"><button type="button" class="theme-filter-btn" aria-haspopup="true" aria-expanded="false"><span class="theme-filter-label">Ordina</span><svg class="svg-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="theme-filter-menu" role="group" aria-label="Ordina" hidden><label class="theme-filter-opt"><input type="radio" name="f-sort" value="default"><span class="theme-filter-radio" aria-hidden="true"></span><span>Consigliati</span></label><label class="theme-filter-opt"><input type="radio" name="f-sort" value="az"><span class="theme-filter-radio" aria-hidden="true"></span><span>Nome A–Z</span></label><label class="theme-filter-opt"><input type="radio" name="f-sort" value="za"><span class="theme-filter-radio" aria-hidden="true"></span><span>Nome Z–A</span></label></div></div>
+            <span class="theme-filters-spacer"></span><button type="button" class="theme-filter-btn theme-filter-reset" id="themeFiltersReset">Azzera filtri<span class="theme-filters-count" id="themeFiltersCount" hidden>0</span></button>
+          </div>
+          <p class="theme-filters-empty" id="themeFiltersEmpty" hidden>Nessun tema corrisponde ai filtri scelti.</p>
+          <div class="theme-preview-grid" id="themeGrid" role="radiogroup" aria-label="Temi disponibili">
+            <!-- card generate da bottega-creazione.js a partire dal manifest di ogni pacchetto tema -->
+          </div>
+
+          <!-- Tema selezionato: dettaglio nel workspace (pagina Bottega in evidenza, poi pagine e gruppi di componenti: anteprime reali) -->
+          <div class="theme-view" id="themeView" hidden>
+            <div class="theme-view-hero theme-detail-hero" id="themeModalHero"></div>
+            <div class="theme-components-head">
+              <h3 class="card-title title-lg theme-components-title">Pagine e componenti</h3>
+              <div class="theme-view-toggle" role="group" aria-label="Vista">
+                <button type="button" class="theme-view-btn is-active" data-view="desktop" aria-pressed="true" aria-label="Desktop"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M2 20h20"/></svg></button>
+            <button type="button" class="theme-view-btn" data-view="mobile" aria-pressed="false" aria-label="Mobile"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></button>
+              </div>
+            </div>
+            <div class="theme-components" id="themeComponents" data-view="desktop"></div>
+          </div>
+        </section>
+
+        <!-- ===== PASSO 2 — Identità ===== -->
+        <section class="bottega-step-panel" data-step-panel="2" aria-labelledby="stepTitle" hidden>
+          <div class="bottega-split">
+          <form class="bottega-form bottega-form-table" id="identityForm" novalidate>
+
+            <div class="card-header no-sub"><div class="card-header-titles"><div class="card-title title-lg">Identità</div></div></div>
+            <div class="card-divider"></div>
+
+            <div class="bottega-field bottega-form-row">
+              <div class="bottega-label-row"><label class="bottega-label panel-field-label" for="fName">Nome della bottega <span class="bottega-required" aria-hidden="true">*</span><span class="visually-hidden"> (obbligatorio)</span></label><button type="button" class="bottega-info" data-tooltip="Meglio il nome che usi sui social, così ti trovano più facilmente." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></div>
+              <input class="bottega-input" id="fName" type="text" autocomplete="off" placeholder="Il nome con cui ti conoscono">
+            </div>
+
+            <div class="bottega-field bottega-form-row">
+              <div class="bottega-label-row"><label class="bottega-label panel-field-label" for="fSlug">Indirizzo della bottega <span class="bottega-required" aria-hidden="true">*</span><span class="visually-hidden"> (obbligatorio)</span></label><button type="button" class="bottega-info" data-tooltip="Generato dal nome, modificabile fino alla prima pubblicazione." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></div>
+              <div class="bottega-input-group">
+                <span class="bottega-input-prefix" aria-hidden="true">contenomy.it/</span>
+                <input class="bottega-input" id="fSlug" type="text" autocomplete="off" spellcheck="false">
+              </div>
+            </div>
+
+            <div class="bottega-field bottega-form-row">
+              <div class="bottega-label-row"><label class="bottega-label panel-field-label" for="fBio">Presentazione breve <span class="bottega-required" aria-hidden="true">*</span><span class="visually-hidden"> (obbligatorio)</span></label><button type="button" class="bottega-info" data-tooltip="Compare sotto il nome, in cima alla bottega." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></div>
+              <textarea class="bottega-input bottega-textarea" id="fBio" rows="4" placeholder="Chi sei e cosa fai, in poche righe"></textarea>
+            </div>
+
+          </form>
+          
+        </div>
+        </section>
+
+        <!-- ===== PASSO 3 — Marchio e social ===== -->
+        <section class="bottega-step-panel" data-step-panel="3" aria-labelledby="stepTitle" hidden>
+          <div class="bottega-split">
+          <div class="bottega-form bottega-form-table">
+
+            <div class="card-header no-sub"><div class="card-header-titles"><div class="card-title title-lg">Marchio e social</div></div></div>
+            <div class="card-divider"></div>
+
+            <div class="bottega-field bottega-form-row">
+              <div class="bottega-label-row"><span class="bottega-label panel-field-label">Logo</span><button type="button" class="bottega-info" data-tooltip="Compare nella navbar; senza logo si usa il nome della bottega." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></div>
+              <div class="bottega-upload" data-upload="logo">
+                <div class="bottega-upload-thumb" aria-hidden="true"><img alt="" hidden></div>
+                <div class="bottega-upload-copy"><span class="bottega-upload-name">Nessun file scelto</span></div>
+                <div class="bottega-upload-actions">
+                  <button class="btn-ghost sm" type="button" data-upload-pick>Scegli file</button>
+                  <button class="btn-ghost sm danger" type="button" data-upload-clear hidden>Rimuovi</button>
+                </div>
+                <input class="visually-hidden" type="file" accept="image/*" data-upload-input tabindex="-1">
+              </div>
+            </div>
+
+            <div class="bottega-field bottega-form-row">
+              <div class="bottega-label-row"><span class="bottega-label panel-field-label">Favicon</span><button type="button" class="bottega-info" data-tooltip="È l’icona nella scheda del browser, al posto di quella di Contenomy." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></div>
+              <div class="bottega-upload" data-upload="favicon">
+                <div class="bottega-upload-thumb bottega-upload-thumb-sm" aria-hidden="true"><img alt="" hidden></div>
+                <div class="bottega-upload-copy"><span class="bottega-upload-name">Nessun file scelto</span></div>
+                <div class="bottega-upload-actions">
+                  <button class="btn-ghost sm" type="button" data-upload-pick>Scegli file</button>
+                  <button class="btn-ghost sm danger" type="button" data-upload-clear hidden>Rimuovi</button>
+                </div>
+                <input class="visually-hidden" type="file" accept="image/*" data-upload-input tabindex="-1">
+              </div>
+            </div>
+
+            <div class="bottega-field bottega-form-row">
+              <div class="bottega-label-row"><span class="bottega-label panel-field-label">Link social</span><button type="button" class="bottega-info" data-tooltip="Se li modifichi qui, cambiano in tutta la bottega." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></div>
+              <div class="bottega-social-list" id="socialList"></div>
+              <button class="btn-ghost sm bottega-add-link" type="button" id="addSocialBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Aggiungi link</button>
+            </div>
+
+          </div>
+        </div>
+        </section>
+
+        <!-- ===== PASSO 4 — Riepilogo ===== -->
+        <section class="bottega-step-panel" data-step-panel="4" aria-labelledby="stepTitle" hidden>
+          <div class="bottega-summary">
+            <div class="bottega-form-table bottega-summary-block">
+              <div class="card-header no-sub"><div class="card-header-titles"><div class="card-title title-lg">Tema</div></div></div>
+              <div class="card-divider"></div>
+              <dl class="bottega-summary-list">
+              <div class="bottega-summary-row" data-edit="theme"><dt>Tema scelto</dt><dd id="sumTheme"></dd><button type="button" class="icon-btn" data-edit-btn="theme" data-tooltip="Modifica" aria-label="Cambia tema"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              </dl>
+            </div>
+            <div class="bottega-form-table bottega-summary-block">
+              <div class="card-header no-sub"><div class="card-header-titles"><div class="card-title title-lg">Identità</div></div></div>
+              <div class="card-divider"></div>
+              <dl class="bottega-summary-list">
+              <div class="bottega-summary-row" data-edit="name"><dt>Nome</dt><dd id="sumName"></dd><button type="button" class="icon-btn" data-edit-btn="name" data-tooltip="Modifica" aria-label="Modifica nome"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              <div class="bottega-summary-row" data-edit="slug"><dt>Indirizzo</dt><dd id="sumSlug"></dd><button type="button" class="icon-btn" data-edit-btn="slug" data-tooltip="Modifica" aria-label="Modifica indirizzo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              <div class="bottega-summary-row" data-edit="bio"><dt>Presentazione</dt><dd id="sumBio"></dd><button type="button" class="icon-btn" data-edit-btn="bio" data-tooltip="Modifica" aria-label="Modifica presentazione"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              </dl>
+            </div>
+            <div class="bottega-form-table bottega-summary-block">
+              <div class="card-header no-sub"><div class="card-header-titles"><div class="card-title title-lg">Marchio e social</div></div></div>
+              <div class="card-divider"></div>
+              <dl class="bottega-summary-list">
+              <div class="bottega-summary-row" data-edit="logo"><dt>Logo</dt><dd><div class="bottega-upload" data-upload="logo"><div class="bottega-upload-thumb" aria-hidden="true"><img alt="" hidden></div><div class="bottega-upload-copy"><span class="bottega-upload-name">Nessun file scelto</span></div><div class="bottega-upload-actions"><button class="btn-ghost sm" type="button" data-upload-pick>Scegli file</button><button class="btn-ghost sm danger" type="button" data-upload-clear hidden>Rimuovi</button></div><input class="visually-hidden" type="file" accept="image/*" data-upload-input tabindex="-1"></div></dd><button type="button" class="icon-btn" data-edit-btn="logo" data-tooltip="Modifica" aria-label="Cambia logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              <div class="bottega-summary-row" data-edit="favicon"><dt>Favicon</dt><dd><div class="bottega-upload" data-upload="favicon"><div class="bottega-upload-thumb bottega-upload-thumb-sm" aria-hidden="true"><img alt="" hidden></div><div class="bottega-upload-copy"><span class="bottega-upload-name">Nessun file scelto</span></div><div class="bottega-upload-actions"><button class="btn-ghost sm" type="button" data-upload-pick>Scegli file</button><button class="btn-ghost sm danger" type="button" data-upload-clear hidden>Rimuovi</button></div><input class="visually-hidden" type="file" accept="image/*" data-upload-input tabindex="-1"></div></dd><button type="button" class="icon-btn" data-edit-btn="favicon" data-tooltip="Modifica" aria-label="Cambia favicon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              <div class="bottega-summary-row" data-edit="social"><dt>Social</dt><dd id="sumSocial"></dd><button type="button" class="icon-btn" data-edit-btn="social" data-tooltip="Modifica" aria-label="Modifica link social"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button></div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===== PASSO 5 — Anteprima (editor) ===== -->
+        <section class="bottega-step-panel bottega-editor" data-step-panel="5" aria-label="Anteprima della bottega" hidden>
+
+          <div class="panel-alert-banner info bottega-editor-banner" id="nameBanner" hidden>
+            <div class="panel-alert-icon" aria-hidden="true">i</div>
+            <div class="panel-alert-body">
+              <span class="panel-alert-title">Stai cambiando il nome della bottega</span>
+              <span class="panel-alert-text">Il nome compare in navbar, footer e nei risultati di ricerca. Puoi cambiarlo quando vuoi.</span>
+            </div>
+            <button class="panel-alert-close" type="button" id="nameBannerClose" aria-label="Chiudi avviso"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+          </div>
+
+          <p class="bottega-note bottega-editor-hint">Clicca su nome e presentazione per modificarli. I testi di piattaforma (pulsanti, menu) non si modificano.</p>
+
+          <div class="bottega-preview-frame">
+            <div class="bottega-preview-bar">
+              <span class="bottega-preview-tabicon" id="pvFavicon" aria-hidden="true"><img alt="" hidden></span>
+              <span class="bottega-preview-url" id="pvUrl">contenomy.it/</span>
+              <span class="bottega-preview-badge" id="pvBadge">Anteprima · non pubblicata</span>
+            </div>
+
+            <div class="bottega-editor-stage" id="editorStage"></div>
+          </div>
+        </section>
+        </div><!-- /.bottega-main -->
+        </div><!-- /.bottega-scroll -->
+
+      </div>
+    </main>
+
+    <!-- ===================== PANNELLO DESTRO (editor) ===================== -->
+    <aside class="product-detail-panel" id="bottegaPanel" aria-label="Personalizza la bottega">
+
+      <!-- Passi 1-4: stepper fisso in alto nel pannello -->
+      <div class="bottega-panel-steps" id="panelSteps">
+        
+            <nav class="bottega-steps" id="stepsNav" aria-label="Passi di creazione">
+              <ol class="phase-stepper">
+                <li class="phase-step is-active" aria-current="step" data-step-ind="1"><span class="phase-step-marker" aria-hidden="true"></span><div class="phase-step-text"><div class="phase-step-title">Tema</div><span class="phase-step-desc">Struttura e stile</span></div></li>
+                <li class="phase-step" data-step-ind="2"><span class="phase-step-marker" aria-hidden="true"></span><div class="phase-step-text"><div class="phase-step-title">Identità</div><span class="phase-step-desc">Nome, indirizzo, bio</span></div></li>
+                <li class="phase-step" data-step-ind="3"><span class="phase-step-marker" aria-hidden="true"></span><div class="phase-step-text"><div class="phase-step-title">Marchio e social</div><span class="phase-step-desc">Facoltativo</span></div></li>
+              <li class="phase-step" data-step-ind="4"><span class="phase-step-marker" aria-hidden="true"></span><div class="phase-step-text"><div class="phase-step-title">Riepilogo</div><span class="phase-step-desc">Controlla i dati</span></div></li>
+              </ol>
+            </nav>
+      </div>
+      <!-- Passo 1, tema selezionato: frecce (tema precedente/successivo) + "Specifiche Tema" + tabella dati, al posto del segnaposto -->
+      <div class="bottega-panel-specs" id="panelSpecs" hidden>
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <div class="panel-header-group">
+              <button type="button" class="panel-nav-btn" id="themePrevBtn" aria-label="Tema precedente"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>
+              <button type="button" class="panel-nav-btn" id="themeNextBtn" aria-label="Tema successivo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="panel-alert-banner info theme-detail-note">
+          <div class="panel-alert-icon" aria-hidden="true">i</div>
+          <div class="panel-alert-body">
+            <span class="panel-alert-title">Colori e testi sono personalizzabili</span>
+            <span class="panel-alert-text">Dopo aver scelto il tema potrai cambiarli dal pannello dell’anteprima.</span>
+          </div>
+        </div>
+        <h2 class="card-title title-lg bottega-specs-title" id="panelSpecTheme"></h2>
+        <h3 class="card-title title-lg bottega-specs-sub">Specifiche</h3>
+        <dl class="theme-detail-facts" id="panelSpecFacts"></dl>
+      </div>
+      <div class="bottega-panel-placeholder" id="panelPlaceholder"><span>Seleziona il tema<br>per mostrare le specifiche</span></div>
+      <aside class="bottega-mini-preview bottega-panel-preview" data-preview-host aria-label="Anteprima della bottega"></aside>
+
+      <div class="panel-header-sticky">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <span class="bottega-panel-title">Personalizza</span>
+          </div>
+          <div class="panel-header-right">
+            <span class="bottega-panel-theme" id="panelThemeName"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-body" id="bottegaPanelBody">
+
+        <p class="bottega-hint" id="panelEmpty">Scegli un tema per personalizzare colori, testi e il resto della bottega.</p>
+
+        <section class="panel-section">
+          <h3 class="panel-section-title">Colore della copertina</h3>
+          <div class="bottega-swatches" id="swatches" role="radiogroup" aria-label="Colore della copertina"></div>
+          <p class="bottega-hint">È il colore di fondo della copertina. Solo i colori ammessi dal tema, con contrasto verificato; ogni sezione avrà il suo.</p>
+        </section>
+
+        <section class="panel-section" id="fontSection">
+          <h3 class="panel-section-title">Font</h3>
+          <select class="bottega-input" id="fontSelect" aria-label="Font"></select>
+        </section>
+
+        <section class="panel-section">
+          <h3 class="panel-section-title">Marchio</h3>
+          <div class="bottega-panel-row">
+            <span class="panel-field-label">Logo</span>
+            <button class="btn-ghost sm" type="button" id="panelLogoBtn">Scegli file</button>
+          </div>
+          <div class="bottega-panel-row">
+            <span class="panel-field-label">Favicon</span>
+            <button class="btn-ghost sm" type="button" id="panelFaviconBtn">Scegli file</button>
+          </div>
+        </section>
+
+        <section class="panel-section">
+          <h3 class="panel-section-title">Indirizzo</h3>
+          <div class="bottega-input-group">
+            <span class="bottega-input-prefix" aria-hidden="true">contenomy.it/</span>
+            <input class="bottega-input" id="panelSlug" type="text" autocomplete="off" spellcheck="false" aria-describedby="panelSlugHint">
+          </div>
+          <p class="bottega-hint" id="panelSlugHint">Modificabile fino alla prima pubblicazione.</p>
+        </section>
+
+        <section class="panel-section">
+          <h3 class="panel-section-title">Link social</h3>
+          <div class="bottega-social-list" id="panelSocialList"></div>
+        </section>
+
+        <section class="panel-section">
+          <h3 class="panel-section-title">Sezioni aggiuntive</h3>
+          <p class="bottega-hint">Come si aggiungono, si riordinano e si nascondono è ancora da definire.</p>
+          <button class="btn-ghost sm bottega-add-link" type="button" disabled>Aggiungi sezione</button>
+        </section>
+
+      </div>
+
+      <div class="bottega-panel-publish" id="publishBlock">
+        <div class="panel-alert-banner warning" id="stripeBanner">
+          <div class="panel-alert-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v6M12 17v.01"/></svg></div>
+          <div class="panel-alert-body">
+            <span class="panel-alert-title">Collega Stripe per pubblicare</span>
+            <span class="panel-alert-text">Senza Stripe la bottega resta in anteprima: solo tu la vedi, i visitatori no.</span>
+          </div>
+        </div>
+        <div class="panel-alert-banner success" id="publishedBanner" hidden>
+          <div class="panel-alert-icon" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4 4 10-10"/></svg></div>
+          <div class="panel-alert-body">
+            <span class="panel-alert-title">Bottega pubblicata</span>
+            <span class="panel-alert-text">Ora è visibile ai visitatori.</span>
+          </div>
+        </div>
+        <p class="bottega-hint" id="publishMissing" hidden></p>
+        <button class="btn-pill-dark primary" type="button" id="publishBtn" hidden>Pubblica</button>
+      </div>
+
+
+      <!-- ===== Azioni dei passi (footer del pannello) ===== -->
+      <div class="bottega-step-actions" id="stepActions">
+      <button class="bottega-link-btn" type="button" id="skipBtn" hidden>Salta<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="btn-ghost" type="button" id="prevBtn" hidden>Indietro</button>
+      <button class="btn-pill-dark primary" type="button" id="nextBtn" disabled>Continua</button>
+      </div>
+
+    </aside>
+
+  </div>
+  </div>
+</div>
+
+  <div class="theme-lightbox" id="themeLightbox" role="dialog" aria-modal="true" aria-label="Anteprima ingrandita" hidden>
+    <button type="button" class="theme-lightbox-close" id="themeLightboxClose" aria-label="Chiudi anteprima"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <button type="button" class="theme-lightbox-nav is-prev" id="themeLightboxPrev" aria-label="Immagine precedente"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <button type="button" class="theme-lightbox-nav is-next" id="themeLightboxNext" aria-label="Immagine successiva"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+    <div class="theme-lightbox-stage" id="themeLightboxStage"></div>
+  </div>
+
+  <script src="../../../../Temi/01_tema/01_tema_Package/package.js"></script>
+  <script src="bottega-store.js"></script>
+  <script src="../confirm-cancel.js"></script>
+  <script src="bottega-creazione.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

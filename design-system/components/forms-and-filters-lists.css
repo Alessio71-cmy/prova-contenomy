@@ -1,0 +1,144 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.search-result-status {
+  font-size: var(--font-size-14);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-4) var(--spacing-2);
+}
+
+.filters-collapse {
+  display: var(--table_toolbar-filters_collapse-display);
+  grid-template-rows: var(--table_toolbar-filters_collapse-grid_template_rows);
+  transition: var(--table_toolbar-filters_collapse-transition);
+}
+
+.filters-collapse.open {
+  grid-template-rows: var(--table_toolbar-filters_collapse_open-grid_template_rows);
+}
+
+.filters-collapse-inner {
+  overflow: var(--table_toolbar-filters_collapse_inner-overflow);
+  min-height: var(--table_toolbar-filters_collapse_inner-min_height);
+}
+
+.filters-row {
+  display: var(--table_toolbar-filters_row-display);
+  flex-wrap: var(--table_toolbar-filters_row-flex_wrap);
+  align-items: var(--table_toolbar-filters_row-align_items);
+  gap: var(--table_toolbar-filters_row-gap);
+  margin-top: var(--table_toolbar-filters_row-margin_top);
+  margin-bottom: var(--table_toolbar-filters_row-margin_bottom);
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  border: var(--border-width-hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-14);
+  color: var(--text);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.filter-chip:hover {
+  background: var(--hover-bg);
+}
+
+.filter-chip .chev {
+  margin-left: var(--space-0-5);
+  transform: rotate(45deg);
+}
+
+.pagination-arrow {
+  width: var(--pagination-pagination_arrow-width);
+  height: var(--pagination-pagination_arrow-height);
+  border: var(--pagination-pagination_arrow-border);
+  background: var(--pagination-pagination_arrow-background);
+  border-radius: var(--pagination-pagination_arrow-border_radius);
+  display: var(--pagination-pagination_arrow-display);
+  align-items: var(--pagination-pagination_arrow-align_items);
+  justify-content: var(--pagination-pagination_arrow-justify_content);
+  color: var(--pagination-pagination_arrow-color);
+  cursor: var(--pagination-pagination_arrow-cursor);
+  transition: var(--pagination-pagination_arrow-transition);
+}
+
+.pagination-arrow:hover {
+  background: var(--hover-bg);
+  color: var(--pagination-pagination_arrow_hover-color);
+}
+
+.pagination-arrow:disabled {
+  color: var(--pagination-pagination_arrow_disabled-color);
+  cursor: var(--pagination-pagination_arrow_disabled-cursor);
+  pointer-events: var(--pagination-pagination_arrow_disabled-pointer_events);
+}
+
+.toolbar-icons-group {
+  display: var(--table_toolbar-toolbar_icons_group-display);
+  align-items: var(--table_toolbar-toolbar_icons_group-align_items);
+  gap: var(--table_toolbar-toolbar_icons_group-gap);
+  flex: var(--table_toolbar-toolbar_icons_group-flex);
+}
+
+/* La ricerca prende temporaneamente il posto delle altre azioni della toolbar. Questa
+   regola è condivisa da tutte le viste elenco, incluse le demo statiche, e non dipende
+   dalla larghezza disponibile quando è aperto il pannello destro. */
+.table-toolbar-actions.search-active .toolbar-icons-group {
+  display: none;
+}
+
+.search-box {
+  display: var(--search-search_box-display);
+  align-items: var(--search-search_box-align_items);
+  width: var(--search-search_box-width);
+  height: var(--search-search_box-height);
+  flex: var(--search-search_box-flex);
+  overflow: var(--search-search_box-overflow);
+  border-radius: var(--search-search_box-border_radius);
+  transition: var(--search-search_box-transition);
+}
+
+.search-box.open {
+  width: var(--search-search_box_open-width);
+}
+
+.search-toggle {
+  flex: var(--search-search_toggle-flex);
+}
+
+.search-input {
+  flex: var(--search-search_input-flex);
+  min-width: var(--search-search_input-min_width);
+  border: var(--search-search_input-border);
+  outline: var(--search-search_input-outline);
+  background: var(--search-search_input-background);
+  font: var(--search-search_input-font);
+  font-size: var(--search-search_input-font_size);
+  color: var(--search-search_input-color);
+  padding: var(--search-search_input-padding);
+  opacity: var(--search-search_input-opacity);
+  pointer-events: var(--search-search_input-pointer_events);
+  transition: var(--search-search_input-transition);
+}
+
+.search-box.open .search-input {
+  opacity: var(--search-search_box_open_search_input-opacity);
+  pointer-events: var(--search-search_box_open_search_input-pointer_events);
+}
+
+.search-input::placeholder {
+  color: var(--search-search_input_placeholder-color);
+}
+
+.search-box.open .search-close-btn {
+  opacity: var(--search-search_box_open_search_close_btn-opacity);
+  pointer-events: var(--search-search_box_open_search_close_btn-pointer_events);
+}
+
+/* 5/11/2026 (Ruggi): la freccia dei dropdown segue l'hover come i link/icone (muted -> testo); il chev ha il colore scritto nel bordo, serve la regola dedicata. */
+.filter-chip .chev { transition: border-color var(--motion-duration-150) var(--motion-easing-ease); }
+.filter-chip:hover .chev, .filter-chip:focus-visible .chev { border-color: var(--text); }

@@ -1,0 +1,119 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.rank-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.rank-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rank-bar-label {
+  width: 120px;
+  flex-shrink: 0;
+  font-size: var(--font-size-12);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rank-bar-track {
+  flex: 1;
+  height: var(--spacing-2);
+  border-radius: var(--radius-pill);
+  background: var(--item-active-bg);
+  overflow: hidden;
+}
+
+.rank-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--rank-bar-fill);
+}
+
+.rank-bar-value {
+  width: var(--spacing-8);
+  flex-shrink: 0;
+  text-align: right;
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+}
+
+.submetrics-row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  padding: var(--space-6) 0;
+  background: var(--color-neutral-25);
+  border-radius: var(--radius-md);
+}
+
+.submetric {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 0 var(--space-6);
+  border-left: var(--border-width-hairline) solid var(--border);
+}
+
+.submetric:first-child {
+  border-left: none;
+}
+
+.submetric-value {
+  font-size: var(--font-size-30); /* 30/9/2026 (Ruggi): era font-size-20/lineHeight-normal — allineato a .metrica-value (cruscotto.css), stessa proporzione display-number in tutte le pagine */
+  font-weight: var(--font-weight-bold);
+  color: var(--text);
+  line-height: var(--font-lineHeight-tight);
+}
+
+.submetric-value .unit {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+  font-size: var(--font-size-14); /* 30/9/2026 (Ruggi): era font-size-12 — proporzione corretta rispetto al nuovo valore a 30px (regola scala: 14px per info secondaria importante, mai 13px) */
+}
+
+.submetric-value .unit.unit-text {
+  margin-left: var(--space-2);
+}
+
+.submetric-label {
+  font-size: var(--font-size-14);
+  color: var(--text-muted);
+}
+
+.submetric-label strong {
+  color: var(--text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.submetric-label-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.submetric-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+}
+
+.submetric-trend.up {
+  color: var(--status-success-fg);
+}
+
+.submetric-trend.down {
+  color: var(--status-danger-fg);
+}

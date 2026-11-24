@@ -1,0 +1,48 @@
+/* =====================================================================
+   BREADCRUMB — 15/10/2026 (Ruggi), file CONDIVISO delle pagine Venditore di secondo livello (come workspace-fit.css). CANDIDATO, nessuna nuova variabile Foundation/alias.
+   Tutte le voci 14px. Non correnti: muted (text-secondary), hover text-primary (150ms, come icon-btn).
+   Pagina corrente: lilla (brand-primary, stesso segnale "sei qui" della voce attiva in sidebar).
+   Separatore "/" 14px muted, decorativo.
+
+   POSIZIONE (16:17, Ruggi) — dipende dallo stato della sidebar:
+   - SIDEBAR APERTA: in assoluto nella topbar, alla stessa x del titolo del workspace. La x e' ricostruita con le STESSE regole del workspace
+     (larghezza sidebar + margin-left workspace + bordo 1px + padding 24 + eventuale centratura di .workspace-inner + padding 24):
+     se cambiano i margini del workspace va aggiornata anche qui (rischio dichiarato).
+   - SIDEBAR CHIUSA: NON segue il titolo. Si avvicina al logo "Contenomy": logo + 16px + divider verticale neutro (1px x 16px, neutral-200) + 16px + breadcrumb.
+     Il divider compare solo a sidebar chiusa (a sidebar aperta il breadcrumb e' lontano dal logo).
+   Variabili per-pagina (da sovrascrivere in .shell se la pagina ha un layout diverso): --bc-inner-max (max-width di .workspace-inner: 80rem default, 70rem in Prodotti), --bc-mr (margin-right del workspace: space-4, piu' grande con pannello destro aperto).
+   --bc-logo-end = x di fine del logo "Contenomy" (64 + larghezza testo), STIMATA: dipende dal font di sistema (+-4px).
+   ===================================================================== */
+.shell { --bc-side: var(--appShell-sidebarWidth); --bc-ml: var(--space-4); --bc-inner-max: 80rem; --bc-mr: var(--space-4); --bc-logo-end: 155px;
+  --bc-x: calc(var(--bc-side) + var(--bc-ml) + 1px + var(--space-6)
+      + max(0px, (100vw - var(--bc-side) - var(--bc-ml) - var(--bc-mr) - 2px - 2 * var(--space-6) - var(--bc-inner-max)) / 2)
+      + var(--space-6)); }
+/* posizione "vicino al logo": sidebar chiusa OPPURE pannello destro aperto (15/10/2026, Ruggi: col pannello aperto il breadcrumb non ha altre posizioni, qualunque sia lo stato della sidebar) */
+.shell.sidebar-collapsed,
+.shell:has(.body.panel-open) { --bc-x: calc(var(--bc-logo-end) + var(--space-4) + var(--border-width-hairline) + var(--space-4)); }
+
+.topbar { position: relative; }
+.breadcrumb {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  left: var(--bc-x);
+  transition: left var(--motion-duration-280) var(--motion-easing-ease);
+  min-width: 0;
+}
+/* divider verticale neutro tra logo e breadcrumb: solo a sidebar chiusa */
+.breadcrumb::before {
+  content: ""; position: absolute; top: 50%; transform: translateY(-50%);
+  left: calc(-1 * (var(--space-4) + var(--border-width-hairline)));
+  width: var(--border-width-hairline); height: var(--spacing-4);
+  background: var(--color-neutral-100);
+  opacity: 0; transition: opacity var(--motion-duration-150) var(--motion-easing-ease);
+}
+.shell.sidebar-collapsed .breadcrumb::before,
+.shell:has(.body.panel-open) .breadcrumb::before { opacity: 1; }
+
+.breadcrumb ol { list-style: none; display: flex; align-items: baseline; gap: var(--space-2); }
+.breadcrumb li { display: flex; align-items: baseline; gap: var(--space-2); white-space: nowrap; font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.breadcrumb li + li::before { content: "/"; content: "/" / ""; }
+.breadcrumb a { color: inherit; text-decoration: none; border-radius: var(--radius-sm); transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.breadcrumb a:hover { color: var(--text); }
+.breadcrumb li[aria-current="page"] { color: var(--color-brand-primary); }
+@media (max-width: 760px) { .breadcrumb { display: none; } }

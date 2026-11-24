@@ -1,0 +1,108 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.body.panel-open .product-detail-panel {
+  transform: var(--workspace-body_panel_open_product_detail_panel-transform);
+  pointer-events: var(--workspace-body_panel_open_product_detail_panel-pointer_events);
+}
+
+.body.panel-open .product-row,
+.body.panel-open .product-row-head {
+  grid-template-columns: var(--workspace-body_panel_open_product_row_body_panel_open_product_row_head-grid_template_columns);
+}
+
+.body.panel-open .badge-cluster,
+.body.panel-open .product-row-date,
+.body.panel-open .product-row-head > div:nth-child(6),
+.body.panel-open .product-row-head > div:nth-child(7) {
+  display: var(--workspace-body_panel_open_badge_cluster_body_panel_open_product_row_date_body_panel_open_product_row_head_div_nth_child_6_body_panel_open_product_row_head_div_nth_child_7-display);
+}
+
+.body.panel-open .product-variant-head,
+.body.panel-open .product-variant-row {
+  grid-template-columns: var(--workspace-body_panel_open_product_variant_head_body_panel_open_product_variant_row-grid_template_columns);
+}
+
+.body.panel-open .product-variant-row > div:nth-child(6) {
+  display: var(--workspace-body_panel_open_product_variant_row_div_nth_child_6-display);
+}
+
+.body.panel-open .tabs {
+  flex-wrap: var(--workspace-body_panel_open_tabs-flex_wrap);
+  overflow-x: var(--workspace-body_panel_open_tabs-overflow_x);
+  overflow-y: var(--workspace-body_panel_open_tabs-overflow_y);
+  padding-bottom: var(--workspace-body_panel_open_tabs-padding_bottom);
+  scrollbar-width: var(--workspace-body_panel_open_tabs-scrollbar_width);
+  -ms-overflow-style: var(--workspace-body_panel_open_tabs-_ms_overflow_style);
+  scroll-padding-inline: var(--workspace-body_panel_open_tabs-scroll_padding_inline);
+  --fade-l: var(--workspace-body_panel_open_tabs-__fade_l);
+  --fade-r: var(--workspace-body_panel_open_tabs-__fade_r);
+  mask-image: linear-gradient(to right, transparent 0, black var(--fade-l), black calc(100% - var(--fade-r)), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--fade-l), black calc(100% - var(--fade-r)), transparent 100%);
+}
+
+.body.panel-open .tabs::-webkit-scrollbar {
+  display: var(--workspace-body_panel_open_tabs_webkit_scrollbar-display);
+}
+
+/* A pannello aperto la barra delle tab resta scorrevole, ma ogni voce conserva
+   il proprio ingombro naturale. Le tab non usano la dimensione fissa dei chip:
+   così la loro spaziatura e la linea attiva restano coerenti con il pattern tabs. */
+.body.panel-open .tabs .tab {
+  flex: var(--workspace-body_panel_open_tabs_tab-flex);
+  min-width: max-content;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* Lo scroll orizzontale maschera anche l'asse verticale. La linea condivisa,
+   normalmente posizionata a -1px sul bordo, va quindi tenuta nel box per non
+   essere tagliata a meta' e mantenere i suoi 2px pieni. */
+.body.panel-open .tabs .tab-active-line {
+  bottom: 0;
+}
+
+/* Toolbar con filtri rapidi — nello stato con pannello laterale la striscia ha una
+   larghezza intenzionalmente limitata: tre chip complete e l'avvio della quarta. */
+.body.panel-open .products-panel .table-toolbar {
+  min-width: 0;
+  gap: var(--space-3);
+}
+
+.body.panel-open .products-panel .status-chips {
+  flex: 0 0 min(400px, calc(100% - 176px));
+  width: min(400px, calc(100% - 176px));
+  max-width: min(400px, calc(100% - 176px));
+  min-width: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-padding-inline: var(--space-4);
+  --status-chips-fade-l: 0px;
+  /* Fallback per le pagine statiche: i file interattivi lo azzerano quando non
+     esiste overflow e lo aggiornano durante lo scroll. */
+  --status-chips-fade-r: 48px;
+  mask-image: linear-gradient(to right, transparent 0, black var(--status-chips-fade-l), black calc(100% - var(--status-chips-fade-r)), transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black var(--status-chips-fade-l), black calc(100% - var(--status-chips-fade-r)), transparent 100%);
+}
+
+.body.panel-open .products-panel .table-toolbar-actions { flex: none; }
+.body.panel-open .products-panel .status-chips::-webkit-scrollbar { display: none; }
+.body.panel-open .products-panel .status-chips .status-chip,
+.body.panel-open .products-panel .status-chips .status-chip-divider { flex: none; }
+.body.panel-open .products-panel .status-chips .status-chip { white-space: nowrap; }
+
+.body.panel-open .products-panel,
+.body.panel-open .table-row-divider,
+.body.panel-open .product-row-head {
+  --table-border-color: var(--workspace-body_panel_open_products_panel_body_panel_open_table_row_divider_body_panel_open_product_row_head-__table_border_color);
+}
+
+.body.panel-open .product-row:hover .status-pill {
+  mask-image: var(--workspace-body_panel_open_product_row_hover_status_pill-mask_image);
+  -webkit-mask-image: var(--workspace-body_panel_open_product_row_hover_status_pill-_webkit_mask_image);
+}
+
+.body.panel-open .submetrics-row {
+  background: var(--workspace-body_panel_open_submetrics_row-background);
+}

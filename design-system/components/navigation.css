@@ -1,0 +1,10 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.filter-pill:not(.active):hover {
+  background: var(--hover-bg);
+  color: var(--filter_pill-filter_pill_not_active_hover-color);
+}
+
+.filter-pill.active {
+  background: var(--filter_pill-filter_pill_active-background);
+  color: var(--filter_pill-filter_pill_active-color);
+}

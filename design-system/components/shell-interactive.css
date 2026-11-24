@@ -1,0 +1,14 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.shell.sidebar-collapsed .sidebar:hover .sidebar-footer-text,
+.shell.sidebar-collapsed .sidebar:hover .sidebar-footer-content .chev {
+  opacity: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_footer_text_shell_sidebar_collapsed_sidebar_hover_sidebar_footer_content_chev-opacity);
+  width: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_footer_text_shell_sidebar_collapsed_sidebar_hover_sidebar_footer_content_chev-width);
+  overflow: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_footer_text_shell_sidebar_collapsed_sidebar_hover_sidebar_footer_content_chev-overflow);
+}
+
+.workspace-inner {
+  max-width: var(--workspace-workspace_inner-max_width);
+  margin: var(--workspace-workspace_inner-margin);
+  padding: var(--workspace-workspace_inner-padding);
+  padding-top: var(--workspace-workspace_inner-padding_top);
+}

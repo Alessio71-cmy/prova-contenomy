@@ -1,0 +1,456 @@
+/* Variante di lavoro del dettaglio Drop: eredita chrome, token e layout da drop.css. */
+@import url("drop.css");
+
+/* Mantiene lo stesso rapporto fra workspace e pannello della vista Prodotti statica. */
+:root { --panel-w: 528px; }
+
+/* Le pagine *-statico rappresentano Compact: primi quattro campi e schema 9/5/5/5. */
+.body.panel-open .drop-table[data-status-panel="aperti"] .drop-row-head,
+.body.panel-open .drop-table[data-status-panel="aperti"] .drop-row {
+  grid-template-columns: var(--table-layout-compact-template);
+}
+.body.panel-open .drop-row-head > div:nth-child(5),
+.body.panel-open .drop-row-head > div:nth-child(6),
+.body.panel-open .drop-row-head > div:nth-child(7),
+.body.panel-open .drop-row-head > div:nth-child(8),
+.body.panel-open .drop-row-period,
+.body.panel-open .drop-row-social,
+.body.panel-open .drop-row-quorum { display: none; }
+
+/* Con il pannello aperto Venduti è l'ultima informazione visibile della riga.
+   Le azioni restano sovrapposte sul bordo destro: la dissolvenza evita che il
+   valore finisca sotto il menu ⋮, allineando Drop al comportamento di Prodotti. */
+.body.panel-open .drop-table[data-status-panel="aperti"] .drop-row:hover .drop-row-stat {
+  mask-image: var(--workspace-body_panel_open_product_row_hover_status_pill-mask_image);
+  -webkit-mask-image: var(--workspace-body_panel_open_product_row_hover_status_pill-_webkit_mask_image);
+}
+.drop-row.selected { background: var(--color-lilla-50); }
+
+/* 28/9/2026, richiesta Ruggi: rimosso l'override .body.panel-open .workspace{background:neutral-50} —
+   ridondante, il workspace ereditato da drop.css è già SEMPRE neutral-50 (riposo e pannello aperto). */
+.body.panel-open .products-panel { background: transparent; /* 12/10/2026, richiesta Ruggi: panel/tabelle trasparenti (workspace bianco) */ } /* 28/9/2026, richiesta Ruggi: era var(--bg)/bianco */
+
+/* Stessa geometria del pannello di Prodotti. */
+/* 1/10/2026 (Ruggi): struttura copiata da prodotti-panel-static.css (.product-detail-panel): il pannello diventa una colonna flex (display:flex; flex-direction:column; overflow-y:hidden, era overflow-y:auto sull'intero pannello). Header e footer sono figli flex non scrollabili (.panel-header-sticky / .panel-footer-sticky), solo .panel-body scorre. */
+.drop-detail-panel {
+  position: fixed; top: calc(var(--header-h) + var(--space-4)); right: var(--space-4); bottom: var(--space-4);
+  z-index: var(--zIndex-30); width: var(--panel-w); display: flex; flex-direction: column; overflow-y: hidden; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none; padding: 0 var(--space-6) var(--space-6);
+  border-radius: var(--radius-lg); /* 6/10/2026 (Ruggi): tutti i pannelli destri radius-lg (era radius-xl) */ background: var(--bg); color: var(--text); /* 28/9/2026, correzione Ruggi: il pannello destro NON deve avere bordo (rimosso il border-neutral-200 aggiunto in precedenza). */
+  box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent);
+}
+.drop-detail-panel::-webkit-scrollbar { display: none; }
+.panel-header { display: flex; align-items: center; justify-content: space-between; }
+.panel-header {
+  position: sticky; top: 0; z-index: var(--zIndex-5); justify-content: space-between; background: var(--bg);
+  padding: var(--space-4) 0; /* 5/10/2026 (Ruggi): .panel-header in tutte le pagine = padding var(--space-4) solo sopra e sotto, nessun padding laterale */
+  margin-bottom: var(--space-4);
+  border-bottom: none;
+} /* 1/10/2026 (Ruggi): copiato da prodotti-panel-static.css (override locale di .panel-header): border-bottom none (il divider e' rimosso), margin-bottom space-4 (era space-8 + hairline). */
+/* 22/9/2026 (Ruggi): X+freccia in un div, precedente/successivo in un altro div, gap di 16px fra i due gruppi (era un'unica riga flat con
+   gap 4px per tutti e 4 gli elementi) — vedi markup aggiornato sotto e .panel-header-group. .panel-header-right invariato (Condividi/menu, non
+   coinvolto nella richiesta). */
+.panel-header-left { display: flex; align-items: center; gap: var(--space-4); }
+.panel-header-right { display: flex; align-items: center; gap: var(--space-1); }
+.panel-header-group { display: flex; align-items: center; gap: var(--space-1); }
+/* 22/9/2026 (Ruggi): .panel-header-divider rimosso dall'header del pannello, su richiesta esplicita ("in tutti i pannelli destri aperti di tutte le pagine"). Regola CSS eliminata qui perche questo file serve solo drop-statico.html. */
+.panel-close-btn, .panel-nav-btn, .panel-goto-btn, .panel-menu-btn {
+  width: var(--spacing-7); height: var(--spacing-7); padding: 0; border: 0; border-radius: var(--radius-pill); flex: none;
+  display: flex; align-items: center; justify-content: center; background: none; color: var(--text-muted); cursor: pointer; /* 1/10/2026 (Ruggi): header copiato da Prodotti -> a riposo icone senza sfondo (era neutral-25, 28/9/2026), come .panel-close-btn/.panel-nav-btn/.panel-menu-btn in prodotti-panel-static.css; hover invariato. */
+  text-decoration: none; transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease);
+}
+.panel-close-btn:hover, .panel-nav-btn:hover, .panel-goto-btn:hover, .panel-menu-btn:hover { background: var(--item-hover-bg); color: var(--text); }
+.panel-goto-btn { border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); } /* 1/10/2026 (Ruggi): rimosso .panel-close-btn da questo selettore — la X torna senza bordo (pill), come in Prodotti (28/9/2026). .panel-goto-btn non ha piu' markup nel pannello (icona rimossa, come in Prodotti): regola lasciata per coerenza con prodotti-panel-static.css. */ /* 21/9/2026: border-radius radius-pill (ereditato dal gruppo) → radius-sm, su richiesta di Ruggi — bordato = quadrato in questo sistema (coerente con .drop-goto-btn/.icon-btn-ghost in prodotti-panel-static.css/cruscotto.css); .panel-nav-btn/.panel-menu-btn (senza bordo) restano pill. */
+.panel-goto-btn svg, .panel-menu-btn svg { display: block; }
+
+/* 1/10/2026 (Ruggi): .panel-header-sticky, .panel-body e .panel-footer-sticky copiati ESATTI da prodotti-panel-static.css (28/9/2026). Header e footer sono figli flex non scrollabili del pannello (flex:none); scorre solo .panel-body. */
+.panel-header-sticky { flex: none; background: var(--bg); padding-top: var(--space-2); padding-bottom: var(--space-6); } /* 12/10/2026: più respiro sopra nel pannello; padding-bottom mantiene il distacco dalle tab */
+
+.panel-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-top: var(--space-4); /* 5/10/2026: esplicito (prima ereditato da .panel-body di drop.css): spazio tab→contenuto = 24px di .panel-header-sticky + 16px = 40px, riferimento per Prodotti */
+  padding-inline: 0; /* 5/10/2026 (Ruggi): niente padding laterale — azzera il padding var(--space-4) ereditato da .panel-body di drop.css; il contenuto si allinea ad header/tab/footer */
+  padding-bottom: var(--space-8); /* 28/9/2026 (Ruggi, da Prodotti): l'ultimo contenuto scrollabile non deve toccare il bordo di .panel-footer-sticky */
+}
+.panel-body::-webkit-scrollbar { display: none; }
+
+.panel-footer-sticky {
+  flex: none;
+  display: flex; justify-content: flex-end;
+  position: relative;
+  background: var(--bg); border-top: 0;
+  /* Margini negativi sinistra/destra/basso pari al padding del pannello (var(--space-6)) per estendere il div fino ai bordi reali del pannello e rispettare gli angoli arrotondati in fondo (stesso --radius-xl del pannello). Figlio flex fisso: resta sempre incollato al bordo inferiore reale, anche a contenuto corto. */
+  margin: 0 calc(-1 * var(--space-6)) calc(-1 * var(--space-6));
+  padding: var(--space-4) var(--space-6);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+.panel-footer-sticky::before { content: ""; position: absolute; top: 0; left: var(--space-6); right: var(--space-6); border-top: var(--border-width-hairline) solid var(--border); }
+
+/* 1/10/2026 (Ruggi): tab del pannello copiate ESATTE da Prodotti. Regole base .panel-tabs/.panel-tab/.panel-tab-inner/.panel-tab-active-line da design-system/components/product-panel-products.css (non importato da Drop: lo importerebbe tutto il pannello Prodotti); regole locali #panelMainTabs, .panel-tab-label e .panel-tab-count-badge da prodotti-panel-static.css. Stessa duplicazione per pagina gia' usata in questo file. */
+.panel-tabs {
+  position: var(--tabs-panel_tabs-position);
+  display: var(--tabs-panel_tabs-display);
+  gap: var(--tabs-panel_tabs-gap);
+  border-bottom: var(--tabs-panel_tabs-border_bottom);
+  margin-bottom: var(--tabs-panel_tabs-margin_bottom);
+}
+
+.panel-tab {
+  position: var(--tabs-panel_tab-position);
+  font-size: var(--tabs-panel_tab-font_size);
+  color: var(--tabs-panel_tab-color);
+  padding: var(--tabs-panel_tab-padding);
+  cursor: var(--tabs-panel_tab-cursor);
+  border-bottom: var(--tabs-panel_tab-border_bottom);
+  margin-bottom: var(--tabs-panel_tab-margin_bottom);
+  white-space: var(--tabs-panel_tab-white_space);
+  transition: var(--tabs-panel_tab-transition);
+}
+
+.panel-tab::after {
+  content: attr(data-label);
+  display: var(--tabs-panel_tab_after-display);
+  height: var(--tabs-panel_tab_after-height);
+  visibility: var(--tabs-panel_tab_after-visibility);
+  overflow: var(--tabs-panel_tab_after-overflow);
+  font-weight: var(--tabs-panel_tab_after-font_weight);
+}
+
+.panel-tab-inner {
+  display: var(--tabs-panel_tab_inner-display);
+  align-items: var(--tabs-panel_tab_inner-align_items);
+  gap: var(--tabs-panel_tab_inner-gap);
+}
+
+.panel-tab:hover {
+  color: var(--tabs-panel_tab_hover-color);
+}
+
+.panel-tab.active {
+  color: var(--tabs-panel_tab_active-color);
+  font-weight: var(--tabs-panel_tab_active-font_weight);
+}
+
+.panel-tab-active-line {
+  position: var(--tabs-panel_tab_active_line-position);
+  left: var(--tabs-panel_tab_active_line-left);
+  bottom: var(--tabs-panel_tab_active_line-bottom);
+  height: var(--tabs-panel_tab_active_line-height);
+  width: var(--tabs-panel_tab_active_line-width);
+  background: var(--tabs-panel_tab_active_line-background);
+  transform: var(--tabs-panel_tab_active_line-transform);
+  transition: var(--tabs-panel_tab_active_line-transition);
+  pointer-events: var(--tabs-panel_tab_active_line-pointer_events);
+}
+
+/* 30/9/2026 (Ruggi): sostituito il bordo diretto (#panelMainTabs .panel-tab.active) e il
+   display:none sulla linea — ora la linea scorre come .tab-active-line della nav .tabs (JS in
+   fondo alla pagina, funzione moveLine). Resta lo scoping locale del margin-bottom (28/9). */
+#panelMainTabs.panel-tabs { margin-bottom: 0; }
+
+/* 30/9/2026 (Ruggi): la tab con badge (Scheda prodotto) cambiava larghezza da attiva perche' il
+   ::after di .panel-tab (shared) riserva il bold solo sul testo, ma il badge sta dentro
+   .panel-tab-inner accanto al testo: il testo diventava semibold e spostava le altre tab. Stessa
+   tecnica del ::after shared (testo nascosto in semibold, altezza 0), applicata al solo testo. */
+.panel-tab-label { display: inline-block; }
+.panel-tab-label::after {
+  content: attr(data-label);
+  display: block;
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+  font-weight: var(--font-weight-semibold);
+}
+
+.panel-tab-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--spacing-4);
+  height: var(--spacing-4);
+  padding: 0 var(--spacing-1);
+  border-radius: var(--radius-full);
+  background: var(--color-feedback-danger-foreground);
+  color: var(--color-text-inverse);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-lineHeight-tight);
+  flex: none;
+}
+
+
+/* 1/10/2026 (Ruggi): regole di .panel-header-title-row copiate ESATTE da prodotti-panel-static.css (righe .panel-header-title-row ... .panel-header-title-meta-divider). */
+.panel-header-title-row { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-10); } /* 28/9/2026: ripristinato --space-10 (Ruggi) */
+.panel-header-title-line { display: flex; align-items: center; justify-content: space-between; width: 100%; } /* 30/9/2026 (Ruggi): tornata alla struttura originale (titolo+data) dopo un tentativo di invertire status/titolo, poi scartato. */
+.panel-header-title-group { display: flex; align-items: center; gap: var(--space-4); } /* 1/10/2026 (Ruggi): gap titolo ↔ bottone ghost "Vai al prodotto" da space-2 a space-4 (piu' staccato) */ /* 30/9/2026 (Ruggi): titolo + badge "In vetrina" nello stesso gruppo, gap uniforme; .panel-header-title-line resta lo spazio fra questo gruppo e la data (space-between, invariato). .badge-icon riusa la classe condivisa (feedback-lists.css) senza override: 28px combacia con l'altezza del titolo (type-title-xl, 28px). */
+#panelHeaderProductTitle, #panelTabScheda .panel-header-title-row .card-title, #panelTabInterazioni .panel-header-title-row .card-title { /* 5/10/2026: aggiunta tab Interazioni, header identico a Scheda prodotto */ font: var(--type-title-xl); } /* 28/9/2026 (Ruggi): titolo header piu' grande e bold — --type-title-xl (28px/bold), scoped solo qui, non tocca .card-title.title-lg (20px/regular) condiviso con le card */
+.panel-header-title-meta-row { display: flex; align-items: center; gap: var(--space-2); }
+/* 1/10/2026 (Ruggi): timer nell'header della tab Scheda prodotto (al posto del periodo del drop): numero in stile "display piccolo" (20px bold = type/display/xs, senza icona) con sotto "Fase n di n" (.panel-product-date); nome fase, periodo e barra tolti il 1/10/2026. Locale e CANDIDATO, non promosso: ripete in piccolo .drop-countdown (28px bold); 20px = alias type/display/xs gia' verificato (.submetric-value); piu' piccolo del titolo 28px, che resta il livello 1 dell'header (24px era troppo vicino al titolo; 28px = identico alla card stato). Solo token esistenti. */
+#panelTabScheda .panel-header-title-line, #panelTabInterazioni .panel-header-title-line { align-items: baseline; } /* counter e titolo sulla stessa linea di base (solo tab Scheda prodotto; in Disponibilita' resta center) */
+.panel-header-timer-value { font-size: var(--font-size-20); font-weight: var(--font-weight-bold); color: var(--text); line-height: var(--font-lineHeight-tight); }
+.panel-header-title-meta-row .tag {
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  background: var(--item-active-bg);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+} /* 30/9/2026 (Ruggi): "Edizione limitata" — era testo piatto (.panel-header-title-meta, rimossa:
+   nessun altro consumatore), ora tag-pill separata solo da gap (niente piu' •, ridondante fra
+   elementi che hanno gia' un proprio contenitore visivo). Stessi valori esatti di .panel-tag-col
+   .tag (prodotti.css) — pattern gia' esistente nel sistema per questo contenuto, orfano da quando
+   .panel-tag-col e' stata rimossa il 28/9; nessun override nuovo, solo riuso scoped qui.
+   "Moda" invece NON usa .tag — riusa .panel-product-category.cat-moda (colorata per categoria,
+   gia' definita in product-panel-static-product-and-drop.css e usata altrove nel pannello),
+   trovata dopo un primo tentativo sbagliato con .tag generica. Lo status-pill e' tornato in
+   questa riga (era stato spostato sopra il titolo, poi scartato) — resta distinguibile dalle
+   due etichette per colore (semantico, con pallino) e ora anche per il divider verticale sotto. */
+
+.panel-header-title-meta-divider {
+  width: var(--border-width-hairline);
+  height: var(--spacing-4);
+  background: var(--border);
+  flex: none;
+  margin: 0 var(--space-1);
+} /* 30/9/2026 (Ruggi): piccolo divider verticale fra lo status-pill e le due etichette
+   (Moda/Edizione limitata) — margin-left/right proprio (space-1), in aggiunta al gap uniforme
+   della riga (space-2), per staccarlo leggermente di piu' dai suoi vicini rispetto al gap fra
+   le due etichette stesse. */
+
+
+/* 1/10/2026 (Ruggi): .panel-drop-col copiato da prodotti-panel-static.css (28/9/2026) — card di superficie: sfondo neutral-25, bordo hairline, radius-md, padding space-4; titolo .panel-drop-title 16px regular. Qui contiene il PRODOTTO collegato (in Prodotti il drop collegato). */
+.panel-drop-col {
+  display: flex; flex-direction: column; justify-content: center; width: 100%;
+  background: var(--color-neutral-25);
+  border: var(--border-width-hairline) solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+.panel-drop-col .panel-drop-title {
+  align-self: flex-start; margin-bottom: var(--space-4);
+  font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text);
+}
+/* Contenuto della card prodotto (nuovo, locale): anteprima 48px + nome/varianti + bottone "Vai al prodotto" a destra. */
+.panel-product-card-row { display: flex; align-items: center; gap: var(--space-3); }
+.panel-product-card-row .panel-image-thumb { width: var(--spacing-12); flex: none; }
+.panel-product-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-0-5); }
+.panel-product-card-name { font-size: var(--font-size-16); color: var(--text); }
+.panel-product-card-sub { font-size: var(--font-size-14); color: var(--text-muted); }
+
+.panel-footer-sticky { gap: var(--space-2); } /* 1/10/2026: unica aggiunta rispetto alla copia di Prodotti — qui il footer contiene DUE azioni ("Interrompi drop" + "Gestisci Drop", gap space-2 come l'ex .drop-panel-actions); in Prodotti c'e' un solo bottone. */
+
+/* ---- Body del pannello Drop (ricostruito 21/9/2026 sulla gerarchia di Ruggi) ----
+   Componenti copiati da prodotti-panel-static.css (stessa duplicazione per pagina: drop.css non li contiene).
+   Solo token --space-*; nessun valore di spacing letterale nuovo. */
+/* 1/10/2026: .drop-panel-body { padding: 0 } rimosso — azzerava il padding-bottom (space-8) di .panel-body copiato da Prodotti. */
+
+/* Da prodotti-panel-static.css: blocco riepilogo con divider, sezioni, righe dato, miniature. */
+/* 21/9/2026: .panel-summary-block senza bordo/padding/margin inferiori: il divider è ora l'<hr class="drop-panel-divider"> sotto il blocco, con margin proprio (richiesta Ruggi) */
+.panel-section { margin-bottom: var(--space-6); }
+.panel-section:last-child { margin-bottom: 0; }
+.panel-section-title { font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); color: var(--text); margin-bottom: var(--space-3); }
+.panel-field-row { display: flex; align-items: center; justify-content: space-between; padding: var(--space-2) 0; border-bottom: var(--border-width-hairline) solid var(--border); }
+.panel-field-row:last-child { border-bottom: none; }
+.panel-image-thumb { aspect-ratio: 1; border-radius: var(--radius-sm); background: var(--item-active-bg); } /* senza flex-basis: qui e una tile di griglia, non la riga scrollabile di Prodotti */
+
+/* 1. Stato del drop: badge -> label + countdown + fase -> barra a segmenti. Widget Drop di Cruscotto/Prodotti. */
+.drop-state { display: flex; flex-direction: column; align-items: stretch; gap: var(--space-3); } /* 1/10/2026 (Ruggi): ora e' una card (.card.panel-gradimento): align-items stretch (era flex-start) perche' il divider occupi tutta la larghezza */
+.drop-state-time { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); width: 100%; margin-top: var(--space-1); } /* 21/9/2026: distanza badge → label = space-4 (gap space-3 + questo offset), stesso schema di .panel-status-date-row + .card-title in Prodotti (richiesta Ruggi) */
+.drop-countdown-info { display: flex; align-items: baseline; gap: var(--space-3); }
+.drop-countdown { font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); line-height: var(--font-lineHeight-tight); } /* text-display-md, come .drop-countdown di Cruscotto; nel pannello Prodotti e 20px (DESIGN-JUDGMENT) */
+.drop-phase { font-size: var(--font-size-14); color: var(--text-muted); }
+/* 21/9/2026: riga 1 = pill di stato + periodo (space-between), copiata da prodotti-panel-static.css (.panel-status-date-row / .panel-product-date, 12px muted), richiesta Ruggi.
+   Riga 2 (.drop-state-time): non più colonna ma riga space-between — countdown-info a sinistra, .tag "Edizione limitata" a destra (align center, come .drop-countdown-row di Cruscotto). */
+.panel-status-date-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.panel-product-date { font-size: var(--font-size-12); color: var(--text-muted); }
+.drop-progress { display: flex; gap: var(--space-1); width: 100%; }
+.drop-seg { flex: 1; height: var(--space-2); border-radius: var(--radius-pill); background: #f0f0f2; /* 1/10/2026 (Ruggi): altezza barre var(--space-2) (era 6px) */ overflow: hidden; }
+.drop-fill { height: 100%; background: var(--progress-segmented-fill); border-radius: inherit; }
+/* 1/10/2026 (Ruggi): .drop-product-row (prodotto associato) rimossa col suo blocco CSS (.thumb, .drop-product-*, .drop-substat*); il markup non la usa piu'. */
+/* Card dello stato drop: stessa .card.panel-gradimento di Prodotti (tab Interazioni): bordo hairline (regola copiata da prodotti-panel-static.css) e divider con margin space-4 (regola copiata). Dentro .drop-state il divider ha un margin ridotto: il gap space-3 del flex si somma, totale 16px sopra e sotto. */
+.panel-gradimento { margin-top: 0; border: var(--border-width-hairline) solid var(--border); }
+.card .card-divider { margin: var(--space-4) 0; }
+.drop-state .card-divider { margin: var(--space-1) 0; }
+/* "Prossimo step": sotto il divider della card. Etichetta + nome della fase prossima a sinistra, data/ora di apertura a destra (space-between). DESIGN-JUDGMENT (da confermare con Ruggi): dimensioni 12/16/14 con i soli token font-size esistenti. */
+.drop-next-step { display: flex; flex-direction: column; gap: var(--space-1); width: 100%; } /* 1/10/2026 (Ruggi): etichetta sopra, poi riga nome fase + data/ora sulla stessa riga */
+.drop-next-step-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.drop-next-step-label { font-size: var(--font-size-12); color: var(--text-muted); }
+.drop-next-step-name { font-size: var(--font-size-16); color: var(--text); }
+.drop-next-step-when { font-size: var(--font-size-14); color: var(--text-muted); flex: none; }
+/* 1/10/2026: spazio fra la card dello stato e le metriche (era la regola .drop-product-row + .panel-section, space-8 = 32px). */
+
+/* 1/10/2026 (Ruggi): .panel-stock-summary copiato da prodotti-panel-static.css (28/9/2026). Variabili dedicate per ruolo come in Prodotti; 1/10/2026: copia identica di Prodotti (numero in --type-display-lg, 34px). Provata brevemente la riduzione a --type-display-xs (20px), scartata da Ruggi. */
+:root {
+  --panel-stock-number-font: var(--type-display-lg); /* 1/10/2026 (Ruggi): ripristinato come in Prodotti (34px/bold); la riduzione a --type-display-xs (20px) era troppo piccola */
+  --panel-stock-number-color: var(--text);
+  --panel-stock-number-label-font: var(--type-body-md);
+  --panel-stock-number-label-color: var(--text-muted);
+  --panel-stock-meta-gap: var(--space-2);
+}
+.panel-stock-summary { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-4); } /* 1/10/2026 (Ruggi): distanza dalla .drop-product-row sotto (che non ha piu' margin-top) */
+.panel-stock-number { display: flex; align-items: baseline; font: var(--panel-stock-number-font); color: var(--panel-stock-number-color); } /* 1/10/2026 (Ruggi): flex baseline — numero e label sulla stessa linea di base in ogni caso */
+.panel-stock-number > span { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--panel-stock-number-label-font); color: var(--panel-stock-number-label-color); margin-left: var(--space-2); } /* 1/10/2026 (Ruggi): label + icona avviso in flex centrato (icona allineata al testo anche se manca o va a capo) */
+.panel-stock-number .variant-esaurito-warning { flex: none; color: var(--status-warning-fg); } /* 1/10/2026 (Ruggi): icona avviso DENTRO la label (flex, align-items:center); colore WARNING (arancione, come "Verifica disponibilita'" / .panel-attention-symbol) e non danger: coerenza con gli altri avvisi del pannello. Scelta opzione A (triangolo 14px). */
+.panel-stock-meta { display: flex; align-items: center; gap: var(--panel-stock-meta-gap); margin-bottom: var(--space-2); }
+.panel-product-price { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--text); } /* da product-panel-products.css (non importato in Drop) */
+.drop-detail-panel .product-row-stat { font-size: var(--font-size-14); } /* da prodotti-panel-static.css: .product-detail-panel .product-row-stat, 14px scoped al pannello (30/9/2026, Ruggi) */
+.panel-stock-progress { display: block; width: 100%; height: var(--space-2); border: 0; border-radius: var(--radius-pill); overflow: hidden; accent-color: var(--color-lilla-500); background: var(--color-neutral-100); }
+.panel-stock-progress::-webkit-progress-bar { background: var(--color-neutral-100); border-radius: var(--radius-pill); }
+.panel-stock-progress::-webkit-progress-value { background: var(--color-lilla-500); border-radius: var(--radius-pill); }
+.panel-stock-progress::-moz-progress-bar { background: var(--color-lilla-500); border-radius: var(--radius-pill); }
+.panel-drop-divider { margin: var(--space-12) 0; } /* copiato da prodotti-panel-static.css (28/9/2026, Ruggi): override del margin fisso di .card-divider. 1/10/2026: stesso divider fra stepper e Andamento (48px sopra e sotto); sostituisce il margin-top space-8 di .drop-steps-section + .drop-trend-section. */
+.panel-summary-block .drop-state + .panel-section { margin-top: var(--space-8); } /* 32px fra card e stepper */
+/* 1/10/2026 (Ruggi): .drop-product-row (struttura di cruscotto.css: thumb + colonna + chevron) senza bordi (tolti su richiesta Ruggi, 1/10/2026; padding space-3 verticale, gap space-3); link al prodotto sotto .panel-stock-summary in Andamento. Colori/font solo token. */
+.drop-product-row { display: flex; align-items: center; gap: var(--space-3); width: 100%; color: inherit; text-decoration: none; cursor: pointer; }
+.drop-product-row .panel-image-thumb { width: var(--spacing-12); flex: none; }
+.drop-product-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-0-5); }
+.drop-product-name { font-size: var(--font-size-16); color: var(--text); }
+.drop-product-sub { font-size: var(--font-size-14); color: var(--text-muted); }
+.drop-product-chevron { flex: none; display: flex; color: var(--text-muted); transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.drop-product-row:hover .drop-product-chevron { color: var(--text); }
+.drop-trend-section .drop-metrics-section { margin: 0 0 var(--space-12); } /* 5/10/2026 (Ruggi): niente margin-top (era space-6); la distanza dal sottotitolo resta quella del margin-bottom di .panel-variant-section-desc (space-8) */ /* 5/10/2026 (Ruggi): margin-bottom space-12 (era space-8) sotto .submetrics-row.span-12. 1/10/2026 (Ruggi): metriche in cima ad Andamento, subito sotto titolo e sottotitolo, prima di .panel-stock-summary; non piu' sezione a se' */
+.drop-metrics-section { margin-bottom: 0; } /* 21/9/2026: sezione "Risposta del pubblico" senza margin-bottom (richiesta Ruggi) */
+/* 1/10/2026 (Ruggi): .drop-steps-section ora sta sotto la card dello stato, prima delle metriche; margin-top space-12 (48px, storico 21/9) rimosso: il distacco (32px) e' dato da .panel-summary-block .drop-state + .panel-section. */
+/* 1/10/2026 (Ruggi): .drop-panel-actions (barra sticky dentro il body, "Interrompi drop" + "Gestisci Drop") rimossa: i due pulsanti vivono ora in .panel-footer-sticky, copiato da Prodotti. */
+/* 1/10/2026 (Ruggi): .drop-panel-divider (hr fra riepilogo e Varianti) rimosso: le Varianti stanno ora nella tab "Scheda prodotto", non servono piu' divisori fra i due blocchi. */
+
+/* 3. Risposta del pubblico: .submetrics-row/.submetric gia presenti in drop.css. Nel pannello (sfondo bianco) la regola
+   .body.panel-open .submetrics-row la renderebbe bianca su bianco: sfondo neutral-25 (lo stesso token a pannello chiuso). */
+.body.panel-open .drop-detail-panel .submetrics-row { background: transparent; border: var(--border-width-hairline) solid var(--color-neutral-100); } /* 12/10/2026, richiesta Ruggi: nei pannelli laterali sfondo trasparente e bordo neutral-200 */ /* 1/10/2026 (Ruggi): le metriche hanno il bordo hairline (come le card del pannello) */ /* specificita > .body.panel-open .submetrics-row */
+
+/* 4. Percorso del drop: stepper verticale (.phase-*; i nomi .drop-step* sono gia usati dallo stepper orizzontale di Programmati in drop.css) (marker + linea di collegamento, titolo + testo, a lato data o badge).
+   Marker e linea conclusi/correnti = lilla-500 (richiesta Ruggi 21/9/2026); futuro = neutral-200; il badge "In corso" resta .status-pill.pubblicato. Solo token, 1px/2px solo per
+   spessore di bordo/linea. */
+/* 1/10/2026 (Ruggi): stepper ORIZZONTALE a tutta larghezza (era verticale con date a lato): 3 colonne uguali; per ogni step il marker (20px) con la linea di collegamento verso il marker successivo, sotto titolo + badge di stato + testo. Date rimosse. */
+.phase-stepper { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--space-3); width: 100%; }
+.phase-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); text-align: center; } /* 1/10/2026 (Ruggi): marker e testo centrati nella colonna (provata la variante A a sinistra, scartata: ripristinato il centrato); cerchi grandi 28px */
+.phase-step:not(:last-child)::before { content: ""; position: absolute; top: calc(var(--spacing-7) / 2 - var(--spacing-0-5) / 2); left: calc(50% + var(--spacing-7) / 2 + var(--space-2)); right: calc(-50% - var(--space-3) + var(--spacing-7) / 2 + var(--space-2)); height: var(--spacing-0-5); background: var(--color-neutral-200); } /* marker al centro della colonna (50%) -> la linea parte space-2 dopo il bordo destro del suo marker e finisce space-2 prima del marker della colonna successiva (colonne separate da space-3) */
+.phase-step.is-done:not(:last-child)::before { background: var(--color-lilla-500); }
+.phase-step-marker { width: var(--spacing-7); height: var(--spacing-7); box-sizing: border-box; border: var(--border-width-moderate) solid var(--border); border-radius: var(--radius-full); background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--color-text-inverse); font-size: var(--font-size-14); flex: none; } /* 1/10/2026 (Ruggi): marker piu' grande, 28px (--spacing-7, era 20px --spacing-5); spunta 14px (era 11px, fuori scala) */
+.phase-step.is-done .phase-step-marker { background: var(--color-lilla-500); border-color: var(--color-lilla-500); }
+.phase-step.is-active .phase-step-marker { border-color: var(--color-lilla-500); }
+.phase-step.is-active .phase-step-marker::after { content: ""; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-full); background: var(--color-lilla-500); } /* punto interno space-3 (era space-2) in proporzione al marker piu' grande */
+.phase-step-text { min-width: 0; }
+.phase-step-title { white-space: nowrap; font-size: var(--font-size-14); line-height: var(--space-5); color: var(--text-muted); } /* 1/10/2026: 14px muted (era 16px, line-height space-6); lo step in corso torna text + semibold (regola sotto) */
+.phase-step.is-active .phase-step-title { font-weight: var(--font-weight-semibold); color: var(--text); }
+.phase-step-desc { display: block; font-size: var(--font-size-12); color: var(--text-muted); white-space: nowrap; } /* 1/10/2026 (Ruggi): descrizione su UNA riga (nowrap); testi accorciati (max ~20 caratteri) per stare nella colonna da ~140px */ /* 1/10/2026 (Ruggi): breve descrizione informativa sotto il nome della fase, 12px muted (info minore) */
+
+/* 5. Varianti: miniatura + etichetta + venduti + stato. */
+.drop-variants-section { margin-top: 0; } /* 1/10/2026 (Ruggi): ora e' la PRIMA sezione della tab Scheda prodotto — il margin-top: var(--space-10) del 21/9 (40px, stacco dal divider sopra) non serve piu': lo stacco col blocco "Prodotto collegato" e' dato dal .panel-drop-divider che sta SOTTO la sezione (margin space-12) */
+/* Testata sezione Varianti: stessa componente di Prodotti (.panel-variant-section-head/-title/-desc, copiata da prodotti-panel-static.css), 21/9/2026. */
+.panel-variant-section-head { display: flex; align-items: center; justify-content: space-between; }
+.panel-variant-section-title { font-size: var(--card-card_title_title_lg-font_size); font-weight: var(--card-card_title_title_lg-font_weight); color: var(--text); } /* 1/10/2026 (Ruggi): riuso del token di .card-title.title-lg (20px/regular), era font-size-16 — vale per tutti i titoli di sezione che usano questa classe (Andamento, Varianti prodotto) */
+.panel-variant-section-desc { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); margin-bottom: var(--space-8); display: block; }
+/* 5/10/2026 (Ruggi): .panel-variant-section-heading = wrapper flex in colonna di .panel-variant-section-head + .panel-variant-section-desc, con un piccolo gap fra titolo e sottotitolo (prima i due erano fratelli senza distanza). Usato ovunque compaia la coppia head+desc. */
+.panel-variant-section-heading { display: flex; flex-direction: column; gap: var(--space-1); }
+.drop-variant-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4) var(--space-2); }
+.drop-variant-tile { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); text-decoration: none; color: inherit; }
+/* 22/9/2026, su richiesta di Ruggi: rimossa la sottolineatura del nome variante in hover (era .drop-variant-tile:hover .drop-variant-meta span { text-decoration: underline; }, 21/9). Nessuna affordance sostitutiva aggiunta: la tile resta un link cliccabile (cursor pointer, :focus-visible invariato in drop.css), solo l'underline in hover e' stata tolta. */
+.drop-variant-tile .panel-image-thumb { width: 100%; }
+.drop-variant-info { width: 100%; box-sizing: border-box; padding: 0 var(--space-2); display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); } /* 21/9/2026: meta + badge di stato nello stesso div, padding 0 space-2 (richiesta Ruggi); gap interno = gap che prima aveva il tile tra meta e badge */
+.drop-variant-meta { width: 100%; display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); font-size: var(--font-size-14); }
+.drop-variant-meta small { font-size: var(--font-size-12); color: var(--text-muted); white-space: nowrap; }
+/* 1/10/2026 (Ruggi): le tile .drop-variant-grid/.drop-variant-tile/.drop-variant-info/.drop-variant-meta qui sopra NON sono piu' usate da drop-statico.html (sostituite dalle .variant-card sotto). Lasciate nel file solo perche' drop-statico-refactory.html e drop-statico-refactory-v2.html linkano ancora questo CSS e le usano. */
+
+/* ===== variant-card (1/10/2026, Ruggi) =====
+   Copiate da prodotti-panel-static.css (.variant-card*, .panel-variant-list, override .panel-accordion-header) e da design-system/components/product-panel-products.css (.panel-variant-section-count, .panel-field-label/-value, .panel-field-row.stacked, .panel-subvariant-chip*, .variant-esaurito-dot, .panel-image-grid, .panel-image-thumb-add*, .panel-actions-row, .panel-action-btn, .panel-accordion*): drop.css NON importa product-panel-products.css, stessa duplicazione per pagina gia' adottata sopra. Stessi valori, nessuna variabile nuova, nessun valore letterale nuovo. Candidato non promosso (fase 04).
+   Differenze volute rispetto a Prodotti: (1) .panel-accordion-header con padding/border-top space-6 e' scoped a .variant-card-disclosure (in Prodotti e' globale al file) perche' qui non ci sono altri accordion; (2) rimossi .panel-action-btn.danger (non usato) e .panel-section-actions/.panel-action-count (non usati). */
+.panel-variant-list { display: flex; flex-direction: column; gap: var(--space-4); }
+.variant-card { background: transparent; /* 13/10/2026 (Ruggi): sfondo trasparente (era neutral-25) */ border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-md); padding: var(--space-5); }
+/* 1/10/2026 (Ruggi): status-pill SOPRA il titolo; nella riga space-between titolo+prezzo a sinistra e text button "Gestisci variante →" a destra (era la status-pill). */
+.variant-card-header { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-3); }
+.variant-card-header-row { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+.variant-card-header-left { display: flex; align-items: baseline; gap: var(--space-2); }
+.variant-card-header-left .product-row-price { font-size: var(--font-size-14); }
+.variant-card-title { font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+.variant-card-stats { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-4); }
+.variant-card-sizes { padding: 0; border-bottom: none; margin-bottom: var(--space-2); }
+/* 1/10/2026 (Ruggi): "Gestisci variante" nell'header della variant-card = elemento <a class="link"> con <span class="chev inline">, IDENTICO a "Mostra tutti i prodotti" di Cruscotto (.link 14px muted + chev). La base .link/.chev esiste gia' in questo file; qui si aggiunge solo il feedback hover di cruscotto.css (14/9/2026, Ruggi: muted -> text, chev incluso). .link non e' usata altrove in questa pagina. Sostituisce il candidato .variant-card-manage (rimosso). */
+.link { font-weight: var(--font-weight-regular); transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.link:hover { color: var(--text); }
+.link:hover .chev { border-color: var(--text); }
+
+
+.panel-field-label { font-size: var(--font-size-12); color: var(--text-muted); }
+.panel-field-row:not(.stacked) .panel-field-label { font-size: var(--font-size-14); } /* 29/10/2026 (Ruggi): label AFFIANCATA al value = 14px muted (12px è troppo piccolo accanto a un value da 14px); label sopra al campo (.stacked / form) resta 12px */
+.panel-field-value { font-size: var(--font-size-14); color: var(--text); }
+.panel-field-value strong { font-weight: var(--font-weight-bold); }
+.panel-field-row.stacked { flex-direction: column; align-items: flex-start; gap: var(--space-2); }
+
+.panel-subvariant-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.panel-subvariant-chip { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: var(--spacing-8); padding: var(--space-1) var(--space-2); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); font-size: var(--font-size-12); color: var(--text); background: transparent; }
+.panel-subvariant-chip.esaurito { color: var(--text-faint); border-color: var(--border); background: var(--item-active-bg); }
+.panel-subvariant-chip .variant-esaurito-dot { position: absolute; top: -5px; right: -5px; width: var(--spacing-3); height: var(--spacing-3); background: var(--bg); border-radius: var(--radius-full); }
+.panel-subvariant-chip .variant-esaurito-dot svg { width: 10px; height: 10px; }
+.variant-esaurito-dot { display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; flex: none; color: var(--status-danger-fg); }
+.variant-esaurito-dot svg circle { fill: currentColor; }
+
+.panel-accordion { margin-bottom: var(--space-10); border-bottom: var(--border-width-hairline) solid var(--border); }
+.panel-accordion-header { width: 100%; display: flex; align-items: center; justify-content: space-between; background: none; border: none; cursor: pointer; padding: 0 0 var(--space-3); color: var(--text); }
+.panel-accordion-header-label { font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+.panel-accordion-toggle { flex: none; font-size: var(--font-size-18); line-height: var(--font-lineHeight-tight); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.panel-accordion-body { padding: 0 0 var(--space-3); display: flex; flex-direction: column; gap: var(--space-3); }
+.variant-card-disclosure { margin-bottom: 0; border-bottom: none; }
+.variant-card-disclosure > .panel-accordion-header { padding: var(--space-6) 0 var(--space-6); border-top: var(--border-width-hairline) solid var(--border); cursor: pointer; list-style: none; }
+.variant-card-disclosure > .panel-accordion-header::-webkit-details-marker { display: none; }
+.variant-card-disclosure .panel-accordion-toggle::before { content: "+"; }
+.variant-card-disclosure[open] .panel-accordion-toggle::before { content: "\2212"; }
+
+.panel-image-grid { display: flex; gap: var(--space-2); overflow-x: auto; overflow-y: hidden; }
+.panel-image-thumb-add { display: flex; align-items: center; justify-content: center; background: transparent; border: var(--border-width-hairline) dashed var(--border); cursor: pointer; transition: background-color var(--motion-duration-150) var(--motion-easing-ease), border-color var(--motion-duration-150) var(--motion-easing-ease); }
+.panel-image-thumb-add:hover { background: var(--item-hover-bg); border-color: var(--border); }
+.panel-image-thumb-add-icon { width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-full); border: var(--border-width-hairline) solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text); }
+.variant-card-disclosure .panel-image-grid { margin-top: var(--space-2); }
+.variant-card-disclosure .panel-image-thumb { flex: 0 0 calc((100% - (2 * var(--space-2))) / 3.4); } /* la 4a miniatura "sbircia" dal bordo = indizio di scroll (da Prodotti, 28/9) */
+.panel-actions-row { display: flex; gap: var(--space-2); }
+.panel-actions-row > * { flex: 1 1 0; justify-content: center; }
+.variant-card-disclosure .panel-actions-row { margin-top: var(--space-6); }
+.panel-action-btn { flex: 1; padding: var(--space-2) var(--space-3); font-size: var(--font-size-14); font-weight: var(--font-weight-medium); border-radius: var(--radius-sm); border: var(--border-width-hairline) solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.panel-action-btn:hover { background: var(--item-hover-bg); }
+
+
+@media (max-width: 1180px) {
+  .body.panel-open .drop-table[data-status-panel="aperti"] .drop-row-head,
+  .body.panel-open .drop-table[data-status-panel="aperti"] .drop-row { grid-template-columns: var(--table-layout-compact-template); }
+}
+
+/* 5/10/2026 (Ruggi): tab Interazioni — calendario compatto del drop + fasi con tempo rimanente. Componente LOCALE (non promossa a candidato): .drop-mini-cal* (7 colonne, solo le settimane del drop; stato per fase: 1 conclusa = neutro, 2 in corso = accent pieno, 3 prossima = accent tenue; fuori dal drop = nessuno sfondo) e .drop-phase* (una riga per fase: nome + tempo rimanente, date, barra .panel-stock-progress che si accorcia col tempo). Solo token. */
+.drop-mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--space-1); margin-top: var(--space-6); }
+.drop-mini-cal-wd { padding-bottom: var(--space-1); text-align: center; font-size: var(--font-size-12); color: var(--text-muted); }
+.drop-mini-cal-day { height: var(--spacing-8); display: flex; align-items: center; justify-content: center; border-radius: var(--radius-sm); font-size: var(--font-size-14); color: var(--text-faint); }
+.drop-mini-cal-day[data-phase="1"] { background: var(--item-active-bg); color: var(--text-muted); }
+.drop-mini-cal-day[data-phase="2"] { background: var(--color-lilla-500); color: var(--color-text-inverse); font-weight: var(--font-weight-semibold); }
+.drop-mini-cal-day[data-phase="3"] { background: var(--color-lilla-100); color: var(--color-lilla-500); }
+.drop-mini-cal-day--today { font-weight: var(--font-weight-bold); outline: var(--border-width-hairline) solid var(--text); outline-offset: 2px; }
+.drop-phase-list { list-style: none; margin: var(--space-16) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-6); }
+.drop-phase-row { display: flex; flex-direction: column; gap: var(--space-1); }
+.drop-phase-top { display: flex; align-items: center; gap: var(--space-2); }
+.drop-phase-swatch { flex: none; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-pill); background: var(--item-active-bg); border: var(--border-width-hairline) solid var(--border); } /* bordo hairline: senza, il pallino della fase conclusa/prossima si perde sul bianco */
+.drop-phase-row[data-phase="2"] .drop-phase-swatch { background: var(--color-lilla-500); border-color: var(--color-lilla-500); }
+.drop-phase-row[data-phase="3"] .drop-phase-swatch { background: var(--color-lilla-100); border-color: var(--color-lilla-500); }
+.drop-phase-name { flex: 1; min-width: 0; font-size: var(--font-size-16); color: var(--text); }
+.drop-phase-remaining { flex: none; font-size: var(--font-size-14); color: var(--text-muted); }
+.drop-phase-dates { font-size: var(--font-size-14); color: var(--text-muted); padding-left: calc(var(--space-3) + var(--space-2)); }
+.drop-phase-row .panel-stock-progress { margin-top: var(--space-2); }
+
+.panel-header-title-row .phase-stepper { margin-top: var(--space-6); } /* 5/10/2026 (Ruggi): stepper dentro l'header delle tab Scheda prodotto/Interazioni; distacco dai tag (il gap del title-row e' space-3, qui piu' respiro) */
+
+.drop-phase-top .status-pill { flex: none; } /* 5/10/2026 (Ruggi): "Concluso" della fase e' uno .status-pill.archiviato (stessa variante grigia dello stato chiuso del drop); margin della lista fasi portato a space-4 */
+
+.panel-variant-section-head .link { margin-right: var(--space-0-5); } /* 5/10/2026 (Ruggi): il chevron (.chev, box 6px ruotato di -45deg) sborda di ~1px a destra del proprio box; .panel-body ha overflow-x:hidden e, senza padding laterale, lo tagliava sul bordo. 2px di margine lo tengono dentro senza spostare visibilmente il link. */
+
+.panel-tabpanel { padding-left: var(--space-2); padding-right: var(--space-2); } /* 5/10/2026 (Ruggi): tutti i .panel-tabpanel hanno padding laterale space-2 (8px), nessun padding sopra/sotto */
+
+.tab.active { border-bottom-color: var(--color-lilla-500); } /* 5/10/2026 (Ruggi): trattino lilla sotto la tab attiva del workspace ("Elenco drop"), come .tab.active in prodotti-panel-static.css */
+.tabs + .products-panel { margin-top: var(--space-16); } /* 5/10/2026 (Ruggi): distanza tab workspace → tabella uguale a Elenco prodotti: li' e' il margin-top space-16 di .grid (collassa con il margin-bottom space-8 di .tabs = 64px); qui .products-panel segue direttamente .tabs, quindi il margine va sul pannello */
+
+/* 5/10/2026 (Ruggi): variante di .status-pill dedicata a "In drop" (meta-row del pannello), colore tutto suo: lilla, il colore del drop (marker stepper). LOCALE/CANDIDATA, non promossa; solo token esistenti. Sfondo lilla-50, testo lilla-600 (contrasto >5:1), pallino lilla-500. */
+.status-pill.in-drop { background: var(--color-lilla-50); color: var(--color-lilla-600); }
+.status-pill.in-drop .dot { background: var(--color-lilla-500); }
+
+/* Gradienti sulle celle sotto le azioni: sostituiti dal pannello pieno */
+.body.panel-open .drop-table[data-status-panel="aperti"] .drop-row:hover .drop-row-stat { mask-image: none; -webkit-mask-image: none; }

@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Cruscotto — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="cruscotto.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== TOPBAR (larghezza piena, sopra sidebar+workspace) ===================== -->
+  <!-- 17/9/2026, propagato da prodotti-panel-static.css su richiesta di Ruggi (fix bug: sidebar-header era finita dentro la sidebar invece che nella topbar): icona toggle sidebar + logo Contenomy tornano qui dentro .topbar-left (via .sidebar-header rimossa). -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+  <!-- ===================== SIDEBAR (piena altezza dell'area sotto la topbar) ===================== -->
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Buongiorno, Ruggi</h1>
+          <p class="page-sub">Ecco cosa sta succedendo nella tua bottega oggi</p>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn-ghost"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>Visita bottega</button>
+          <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo prodotto</button>
+        </div>
+      </div>
+
+      <!-- BARRA INCASSI -->
+      <div class="card incassi-card">
+        <div class="incassi-totals">
+          <div>
+            <span class="incassi-netto">€ 39.400</span>
+            <span class="incassi-sep">/</span>
+            <span class="incassi-lordo">€ 49.600</span>
+          </div>
+          <a class="icon-btn-ghost" href="#" data-tooltip="Vai alla rendicontazione (Conti)" aria-label="Vai alla rendicontazione (Conti)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17 17 7"/><path d="M9 7h8v8"/>
+            </svg>
+          </a>
+        </div>
+        <div class="incassi-bar">
+          <div class="incassi-seg track" style="width:100%"></div>
+          <div class="incassi-seg lordo" style="width:62%"></div>
+          <div class="incassi-seg netto" style="width:49.25%"></div>
+        </div>
+        <div class="incassi-legend">
+          <span><i class="dot netto"></i>Netto ricevuto</span>
+          <span><i class="dot lordo"></i>Lordo (fee incluse)</span>
+          <span><i class="dot track"></i>Margine alla soglia €80.000</span>
+        </div>
+      </div>
+
+      <div class="grid">
+
+        <!-- METRICHE -->
+        <div class="card metriche-card span-12">
+        <div class="metrica">
+          <div class="metrica-value">1.284</div>
+          <div class="metrica-label-row">
+            <span class="metrica-label">Follower</span>
+            <span class="metrica-trend up">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 12 9l6 6"/></svg>
+              4,2%
+            </span>
+          </div>
+        </div>
+        <div class="metrica">
+          <div class="metrica-value">312</div>
+          <div class="metrica-label-row">
+            <span class="metrica-label">Prodotti venduti</span>
+            <span class="metrica-trend down">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              1,8%
+            </span>
+          </div>
+        </div>
+        <div class="metrica">
+          <div class="metrica-value">94%</div>
+          <div class="metrica-label-row">
+            <span class="metrica-label">Media recensioni</span>
+          </div>
+        </div>
+        <div class="metrica">
+          <div class="metrica-value">38%</div>
+          <div class="metrica-label-row">
+            <span class="metrica-label">Tasso di riacquisto</span>
+          </div>
+        </div>
+        </div>
+
+        <!-- DA FARE -->
+        <div class="card span-6">
+          <div class="card-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Da fare</div>
+              <div class="card-sub">Oggi, 8 settembre</div>
+            </div>
+            <div class="todo-progress">
+              <svg width="20" height="20" viewBox="0 0 20 20">
+                <circle class="ring-track" cx="10" cy="10" r="8" fill="none" stroke-width="2.5" />
+                <circle class="ring-fill" cx="10" cy="10" r="8" fill="none" stroke-width="2.5"
+                  stroke-dasharray="50.27" stroke-dashoffset="40.21" stroke-linecap="round"
+                  transform="rotate(-90 10 10)" />
+              </svg>
+              <span>1 di 5</span>
+            </div>
+          </div>
+
+          <div class="card-divider"></div>
+
+          <div class="filter-row">
+            <button class="filter-pill active">Tutti <span class="count">5</span></button>
+            <button class="filter-pill">Da fare</button>
+            <button class="filter-pill">Completati</button>
+          </div>
+
+          <div class="todo-list">
+            <div class="todo-row">
+              <span class="status-dot"></span>
+              <div class="todo-body">
+                <div class="todo-label">Gestisci l'ordine #4021</div>
+                <div class="todo-meta">Ordine da spedire</div>
+              </div>
+              <div class="chev"></div>
+            </div>
+            <div class="todo-row">
+              <span class="status-dot"></span>
+              <div class="todo-body">
+                <div class="todo-label">Rispondi alla richiesta di Giulia B.</div>
+                <div class="todo-meta">Richiesta cliente</div>
+              </div>
+              <div class="chev"></div>
+            </div>
+            <div class="todo-row">
+              <span class="status-dot"></span>
+              <div class="todo-body">
+                <div class="todo-label">Gestisci il reso #R-118</div>
+                <div class="todo-meta">Scade tra 2 giorni</div>
+              </div>
+              <div class="chev"></div>
+            </div>
+            <div class="todo-row">
+              <span class="status-dot"></span>
+              <div class="todo-body">
+                <div class="todo-label">Rispondi alla recensione di Marco T.</div>
+                <div class="todo-meta">Recensione senza risposta</div>
+              </div>
+              <div class="chev"></div>
+            </div>
+            <div class="todo-row done">
+              <span class="status-dot done">✓</span>
+              <div class="todo-body">
+                <div class="todo-label done">Gestito l'ordine #4018</div>
+                <div class="todo-meta">Completato oggi</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DROP -->
+        <div class="card span-6">
+          <div class="card-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Drop</div>
+              <div class="card-sub">Qui appariranno i tuoi drop attivi.</div>
+            </div>
+            <button class="btn-pill-dark sm secondary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo drop</button>
+          </div>
+
+          <div class="card-divider"></div>
+
+          <span class="tag">Edizione limitata</span>
+          <div class="drop-countdown-row">
+            <div class="drop-countdown-info">
+              <div class="drop-countdown">2h 26m</div>
+              <div class="drop-phase">Primi sostenitori</div>
+            </div>
+            <a class="icon-btn-ghost" href="#" data-tooltip="Vai al drop" aria-label="Vai al drop">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+            </a>
+          </div>
+
+          <div class="drop-progress">
+            <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+            <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+            <div class="drop-seg active"><div class="drop-fill" style="width:55%"></div></div>
+          </div>
+
+          <div class="drop-product-row">
+            <div class="thumb"></div>
+            <div class="drop-product-col">
+              <div class="drop-product-name-line">
+                <span class="drop-product-name">Maglione oversize</span>
+                <span class="drop-product-sep">·</span>
+                <span class="drop-product-price">€ 49–52</span>
+              </div>
+              <!-- Accanto ai pezzi rimasti: icona di avviso se almeno una variante è esaurita (qui 1 su 3);
+                   se è esaurito TUTTO il prodotto, al posto dell'icona <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span> (con "0 pezzi rimasti"). Stessa regola di Drop (03-Drop/drop-statico.html). -->
+              <div class="drop-substat-row">
+                <span class="drop-substat"><strong>42</strong> pezzi rimasti</span>
+                <span class="variant-esaurito-warning" role="img" aria-label="1 variante esaurita su 3" data-tooltip="1 variante esaurita su 3"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span>
+              </div>
+            </div>
+            <div class="chev"></div>
+          </div>
+        </div>
+
+        <!-- DROP — variante vuota (confermata da Ruggi, 15/9/2026). Tenuta come commento:
+             la variante popolata sopra resta quella live in questa pagina; questo è il markup
+             pronto per quando servirà mostrare/swappare lo stato vuoto (nessun JS di toggle qui). -->
+        <!--
+        <div class="card span-6 drop-card">
+          <div class="card-header no-sub">
+            <div class="card-title title-lg">Drop</div>
+          </div>
+          <div class="card-sub">Qui appariranno i tuoi drop attivi.</div>
+
+          <div class="card-divider"></div>
+
+          <div class="drop-empty-state">
+            <div class="drop-empty-text">Non ci sono Drop attivi<br>al momento</div>
+            <button class="btn-pill-dark sm secondary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Crea drop</button>
+          </div>
+        </div>
+        -->
+
+        <!-- ULTIMI PRODOTTI -->
+        <div class="card span-12">
+          <div class="card-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Ultimi prodotti</div>
+              <div class="card-sub">I tuoi prodotti pubblicati più di recente</div>
+            </div>
+            <a class="link" href="#">Mostra tutti i prodotti <span class="chev inline"></span></a>
+          </div>
+
+          <div class="card-divider"></div>
+
+          <div class="products-grid">
+
+            <button class="product-new-card">
+              <span class="product-new-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </span>
+              <span>Nuovo prodotto</span>
+            </button>
+
+            <div class="product-card">
+              <div class="product-card-thumb">
+                <span class="product-card-badge vetrina">In vetrina</span>
+              </div>
+              <div class="product-card-body">
+              <div class="product-card-text">
+                <div class="product-card-primary">
+                  <div class="product-card-name-line">
+                    <span class="product-card-name">Maglione oversize</span>
+                    <span class="product-card-sep">·</span>
+                    <span class="product-card-price">€ 49</span>
+                  </div>
+                  <div class="product-card-stat"><strong>18 di 60</strong> venduti</div>
+                </div>
+                <div class="product-card-reviews"><svg class="product-card-reviews-icon" width="15" height="15" viewBox="0 0 52 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M26,50C26,50,26,50,26,50c-0.3,0-0.6-0.2-0.8-0.4l-23-34c-0.2-0.3-0.2-0.7-0.1-1C2.3,14.2,2.6,14,3,14h46c0.4,0,0.7,0.2,0.9,0.5s0.2,0.7-0.1,1l-23,34C26.6,49.8,26.3,50,26,50z M4.9,16L26,47.2L47.1,16H4.9z"/><path d="M26,50L26,50c-0.5,0-0.9-0.3-1-0.8l-8-34c-0.1-0.3,0-0.6,0.2-0.9c0.2-0.2,0.5-0.4,0.8-0.4h16c0.3,0,0.6,0.1,0.8,0.4c0.2,0.2,0.3,0.6,0.2,0.8l-8,34C26.9,49.7,26.5,50,26,50z M19.3,16L26,44.6L32.7,16H19.3z"/><path d="M49,16H3c-0.4,0-0.7-0.2-0.9-0.6c-0.2-0.4-0.1-0.8,0.1-1.1l10-12C12.4,2.1,12.7,2,13,2h26c0.3,0,0.6,0.1,0.8,0.4l10,12c0.2,0.3,0.3,0.7,0.1,1.1C49.7,15.8,49.4,16,49,16z M5.1,14h41.7L38.5,4H13.5L5.1,14z"/><path d="M18,16c-0.4,0-0.8-0.2-0.9-0.6l-5-12c-0.2-0.5,0-1.1,0.5-1.3c0.5-0.2,1.1,0,1.3,0.5l5,12c0.2,0.5,0,1.1-0.5,1.3C18.3,16,18.1,16,18,16z"/><path d="M34,16c-0.1,0-0.3,0-0.4-0.1c-0.5-0.2-0.8-0.8-0.5-1.3l5-12c0.2-0.5,0.8-0.8,1.3-0.5c0.5,0.2,0.8,0.8,0.5,1.3l-5,12C34.8,15.8,34.4,16,34,16z"/><path d="M34.2,16c-0.3,0-0.6-0.1-0.8-0.4L26,5.4l-7.4,10.1c-0.3,0.4-1,0.5-1.4,0.2c-0.4-0.3-0.5-1-0.2-1.4l8.2-11.2c0.4-0.5,1.2-0.5,1.6,0L35,14.4c0.3,0.4,0.2,1.1-0.2,1.4C34.7,15.9,34.4,16,34.2,16z"/></svg>94% recensioni positive</div>
+              </div>
+              <button class="btn-pill-dark sm primary product-card-restock" style="visibility:hidden" aria-hidden="true">Gestisci prodotto</button>
+              </div>
+            </div>
+
+            <div class="product-card">
+              <div class="product-card-thumb"></div>
+              <div class="product-card-body">
+              <div class="product-card-text">
+                <div class="product-card-primary">
+                  <div class="product-card-name-line">
+                    <span class="product-card-name">Borsa in tela</span>
+                    <span class="product-card-sep">·</span>
+                    <span class="product-card-price">€ 32</span>
+                  </div>
+                  <div class="product-card-stat"><strong>27 di 40</strong> venduti</div>
+                </div>
+                <div class="product-card-reviews"><svg class="product-card-reviews-icon" width="15" height="15" viewBox="0 0 52 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M26,50C26,50,26,50,26,50c-0.3,0-0.6-0.2-0.8-0.4l-23-34c-0.2-0.3-0.2-0.7-0.1-1C2.3,14.2,2.6,14,3,14h46c0.4,0,0.7,0.2,0.9,0.5s0.2,0.7-0.1,1l-23,34C26.6,49.8,26.3,50,26,50z M4.9,16L26,47.2L47.1,16H4.9z"/><path d="M26,50L26,50c-0.5,0-0.9-0.3-1-0.8l-8-34c-0.1-0.3,0-0.6,0.2-0.9c0.2-0.2,0.5-0.4,0.8-0.4h16c0.3,0,0.6,0.1,0.8,0.4c0.2,0.2,0.3,0.6,0.2,0.8l-8,34C26.9,49.7,26.5,50,26,50z M19.3,16L26,44.6L32.7,16H19.3z"/><path d="M49,16H3c-0.4,0-0.7-0.2-0.9-0.6c-0.2-0.4-0.1-0.8,0.1-1.1l10-12C12.4,2.1,12.7,2,13,2h26c0.3,0,0.6,0.1,0.8,0.4l10,12c0.2,0.3,0.3,0.7,0.1,1.1C49.7,15.8,49.4,16,49,16z M5.1,14h41.7L38.5,4H13.5L5.1,14z"/><path d="M18,16c-0.4,0-0.8-0.2-0.9-0.6l-5-12c-0.2-0.5,0-1.1,0.5-1.3c0.5-0.2,1.1,0,1.3,0.5l5,12c0.2,0.5,0,1.1-0.5,1.3C18.3,16,18.1,16,18,16z"/><path d="M34,16c-0.1,0-0.3,0-0.4-0.1c-0.5-0.2-0.8-0.8-0.5-1.3l5-12c0.2-0.5,0.8-0.8,1.3-0.5c0.5,0.2,0.8,0.8,0.5,1.3l-5,12C34.8,15.8,34.4,16,34,16z"/><path d="M34.2,16c-0.3,0-0.6-0.1-0.8-0.4L26,5.4l-7.4,10.1c-0.3,0.4-1,0.5-1.4,0.2c-0.4-0.3-0.5-1-0.2-1.4l8.2-11.2c0.4-0.5,1.2-0.5,1.6,0L35,14.4c0.3,0.4,0.2,1.1-0.2,1.4C34.7,15.9,34.4,16,34.2,16z"/></svg>88% recensioni positive</div>
+              </div>
+              <button class="btn-pill-dark sm primary product-card-restock" style="visibility:hidden" aria-hidden="true">Gestisci prodotto</button>
+              </div>
+            </div>
+
+            <div class="product-card">
+              <div class="product-card-thumb">
+                <span class="product-card-badge esaurito">Esaurito</span>
+              </div>
+              <div class="product-card-body">
+              <div class="product-card-text">
+                <div class="product-card-primary">
+                  <div class="product-card-name-line">
+                    <span class="product-card-name">Felpa logo</span>
+                    <span class="product-card-sep">·</span>
+                    <span class="product-card-price">€ 55</span>
+                  </div>
+                  <div class="product-card-stat"><strong>30 di 30</strong> venduti</div>
+                </div>
+                <div class="product-card-reviews"><svg class="product-card-reviews-icon" width="15" height="15" viewBox="0 0 52 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M26,50C26,50,26,50,26,50c-0.3,0-0.6-0.2-0.8-0.4l-23-34c-0.2-0.3-0.2-0.7-0.1-1C2.3,14.2,2.6,14,3,14h46c0.4,0,0.7,0.2,0.9,0.5s0.2,0.7-0.1,1l-23,34C26.6,49.8,26.3,50,26,50z M4.9,16L26,47.2L47.1,16H4.9z"/><path d="M26,50L26,50c-0.5,0-0.9-0.3-1-0.8l-8-34c-0.1-0.3,0-0.6,0.2-0.9c0.2-0.2,0.5-0.4,0.8-0.4h16c0.3,0,0.6,0.1,0.8,0.4c0.2,0.2,0.3,0.6,0.2,0.8l-8,34C26.9,49.7,26.5,50,26,50z M19.3,16L26,44.6L32.7,16H19.3z"/><path d="M49,16H3c-0.4,0-0.7-0.2-0.9-0.6c-0.2-0.4-0.1-0.8,0.1-1.1l10-12C12.4,2.1,12.7,2,13,2h26c0.3,0,0.6,0.1,0.8,0.4l10,12c0.2,0.3,0.3,0.7,0.1,1.1C49.7,15.8,49.4,16,49,16z M5.1,14h41.7L38.5,4H13.5L5.1,14z"/><path d="M18,16c-0.4,0-0.8-0.2-0.9-0.6l-5-12c-0.2-0.5,0-1.1,0.5-1.3c0.5-0.2,1.1,0,1.3,0.5l5,12c0.2,0.5,0,1.1-0.5,1.3C18.3,16,18.1,16,18,16z"/><path d="M34,16c-0.1,0-0.3,0-0.4-0.1c-0.5-0.2-0.8-0.8-0.5-1.3l5-12c0.2-0.5,0.8-0.8,1.3-0.5c0.5,0.2,0.8,0.8,0.5,1.3l-5,12C34.8,15.8,34.4,16,34,16z"/><path d="M34.2,16c-0.3,0-0.6-0.1-0.8-0.4L26,5.4l-7.4,10.1c-0.3,0.4-1,0.5-1.4,0.2c-0.4-0.3-0.5-1-0.2-1.4l8.2-11.2c0.4-0.5,1.2-0.5,1.6,0L35,14.4c0.3,0.4,0.2,1.1-0.2,1.4C34.7,15.9,34.4,16,34.2,16z"/></svg>100% recensioni positive</div>
+              </div>
+              <button class="btn-pill-dark sm primary product-card-restock">Gestisci prodotto</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      </div>
+    </main>
+  </div>
+  </div>
+</div>
+
+<script src="cruscotto.js" defer></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

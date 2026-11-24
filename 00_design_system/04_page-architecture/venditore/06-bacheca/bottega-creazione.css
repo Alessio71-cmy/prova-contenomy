@@ -1,0 +1,829 @@
+@import url("../../../../design-system/build/css/tokens.css");
+@import url("../../../../design-system/build/css/compatibility.css");
+@import url("../../../../design-system/components/shell.css");
+@import url("../../../../design-system/components/shell-dashboard-and-products.css");
+@import url("../../../../design-system/components/shell-interactive.css");
+@import url("../../../../design-system/components/button.css");
+@import url("../../../../design-system/components/card.css");
+@import url("../../../../design-system/components/navigation.css");
+@import url("../../../../design-system/components/shell-lists.css");
+@import url("../../../../design-system/components/product-panel-products.css");
+@import url("../../../../design-system/components/product-panel.css");
+@import url("../../../../design-system/components/tooltip.css");
+@import url("../../../../design-system/components/feedback-lists.css"); /* serve solo per coerenza con cruscotto-onboarding.css (stessa catena di import) */
+
+/* =====================================================================
+   BOTTEGA CREAZIONE — 13/10/2026
+   Base: bottega-onboarding.css (import, alias di :root, hover contestuale,
+   icon-btn, workspace, page-header, card dei temi). Aggiunto: indicatore dei
+   passi, campi, upload, pannello destro dell'editor, anteprima del tema.
+   Nessuna nuova variabile Foundation/alias. I campi (.bottega-input ecc.)
+   sono LOCALE/CANDIDATO (nel design system non esistono input), nati da
+   .order-input di ordini-statico.css.
+   ===================================================================== */
+
+:root {
+
+  --item-active-hover-bg: var(--color-neutral-100); /* 16/9/2026, decisione Ruggi: da color-mix a valore fisso (scalabilita' e modifica precisa in caso di cambi futuri, invece di una formula derivata) — riuso diretto della Foundation neutral.100 esistente, nessun nuovo valore. Numericamente quasi identico al risultato del vecchio mix (~#e0dee1 vs #e5e3e6): stessa leggerezza visiva di oggi, solo scritto come letterale invece che come formula. Vedi STRUTTURA_E_STATO.md per il ragionamento completo (contrasto, bucket bianco/neutral, scelta leggerezza su accessibilita' stretta). */
+
+  --hover-bg: var(--item-hover-bg); /* 21/9/2026: default = superficie BIANCA (#F3F1F4). Le superfici neutral lo sovrascrivono a --item-active-hover-bg (#E5E3E6) — vedi blocco dopo :root. */
+
+  --progress-stacked-primary-fill: var(--text-muted); /* alias: progress-stacked-primary-fill — segmento "netto" della barra incassi (DEC-039, decisione Ruggi 11/9); prima condiviso con rank-bar/drop sotto il nome data-fill-neutral, ora ruolo proprio, agganciato a progress-stacked-secondary-fill (lordo) nella stessa scala */
+  --progress-stacked-secondary-fill: #b5b5bd; /* alias: progress-stacked-secondary-fill — segmento "lordo" della barra incassi (11/9); prima valore fisso, ora tokenizzato e agganciato a progress-stacked-primary-fill (netto) come coppia della stessa scala */
+  --progress-segmented-fill: var(--text-muted); /* alias: progress-segmented-fill — riempimento barra avanzamento drop (DEC-039, decisione Ruggi 11/9); prima condiviso con incassi/rank-bar sotto il nome data-fill-neutral, ora ruolo indipendente perche' potra' avere un colore proprio in futuro */
+  --success: var(--status-success-fg); /* alias: success — stato positivo/completato (DEC-039, decisione Ruggi 11/9); 15/9/2026: ripuntato a status-success-fg (feedback.success, green.500) per coerenza totale con trend/status-pill — non più isolato, decisione Ruggi. Verificato: 5.38:1 testo bianco su questo sfondo (.status-dot.done) e 5.38:1 come stroke su bianco (.ring-fill) */
+
+  /* Alias feedback (success/warning/danger) — 15/9/2026, decisione Ruggi: stesso "salto"
+     sfondo-50/testo+pallino-500 per tutte e 3 le famiglie, verificato AA (4.7:1-5.1:1
+     sul proprio chip). Vedi tokens/alias/color/feedback.json e tokens-preview.css. */
+
+  --panel-w: 528px; /* 15/10/2026: stessa larghezza di ordini-statico.css (22 × --space-6). Mancava: senza, il pannello non aveva larghezza e .workspace non si restringeva (sovrapposizione). */
+}
+
+/* 21/9/2026, decisione Ruggi — HOVER CONTESTUALE per icone e chip (icon-btn, icon-btn-ghost, btn-ghost, status-chip, filter-pill, view-switch-btn, filter-chip, badge cliccabili, frecce paginazione, chiudi/naviga pannello, chevron riga).
+   Regola: su sfondo BIANCO -> #F3F1F4 (--item-hover-bg); su sfondo NEUTRAL (25/50) -> #E5E3E6 (--item-active-hover-bg). Stesso valore per icone e chip.
+   --hover-bg e' impostata dalla superficie che contiene l'elemento e si eredita ai figli; dove la superficie cambia con .body.panel-open, l'override e' invertito.
+   Nessun nuovo valore Foundation. Candidato locale (4 file pilota), non alias formale. NON toccati: righe tabella, .sidebar-item (neutral-200), bottoni scuri, stati :active. */
+.topbar, .card, .filter-row { --hover-bg: var(--item-active-hover-bg); }
+.card.incassi-card { --hover-bg: var(--item-hover-bg); }
+
+ /* 17/9/2026, propagato da prodotti-panel-static.css. */
+
+.icon-btn {
+  width: var(--spacing-8); height: var(--spacing-8);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease); /* 11/9: mancava, aggiunta per coerenza con gli altri pulsanti */
+}
+.icon-btn:hover { background: var(--hover-bg); }
+
+/* --- Workspace --- */
+.workspace {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 var(--space-4) 0;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--color-neutral-100);
+  border-bottom: 0;
+  background: var(--color-background-default);
+}
+/* 13/10/2026: la regola .workspace.workspace-content-fit e' ora condivisa (venditore/workspace-fit.css + workspace-fit.js), uguale per tutte le pagine. */
+/* 12/10/2026, richiesta Ruggi: a sidebar chiusa il workspace si appoggia alla sidebar compressa — margin-left 0 (shell.css lo portava a var(--sidebar-shell_sidebar_collapsed_workspace-margin_left) = spacing-2); top 0, right e bottom restano space-4 dalla regola base. Solo margin-left, di proposito: così non interferisce con `.body.panel-open .workspace { margin-right }` (stessa specificità). */
+.shell.sidebar-collapsed .workspace { margin-left: 0; }
+
+/* 21/9/2026, su richiesta di Ruggi: RIMOSSO l'override `.shell.sidebar-collapsed .workspace-inner { max-width: 70rem; }` (17/9). A sidebar chiusa .workspace-inner resta a 80rem, come a sidebar aperta: le tabelle guadagnano spazio invece di restare a 70rem. */
+
+.btn-icon { flex: none; display: block; }
+
+/* --- Onboarding Bottega: introduzione + anteprime delle botteghe pubbliche --- */
+.workspace-inner.bottega-onboarding {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.bottega-page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-6); border-bottom: 1px solid var(--color-neutral-100); }
+.bottega-page-header .page-title { margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); }
+.bottega-page-header .page-sub { margin: var(--space-2) 0 0; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.bottega-page-header .page-header-actions { display: flex; align-items: flex-start; gap: var(--space-2); flex: none; }
+.theme-exploration { margin-top: var(--space-16); }
+.theme-section-heading { display: flex; align-items: flex-start; justify-content: flex-start; gap: var(--space-4); margin-bottom: var(--space-6); }
+.theme-section-heading h2 { margin: 0; }
+.theme-section-heading p { margin: var(--space-2) 0 0; color: var(--text-muted); font-size: var(--font-size-14); font-weight: var(--font-weight-regular); }
+.theme-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); }
+.theme-preview { min-width: 0; display: flex; flex-direction: column; }
+.theme-preview-copy { flex: 1; display: flex; flex-direction: column; padding: var(--space-6); border: 1px solid var(--color-neutral-100); border-top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: var(--color-background-default); }
+.theme-preview-title { overflow: hidden; color: var(--text); font-size: var(--font-size-16); font-weight: var(--font-weight-regular); text-overflow: ellipsis; white-space: nowrap; }
+.theme-preview-titles .card-sub { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.btn-ghost.sm { padding: var(--space-2) var(--space-3); font-size: var(--font-size-14); }
+.btn-ghost.xs { min-height: var(--space-6); padding: 0 var(--space-2); font-size: var(--font-size-12); } /* 7/11/2026 (Ruggi, approvata come candidata locale): xs = azioni di recupero su singoli item/oggetti (es. «Ripristina» accanto all'etichetta di un campo); sm = azione secondaria ma principale di una sezione (affiancata al titolo 20px o in fondo a liste) */
+.theme-preview-action { align-self: flex-start; margin-top: var(--space-6); text-decoration: none; }
+@media (max-width: 760px) {
+  .bottega-page-header { flex-direction: column; }
+  .bottega-page-header { padding-bottom: var(--space-4); }
+  .theme-section-heading { margin-bottom: var(--space-4); }
+  .theme-preview-grid { grid-template-columns: 1fr; }
+}
+
+[hidden] { display: none !important; }
+
+/* =====================================================================
+   BOTTEGA CREAZIONE — regole nuove (13/10/2026)
+   ===================================================================== */
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* --- Workspace + pannello destro (stessa logica di ordini-statico.css: il workspace si restringe davvero) --- */
+.workspace { transition: margin-right var(--motion-duration-280) var(--motion-easing-ease); }
+.body.panel-open .workspace {
+  margin-right: calc(var(--panel-w) + var(--space-4) * 2);
+}
+.body.panel-open .workspace { background: transparent; }
+.body.panel-open .workspace { --hover-bg: var(--item-active-hover-bg); }
+
+.workspace-inner.bottega-creazione { box-sizing: border-box; display: flex; flex-direction: column; justify-content: flex-start; }
+
+/* --- Indicatore dei passi: pattern .drop-step / .drop-step-connector di drop.css, copiato in locale (candidato) --- */
+.bottega-step-intro { margin-top: var(--space-8); }
+.bottega-step-intro .card-sub { font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); color: var(--text-muted); }
+
+/* --- Pannelli dei passi --- */
+.bottega-step-panel { margin-top: var(--space-6); }
+.bottega-step-panel[hidden] { display: none; }
+.bottega-note { margin: var(--space-6) 0 0; font-size: var(--font-size-12); color: var(--text-faint); }
+
+/* --- Passo 1: card dei temi selezionabili (riuso di .theme-preview del file di partenza) --- */
+.theme-choice { cursor: pointer; border-radius: var(--radius-lg); }
+.theme-choice .theme-preview-copy { gap: var(--space-4); }
+
+/* --- Campi (LOCALE/CANDIDATO, da .order-input di ordini-statico.css) --- */
+.bottega-form { display: flex; flex-direction: column; gap: var(--space-6); width: 100%; max-width: 40rem; }
+.bottega-field { display: flex; flex-direction: column; gap: var(--space-1); } /* come .order-field (ordini-statico.css) */
+.bottega-label { margin-bottom: 0; } /* stile = .panel-section-title del DS (14px semibold, --text), senza il suo margin-bottom */
+.bottega-required, .bottega-optional { margin-left: var(--space-1); font-size: var(--font-size-12); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.bottega-hint { margin: 0; font-size: var(--font-size-12); line-height: var(--font-lineHeight-20); color: var(--text-muted); }
+.bottega-input { font: inherit; font-size: var(--font-size-14); color: var(--text); background: var(--bg); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); padding: var(--space-2) var(--space-3); width: 100%; box-sizing: border-box; }
+.bottega-input:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 1px; }
+.bottega-input:disabled { background: var(--color-neutral-50); color: var(--text-faint); cursor: not-allowed; }
+.bottega-textarea { resize: vertical; min-height: 6rem; line-height: var(--font-lineHeight-20); }
+.bottega-input-group { display: flex; align-items: stretch; border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); background: var(--bg); overflow: hidden; }
+.bottega-input-group:focus-within { outline: 2px solid var(--btn-primary-bg); outline-offset: 1px; }
+.bottega-input-group .bottega-input { border: 0; border-radius: 0; outline: none; }
+.bottega-input-prefix { display: flex; align-items: center; padding: 0 var(--space-3); background: var(--color-neutral-50); border-right: var(--border-width-hairline) solid var(--border); font-size: var(--font-size-14); color: var(--text-muted); white-space: nowrap; }
+
+/* --- Upload logo / favicon --- */
+.bottega-upload { display: flex; align-items: center; gap: var(--space-4); padding: var(--space-4); border: var(--border-width-hairline) dashed var(--border); border-radius: var(--radius-md); }
+.bottega-upload-thumb { display: flex; align-items: center; justify-content: center; flex: none; width: var(--spacing-16); height: var(--spacing-16); border-radius: var(--radius-sm); background: var(--color-neutral-50); overflow: hidden; }
+.bottega-upload-thumb-sm { width: var(--spacing-10); height: var(--spacing-10); }
+.bottega-upload-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.bottega-upload-copy { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+.bottega-upload-name { font-size: var(--font-size-14); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bottega-upload-actions { display: flex; gap: var(--space-2); flex: none; }
+
+/* --- Link social --- */
+.bottega-social-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.bottega-social-row { display: flex; align-items: center; gap: var(--space-2); }
+.bottega-social-row .bottega-input { flex: 1; min-width: 0; }
+.bottega-add-link { align-self: flex-start; }
+.bottega-add-link:disabled { opacity: .5; cursor: not-allowed; }
+.bottega-remove-btn { flex: none; display: flex; align-items: center; justify-content: center; width: var(--spacing-8); height: var(--spacing-8); border: 0; background: none; border-radius: var(--radius-pill); color: var(--text-muted); cursor: pointer; padding: 0; }
+.bottega-remove-btn:hover { background: var(--hover-bg); color: var(--text); }
+
+/* --- Azioni dei passi 1-3 --- */
+.bottega-step-actions[hidden] { display: none; }
+.bottega-step-actions .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; }
+
+/* --- Pannello destro (editor) --- */
+.bottega-panel-title { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--text); }
+.bottega-panel-theme { font-size: var(--font-size-12); color: var(--text-muted); }
+#bottegaPanel { display: flex; flex-direction: column; }
+#bottegaPanel .panel-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none; padding-top: var(--space-4); padding-bottom: var(--space-8); }
+#bottegaPanel .panel-body::-webkit-scrollbar { display: none; }
+.panel-section + .panel-section { margin-top: var(--space-8); }
+.bottega-panel-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) 0; }
+.bottega-swatches { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-3); }
+.bottega-swatch { width: var(--spacing-8); height: var(--spacing-8); border-radius: var(--radius-pill); border: var(--border-width-hairline) solid var(--border); cursor: pointer; padding: 0; background: var(--sw, var(--bg)); box-sizing: border-box; }
+.bottega-swatch[aria-checked="true"] { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.bottega-swatch:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.bottega-panel-publish { flex: none; display: flex; flex-direction: column; gap: var(--space-3); position: relative; margin: 0 calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); padding: var(--space-4) var(--space-6) var(--space-6); background: var(--bg); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.bottega-panel-publish::before { content: ""; position: absolute; top: 0; left: var(--space-6); right: var(--space-6); border-top: var(--border-width-hairline) solid var(--border); }
+.bottega-panel-publish .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; }
+.bottega-panel-publish [hidden] { display: none; }
+
+/* Banner del pannello: copiati da ordini-statico.css / prodotti-panel-static.css (candidato locale). Aggiunta la variante .warning (status-warning, stessa logica di .success). */
+.panel-alert-banner { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-3) var(--space-4); background: var(--color-blue-50); color: var(--text); border-radius: var(--radius-md); }
+.panel-alert-icon { display: flex; align-items: center; justify-content: center; flex: none; width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); background: var(--color-blue-500); color: var(--bg); }
+.panel-alert-body { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-1); flex: 1; min-width: 0; }
+.panel-alert-title { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--color-blue-500); }
+.panel-alert-text { color: var(--text-muted); font-size: var(--font-size-14); line-height: var(--font-lineHeight-20); }
+.panel-alert-banner.success { background: var(--status-success-bg); }
+.panel-alert-banner.success .panel-alert-icon { background: var(--status-success-fg); }
+.panel-alert-banner.success .panel-alert-title { color: var(--status-success-fg); }
+.panel-alert-banner.warning { background: var(--status-warning-bg); }
+.panel-alert-banner.warning .panel-alert-icon { background: var(--status-warning-fg); }
+.panel-alert-banner.warning .panel-alert-title { color: var(--status-warning-fg); }
+.panel-alert-close { flex: none; align-self: flex-start; display: flex; align-items: center; justify-content: center; width: var(--spacing-6); height: var(--spacing-6); background: none; border: none; border-radius: var(--radius-pill); color: var(--text-muted); cursor: pointer; padding: 0; }
+.panel-alert-close:hover { color: var(--text); }
+
+/* --- Editor: banner nome + cornice di anteprima --- */
+.bottega-editor { margin-top: var(--space-6); }
+.bottega-editor-banner { margin-bottom: var(--space-4); }
+.bottega-editor-hint { margin: 0 0 var(--space-4); }
+.bottega-preview-frame { border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); }
+.bottega-preview-bar { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: var(--border-width-hairline) solid var(--border); background: var(--color-neutral-50); }
+.bottega-preview-tabicon { display: inline-flex; align-items: center; justify-content: center; flex: none; width: var(--spacing-4); height: var(--spacing-4); border-radius: var(--radius-sm); background: var(--color-neutral-200); overflow: hidden; }
+.bottega-preview-tabicon img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.bottega-preview-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-12); color: var(--text-muted); }
+.bottega-preview-badge { flex: none; padding: var(--space-0-5) var(--space-2); border-radius: var(--radius-pill); background: var(--bg); border: var(--border-width-hairline) solid var(--border); font-size: var(--font-size-12); color: var(--text-muted); }
+.bottega-preview-badge.is-live { background: var(--status-success-bg); border-color: transparent; color: var(--status-success-fg); }
+
+@media (max-width: 760px) {
+  .theme-preview-grid { grid-template-columns: 1fr; }
+  .bottega-upload { flex-wrap: wrap; }
+}
+
+[hidden] { display: none !important; }
+
+/* ===== 13/10/2026 (Ruggi): contesto di creazione + uscita, tema con pallino, anteprima a schermo ===== */
+.theme-choice { position: relative; }
+.theme-radio { position: absolute; top: var(--space-4); left: var(--space-4); z-index: 5; width: var(--spacing-6); height: var(--spacing-6); padding: 0; box-sizing: border-box; border: var(--border-width-moderate) solid var(--text); border-radius: var(--radius-full); background: var(--bg); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.theme-radio:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.theme-radio[aria-checked="true"] { border-color: var(--btn-primary-bg); }
+.theme-radio[aria-checked="true"]::after { content: ""; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-full); background: var(--btn-primary-bg); }
+@media (max-width: 760px) {
+  }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 2: tag "Selezionato" accanto al pallino, anteprima solo da pulsante, azioni sticky ===== */
+.theme-choice { cursor: pointer; }
+.theme-choice-state { position: absolute; top: var(--space-4); left: calc(var(--space-4) + var(--spacing-6) + var(--space-2)); z-index: 5; height: var(--spacing-6); display: inline-flex; align-items: center; padding: 0 var(--space-2); border-radius: var(--radius-pill); background: var(--btn-primary-bg); color: var(--bg); font-size: var(--font-size-12); visibility: hidden; }
+.theme-choice.is-selected .theme-choice-state { visibility: visible; }
+.theme-preview-btn { align-self: flex-start; margin-top: auto; }
+.theme-choice .theme-preview-titles { margin-bottom: var(--space-4); }
+.bottega-step-panel { margin-bottom: var(--space-8); }
+#cancelBtn { text-decoration: none; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 3: workspace ad altezza fissa, solo .bottega-scroll scorre; barra azioni sempre in fondo ===== */
+.workspace { overflow: hidden; padding-bottom: 0; }
+.workspace-inner.bottega-creazione { height: 100%; min-height: 0; }
+.bottega-scroll { flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-right: calc(var(--space-6) * -1); padding-right: var(--space-6); }
+.bottega-scroll::-webkit-scrollbar { display: none; }
+.bottega-step-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-3); flex: none; margin: 0 calc(var(--space-6) * -1); padding: var(--space-4) var(--space-6); border-top: var(--border-width-hairline) solid var(--border); background: var(--color-background-default); }
+.bottega-step-actions[hidden] { display: none; }
+.bottega-step-actions .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; }
+.bottega-cancel { color: var(--status-danger-fg); text-decoration: none; }
+.theme-preview-btn .btn-icon { margin-right: var(--space-1); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 4: stepper a sinistra con 4° passo "Riepilogo"; intestazione e stepper scorrono col contenuto ===== */
+.bottega-summary { margin: 0; display: flex; flex-direction: column; border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-lg); }
+.bottega-summary-row { display: grid; grid-template-columns: 10rem minmax(0, 1fr) auto; align-items: center; gap: var(--space-4); padding: var(--space-4) var(--space-6); }
+.bottega-summary-row + .bottega-summary-row { border-top: var(--border-width-hairline) solid var(--border); }
+.bottega-summary dt { font-size: var(--font-size-14); color: var(--text-muted); }
+.bottega-summary dd { margin: 0; font-size: var(--font-size-16); color: var(--text); overflow-wrap: anywhere; }
+.bottega-summary dd.is-empty { color: var(--text-muted); }
+@media (max-width: 760px) { .bottega-summary-row { grid-template-columns: 1fr auto; } .bottega-summary dt { grid-column: 1 / -1; } }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 5: lo stepper sta sopra il divider, più spazio sotto il divider ===== */
+.bottega-step-intro { margin-top: var(--space-12); }
+.bottega-step-panel { margin-top: var(--space-8); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 6: workspace sempre "come non scrollabile" (angoli in basso arrotondati, border-bottom, margin-bottom); stepper in griglia 12 colonne (1/4 per passo) dentro un contenitore stile card; niente divider ===== */
+.workspace { margin-bottom: var(--space-4); border-bottom: 1px solid var(--color-neutral-100); border-radius: var(--radius-lg); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 7: stepper con margin-top space-12, senza border né radius; primo passo a filo del bordo sinistro (padding-left 0), connettori ricalcolati ===== */
+
+/* ===== 13/10/2026 (Ruggi) — revisione 8: la barra azioni sticky è a filo del fondo del workspace: niente padding-bottom né su .workspace né su .workspace-inner ===== */
+.workspace { padding-bottom: 0; }
+.workspace-inner.bottega-creazione { padding-bottom: 0; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 9: barra azioni senza padding laterale (allineata al contenuto, niente margini negativi) ===== */
+.bottega-step-actions { margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 10: anteprima tema a schermo in stile pagina dettaglio template ===== */
+.theme-modal-backdrop { position: fixed; inset: 0; z-index: var(--zIndex-50); overflow-y: auto; padding: var(--space-16) var(--space-6) var(--space-12); background: color-mix(in srgb, var(--dark) 92%, transparent); }
+.theme-modal-backdrop[hidden] { display: none; }
+.theme-modal { width: min(80rem, 100%); margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-4); }
+.theme-modal-back { align-self: flex-start; color: var(--color-text-inverse); }
+.theme-modal-back:hover { background: color-mix(in srgb, var(--color-text-inverse) 14%, transparent); }
+.theme-detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr); gap: var(--space-2); }
+.theme-detail-info { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-8); padding: var(--space-8); background: var(--bg); border-radius: var(--radius-lg); }
+.theme-detail-text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+.theme-detail-title { margin: 0; }
+.theme-detail-desc { margin: 0; font-size: var(--font-size-16); color: var(--text); }
+.theme-detail-actions { display: flex; gap: var(--space-2); }
+.theme-detail-actions > * { flex: 1; justify-content: center; }
+.theme-detail-hero { position: relative; overflow: hidden; border-radius: var(--radius-lg); aspect-ratio: 16 / 10; background: var(--bg); }
+.theme-components-head { display: flex; align-items: center; justify-content: space-between; margin-top: var(--space-8); }
+.theme-components-title { margin: 0; }
+.theme-view-toggle { display: flex; gap: var(--space-3); }
+.theme-view-btn { padding: var(--space-1); border: 0; background: transparent; color: color-mix(in srgb, var(--color-text-inverse) 55%, transparent); cursor: pointer; border-radius: var(--radius-sm); }
+.theme-view-btn.is-active { color: var(--color-text-inverse); }
+.theme-view-btn:focus-visible { outline: 2px solid var(--color-text-inverse); outline-offset: 2px; }
+.theme-components { display: grid; gap: var(--space-4); }
+.theme-components[data-view="desktop"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.theme-components[data-view="mobile"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.theme-component { margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.theme-component-frame { position: relative; overflow: hidden; border-radius: var(--radius-lg); background: var(--bg); aspect-ratio: 16 / 9; }
+.theme-components[data-view="mobile"] .theme-component-frame { aspect-ratio: 9 / 16; }
+.theme-modal-full { display: flex; flex-direction: column; gap: var(--space-4); }
+.theme-modal-full[hidden], .theme-modal-detail[hidden] { display: none; }
+.theme-full-frame { overflow: hidden; border-radius: var(--radius-lg); background: var(--bg); }
+@media (max-width: 760px) { .theme-detail { grid-template-columns: 1fr; } .theme-components[data-view="desktop"], .theme-components[data-view="mobile"] { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 11: divider sotto lo stepper, distanziato ===== */
+
+/* ===== 13/10/2026 (Ruggi) — revisione 12: anteprima tema — link button, titoli card-title title-lg, meta-row con divider verticale, 3 componenti per riga, detail più alto ===== */
+.theme-modal-back { align-self: flex-start; padding: 0; border: 0; background: transparent; color: color-mix(in srgb, var(--color-text-inverse) 70%, transparent); font: inherit; font-size: var(--font-size-16); display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+.theme-modal-back:hover { background: transparent; color: var(--color-text-inverse); text-decoration: underline; }
+.theme-modal-back:focus-visible { outline: 2px solid var(--color-text-inverse); outline-offset: 2px; border-radius: var(--radius-sm); }
+.theme-detail { min-height: 36rem; }
+.theme-detail-hero { aspect-ratio: auto; min-height: 36rem; }
+.theme-detail-title { font-size: revert; }
+.theme-detail-meta { margin-top: 0; }
+.panel-header-title-meta-row { display: flex; align-items: center; gap: var(--space-2); }
+.panel-meta-divider { width: var(--border-width-hairline); height: var(--space-4); background: var(--border); flex: none; }
+.theme-detail-cat { font-size: var(--font-size-14); color: var(--text-muted); }
+.theme-components-head { margin-bottom: var(--space-4); }
+.theme-components-title { color: var(--color-text-inverse); }
+.theme-components[data-view="desktop"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 13: titolo detail = stile .page-title; meta-row sotto il titolo con categorie a pillola; più alto e più largo ===== */
+.theme-modal { width: min(90rem, 100%); }
+.theme-detail { min-height: 46rem; }
+.theme-detail-hero { min-height: 46rem; }
+.theme-detail-title.card-title { margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); }
+.theme-detail-cats { display: inline-flex; flex-wrap: wrap; gap: var(--space-2); }
+.theme-detail-cat { display: inline-flex; align-items: center; padding: var(--space-0-5) var(--space-2); border-radius: var(--radius-pill); background: var(--color-neutral-100); color: var(--text); font-size: var(--font-size-12); }
+.theme-components[data-view="desktop"] .theme-component-frame { aspect-ratio: 4 / 3; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 14: didascalia componenti = card-title (un livello sotto title-lg), colore chiaro su fondo scuro ===== */
+.theme-component-caption { color: var(--color-text-inverse); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 15: categoria come .panel-product-category (copia locale; colori .cat-moda/.cat-accessori di prodotti.css), descrizione con stile .drop-empty-text ===== */
+.theme-detail-cat { display: inline-flex; align-items: center; padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm); background: var(--item-active-bg); color: var(--text-muted); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); white-space: nowrap; }
+.theme-detail-cat.cat-moda { background: #f1eafb; color: #6d4aa8; }
+.theme-detail-cat.cat-accessori { background: #e8f1fc; color: #2f6fb0; }
+.theme-detail-desc { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 16: dati del tema nella scheda (colore personalizzabile, font, componenti, sezioni, adatto a) ===== */
+.theme-detail-facts { margin: 0; width: 100%; display: flex; flex-direction: column; }
+.theme-fact-swatches { display: inline-flex; gap: var(--space-1); }
+.theme-fact-swatches i { width: var(--spacing-4); height: var(--spacing-4); border-radius: var(--radius-full); border: var(--border-width-hairline) solid var(--border); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 17: contorno sulla card selezionata, bottone "Selezionato" riconoscibile, dati del tema staccati dal testo e in stile .panel-field-row (copia locale) ===== */
+.theme-choice.is-selected { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.theme-detail-text { gap: var(--space-4); }
+.theme-detail-facts { margin-top: var(--space-8); }
+.theme-fact { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-4) 0; border-top: 0; border-bottom: var(--border-width-hairline) solid var(--border); }
+.theme-fact:last-child { border-bottom: none; }
+.theme-fact dt, .theme-fact dd { margin: 0; }
+.theme-fact dd { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; justify-content: flex-end; }
+#themeModalSelect.is-selected { background: transparent; color: var(--btn-primary-bg); box-shadow: inset 0 0 0 2px var(--btn-primary-bg); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 18: righe dati con colonna etichetta definita, nota sotto la tabella ===== */
+.theme-fact { display: grid; grid-template-columns: 9rem minmax(0, 1fr); align-items: center; column-gap: var(--space-4); }
+.theme-fact dd { justify-content: flex-start; text-align: left; }
+.theme-detail-note { margin: var(--space-2) 0 0; font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 19: nota in basso nella scheda, frecce tema precedente/successivo in space-between con "Torna ai temi", anteprima un po' più stretta ===== */
+.theme-modal { width: min(90rem, 100%); }
+.theme-detail-info { justify-content: flex-start; }
+.theme-detail-note { margin: auto 0 0; padding-top: var(--space-8); }
+.theme-detail-actions { margin-top: var(--space-4); }
+.theme-modal-nav { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.theme-modal-arrows { display: flex; gap: var(--space-2); }
+.theme-modal-arrow { display: inline-flex; align-items: center; justify-content: center; padding: var(--space-1); border: 0; border-radius: var(--radius-sm); background: transparent; color: var(--color-text-inverse); cursor: pointer; }
+.theme-modal-arrow:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text-inverse) 14%, transparent); }
+.theme-modal-arrow:disabled { opacity: .35; cursor: not-allowed; }
+.theme-modal-arrow:focus-visible { outline: 2px solid var(--color-text-inverse); outline-offset: 2px; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 20: contorno della card selezionata dentro il bordo (non tagliato), velo grigio sull'immagine se selezionata ===== */
+.theme-choice.is-selected { outline-offset: -2px; }
+.theme-choice.is-selected .theme-thumb::after { content: ""; position: absolute; inset: 0; background: var(--hover-bg); opacity: .7; pointer-events: none; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 21: valori dati tema allineati a destra, tabella più distanziata, didascalia = stile .todo-label (16px, regular; colore chiaro su fondo scuro) ===== */
+.theme-detail-facts { margin-top: var(--space-12); }
+.theme-fact dd { justify-content: flex-end; text-align: right; }
+.theme-component .theme-component-caption { font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--color-text-inverse); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 22: gap fra le due colonne della tabella dati = space-12; "Colori e font sono personalizzabili" come banner info (copia locale .panel-alert-banner) ===== */
+.theme-fact { column-gap: var(--space-12); }
+.theme-detail-note { margin: auto 0 0; padding: var(--space-3) var(--space-4); font-size: inherit; color: var(--text); }
+.theme-detail-info > .theme-detail-note { margin-top: auto; }
+
+/* 13/10/2026 (Ruggi): head della sezione Componenti staccata dalla scheda del tema */
+.theme-components-head { margin-top: var(--space-12); }
+
+/* 13/10/2026 (Ruggi): "Torna ai temi" senza sottolineatura in hover */
+.theme-modal-back:hover { text-decoration: none; }
+
+/* 13/10/2026 (Ruggi): frecce tema precedente/successivo — hover/focus circolare (cerchio perfetto, non quadrato) */
+.theme-modal-arrow { width: var(--spacing-8); height: var(--spacing-8); padding: 0; border-radius: var(--radius-full); }
+.theme-modal-arrow:focus-visible { border-radius: var(--radius-full); }
+
+/* 13/10/2026 (Ruggi): contorno della card selezionata su TUTTA la card, sopra l'immagine (l'outline finiva sotto .theme-art, posizionata) — ora è un bordo disegnato da ::after */
+.theme-choice.is-selected { outline: none; }
+.theme-choice.is-selected::after { content: ""; position: absolute; inset: 0; z-index: 4; border: 2px solid var(--btn-primary-bg); border-radius: var(--radius-lg); pointer-events: none; }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 29: campi obbligatori con asterisco lilla (niente parola "Obbligatorio") ===== */
+.bottega-label .bottega-required { margin-left: var(--space-1); font-size: inherit; font-weight: var(--font-weight-semibold); color: var(--color-lilla-500); }
+
+/* ===== 13/10/2026 (Ruggi) — revisione 30: passi 2 e 3 a due colonne, modulo a sinistra (40rem max) + anteprima "Così apparirà" a destra (colore/font di default del tema) ===== */
+.bottega-split { display: grid; grid-template-columns: minmax(0, 40rem) minmax(0, 1fr); gap: var(--space-12); align-items: start; }
+.bottega-mini-preview { position: sticky; top: 0; display: flex; flex-direction: column; gap: var(--space-3); min-width: 0; }
+.bottega-mini-label { font-size: var(--font-size-14); color: var(--text-muted); }
+.bottega-mini-body { position: relative; overflow: hidden; aspect-ratio: 16 / 10; background: var(--bg); }
+@media (max-width: 1100px) { .bottega-split { grid-template-columns: 1fr; } .bottega-mini-preview { position: static; } }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 34: pannello laterale SEMPRE aperto, stepper di nuovo in alto nel workspace (cerchi), niente barra fissa ===== */
+/* Passi: indicatore a cerchi (12 colonne, 3 per passo), come prima della versione "metriche" (annullata). Nessun divider sotto l'header. */
+.bottega-page-header, .bottega-creazione:not([data-step="5"]) .bottega-page-header { border-bottom: 0; padding-bottom: 0; }
+.bottega-layout { margin-top: var(--space-12); }
+.bottega-steps[hidden] { display: none; }
+/* un solo sottotitolo sotto lo stepper (il titolo resta nel DOM, nascosto, per l'accessibilità) */
+.bottega-step-intro { margin-top: var(--space-8); }
+.bottega-step-panel { margin-top: var(--space-6); }
+.bottega-split { grid-template-columns: minmax(0, 40rem) minmax(0, 1fr); }
+@media (max-width: 1100px) { .bottega-split { grid-template-columns: 1fr; } }
+/* azioni dei passi = footer del pannello laterale (stessa struttura di .bottega-panel-publish) */
+.bottega-step-actions { position: relative; flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--space-3); margin: 0 calc(-1 * var(--space-6)) calc(-1 * var(--space-6)); padding: var(--space-4) var(--space-6) var(--space-6); border-top: 0; background: var(--bg); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+.bottega-step-actions::before { content: ""; position: absolute; top: 0; left: var(--space-6); right: var(--space-6); border-top: var(--border-width-hairline) solid var(--border); }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 35: lo stepper ha le sembianze di .phase-stepper (Drop) ===== */
+/* Regole copiate da drop-statico.css con gli stessi nomi (.phase-stepper/.phase-step*): marker 28px centrato, linea tra i marker (lilla sui completati), punto interno lilla sul passo attivo, titolo 14px muted (semibold + text sull'attivo), descrizione 12px muted. Unica differenza: 4 colonne invece di 3. */
+.phase-stepper { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--space-3); width: 100%; }
+.phase-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: var(--space-2); text-align: center; }
+.phase-step:not(:last-child)::before { content: ""; position: absolute; top: calc(var(--spacing-7) / 2 - var(--spacing-0-5) / 2); left: calc(50% + var(--spacing-7) / 2 + var(--space-2)); right: calc(-50% - var(--space-3) + var(--spacing-7) / 2 + var(--space-2)); height: var(--spacing-0-5); background: var(--color-neutral-200); }
+.phase-step.is-done:not(:last-child)::before { background: var(--color-lilla-500); }
+.phase-step-marker { width: var(--spacing-7); height: var(--spacing-7); box-sizing: border-box; border: var(--border-width-moderate) solid var(--border); border-radius: var(--radius-full); background: var(--bg); display: flex; align-items: center; justify-content: center; color: var(--color-text-inverse); font-size: var(--font-size-14); flex: none; }
+.phase-step.is-done .phase-step-marker { background: var(--color-lilla-500); border-color: var(--color-lilla-500); }
+.phase-step.is-active .phase-step-marker { border-color: var(--color-lilla-500); }
+.phase-step.is-active .phase-step-marker::after { content: ""; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-full); background: var(--color-lilla-500); }
+.phase-step-text { min-width: 0; }
+.phase-step-title { white-space: nowrap; font-size: var(--font-size-14); line-height: var(--space-5); color: var(--text-muted); }
+.phase-step.is-active .phase-step-title { font-weight: var(--font-weight-semibold); color: var(--text); }
+.phase-step-desc { display: block; font-size: var(--font-size-12); color: var(--text-muted); white-space: nowrap; }
+@media (max-width: 760px) { .phase-stepper { grid-template-columns: 1fr; row-gap: var(--space-4); } .phase-step { flex-direction: row; text-align: left; } .phase-step::before { display: none; } }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 36: temi 2 per riga; stepper allineato a sinistra ===== */
+.theme-preview-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 760px) { .theme-preview-grid { grid-template-columns: 1fr; } }
+.bottega-step-intro[hidden] { display: none; }
+/* .phase-step: marker e testo a sinistra della colonna (nel Drop sono centrati); la linea parte space-2 dopo il marker e finisce space-2 prima del marker della colonna successiva (gap space-3) */
+.phase-step { align-items: flex-start; text-align: left; }
+.phase-step:not(:last-child)::before { left: calc(var(--spacing-7) + var(--space-2)); right: calc(var(--space-2) - var(--space-3)); }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 37: stepper PRIMA del titolo, entrambi fissi in alto; scorre solo il contenuto del passo ===== */
+.bottega-steps { flex: none; margin-top: 0; }
+.bottega-page-header { flex: none; margin-top: var(--space-8); }
+.bottega-scroll { margin-top: 0; }
+.bottega-step-intro { margin-top: var(--space-8); }
+.bottega-step-panel:first-of-type { margin-top: var(--space-8); }
+/* pannello destro nei passi 1-4: nessuna informazione, solo il div fisso in fondo con le azioni (al passo 5 torna il pannello completo "Personalizza") */
+.product-detail-panel.is-minimal .panel-header-sticky, .product-detail-panel.is-minimal .panel-body { display: none; }
+.product-detail-panel.is-minimal .bottega-step-actions { margin-top: auto; }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 38: titolo = passo corrente; stepper DENTRO il pannello destro (fisso in alto); segnaposto tratteggiato statico ===== */
+.bottega-page-header { margin-top: 0; }
+.bottega-scroll { margin-top: var(--space-8); }
+.bottega-step-panel:first-of-type { margin-top: 0; }
+.bottega-steps { margin: 0; }
+/* stepper nel pannello: sticky in alto, 4 colonne strette -> testi che possono andare a capo */
+.bottega-panel-steps { display: none; position: sticky; top: 0; z-index: var(--zIndex-50); background: var(--bg); padding-bottom: var(--space-6); }
+.product-detail-panel.is-minimal .bottega-panel-steps { display: block; }
+.bottega-panel-steps .phase-stepper { column-gap: var(--space-2); }
+.bottega-panel-steps .phase-step-title, .bottega-panel-steps .phase-step-desc { white-space: normal; }
+/* segnaposto = aspetto di .product-new-card del Cruscotto (bordo tratteggiato, centrato, testo muted 14px) ma STATICO: nessun hover, nessun cursore, nessuna azione */
+.bottega-panel-placeholder { display: none; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2); min-height: 14rem; padding: var(--space-6); border: var(--border-width-moderate) dashed var(--border); border-radius: var(--radius-md); background: transparent; color: var(--text-muted); font-size: var(--font-size-14); text-align: center; cursor: default; }
+.product-detail-panel.is-minimal[data-step="1"] .bottega-panel-placeholder { display: flex; } /* data-step sull'aside: messo da goTo() */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 39: stepper nel pannello con i padding del header del pannello ===== */
+/* contenitore = .panel-header-sticky (ordini-statico.css: padding-top space-2, padding-bottom space-6); ogni passo = .panel-header (product-panel-products.css: padding space-4 solo sopra e sotto, nessun padding laterale) */
+.bottega-panel-steps { flex: none; padding-top: var(--space-2); padding-bottom: var(--space-6); }
+.bottega-panel-steps .phase-step { padding: var(--space-4) 0; }
+.bottega-panel-steps .phase-step:not(:last-child)::before { top: calc(var(--space-4) + var(--spacing-7) / 2 - var(--spacing-0-5) / 2); } /* la linea segue il marker spostato dal padding */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 40: stepper del pannello centrato (marker e testi), come .phase-stepper del Drop ===== */
+.bottega-panel-steps .phase-step { align-items: center; text-align: center; }
+.bottega-panel-steps .phase-step:not(:last-child)::before { left: calc(50% + var(--spacing-7) / 2 + var(--space-2)); right: calc(-50% - var(--space-2) + var(--spacing-7) / 2 + var(--space-2)); } /* formula del Drop con colonne separate da space-2 (qui) invece di space-3 */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 41: il segnaposto tratteggiato occupa tutto lo spazio disponibile del pannello (tra stepper e footer), testo su due righe ===== */
+.product-detail-panel { display: flex; flex-direction: column; }
+.bottega-panel-placeholder { flex: 1 1 auto; min-height: 0; margin-bottom: var(--space-6); }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 42: passo 1, tema selezionato -> nel pannello spariscono segnaposto e tratteggio e compaiono le specifiche (stessi elementi/classi di .theme-detail-info del modale) ===== */
+.bottega-panel-specs { display: none; flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: none; margin-bottom: var(--space-6); }
+.bottega-panel-specs::-webkit-scrollbar { display: none; }
+.product-detail-panel.is-minimal[data-step="1"] .bottega-panel-specs:not([hidden]) { display: block; }
+.bottega-panel-specs .theme-detail-info { padding: 0; } /* il padding laterale lo dà già il pannello */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 43: specifiche nel pannello — meno spazio sopra la tabella dati, più spazio tra stepper e titolo (solo pannello, il modale resta invariato) ===== */
+.bottega-panel-specs { padding-top: var(--space-8); }
+.bottega-panel-specs .theme-detail-facts { margin-top: var(--space-6); }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 44: stepper centrato in alto nel workspace; passo 1 con tema selezionato = dettaglio nel workspace (freccia indietro + titolo/tag/categoria/descrizione + hero + componenti, ex modale); pannello = frecce tema prec./succ. + "Specifiche Tema" + tabella ===== */
+/* (rev. 45: lo stepper è tornato nel pannello destro) */
+/* header: freccia indietro a sinistra del titolo (visibile solo con tema selezionato) */
+.bottega-back { flex: none; width: var(--spacing-8); height: var(--spacing-8); display: inline-flex; align-items: center; justify-content: center; padding: 0; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--text); cursor: pointer; }
+.bottega-back:hover { background: var(--hover-bg); }
+.bottega-back:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; }
+.bottega-page-header { justify-content: flex-start; align-items: flex-start; gap: var(--space-3); }
+.bottega-theme-meta { margin: var(--space-2) 0 0; }
+/* dettaglio tema nel workspace (sfondo chiaro: i colori "inverse" del modale diventano testo normale) */
+.theme-view { display: flex; flex-direction: column; }
+.theme-view-hero { position: relative; overflow: hidden; border-radius: var(--radius-lg); aspect-ratio: 16 / 10; min-height: 0; background: var(--bg); border: var(--border-width-hairline) solid var(--border); }
+.theme-view .theme-components-head { margin-top: var(--space-12); }
+.theme-view .theme-components-title { color: var(--text); }
+.theme-view .theme-view-btn { color: var(--text-muted); }
+.theme-view .theme-view-btn.is-active { color: var(--text); }
+.theme-view .theme-view-btn:focus-visible { outline-color: var(--color-lilla-500); }
+.theme-view .theme-component .theme-component-caption { color: var(--text-muted); font-size: var(--font-size-14); }
+.theme-view .theme-component-frame { border: var(--border-width-hairline) solid var(--border); }
+/* pannello: frecce (copia locale di .panel-nav-btn/.panel-header-group di ordini-statico.css) + titolo + tabella */
+.bottega-panel-specs { padding-top: 0; }
+.bottega-panel-specs .panel-header-group { display: flex; align-items: center; gap: var(--space-1); }
+.bottega-panel-specs .panel-nav-btn { width: var(--spacing-7); height: var(--spacing-7); border: 0; border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; background: transparent; }
+.bottega-panel-specs .panel-nav-btn:hover:not(:disabled) { background: var(--hover-bg); color: var(--text); }
+.bottega-panel-specs .panel-nav-btn:disabled { opacity: .35; cursor: not-allowed; }
+.bottega-specs-title { margin: var(--space-2) 0 0; }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 45: intestazione NON fissa (scorre col contenuto, dentro .bottega-scroll); freccia indietro con sfondo; sottotitolo e vista tema più distanziati; banner e titolo del pannello ===== */
+.bottega-scroll { margin-top: 0; }
+.bottega-back { background: var(--color-neutral-100); }
+.bottega-back:hover { background: var(--item-active-hover-bg); }
+.bottega-theme-meta { margin-top: var(--space-3); }
+.bottega-theme-meta:not([hidden]) + .page-sub { margin-top: var(--space-4); }
+.theme-view { margin-top: var(--space-12); }
+.bottega-panel-specs .theme-detail-note { margin: var(--space-6) 0 0; padding-top: var(--space-3); }
+.bottega-specs-title { margin: var(--space-2) 0 0; }
+/* l'area che scorre parte dal bordo alto del workspace (niente taglio netto sopra l'intestazione): il padding alto passa dal workspace/inner a .bottega-scroll */
+.body .workspace { padding-top: 0; }
+.workspace-inner.bottega-creazione { padding-top: 0; }
+.bottega-scroll { padding-top: calc(var(--space-6) + var(--space-12)); }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 46: intestazione senza border-bottom (anche al passo 5); griglia temi con margin-top space-16 ===== */
+.bottega-page-header, .bottega-creazione .bottega-page-header { border-bottom: 0; }
+.theme-preview-grid { margin-top: var(--space-16); }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 47: a tema selezionato il contenuto è lungo -> il workspace scorre da solo come nelle altre pagine e vale la regola condivisa (workspace-fit.css/js): contenuto corto = angoli arrotondati + bordo + margin-bottom; contenuto lungo = attaccato in basso, angoli inferiori piatti. Annulla l'altezza fissa con scroll interno (rev. 3) e il "sempre come non scrollabile" (rev. 6) ===== */
+.workspace { overflow-y: auto; padding: var(--space-6); margin-bottom: 0; border-bottom: 0; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.body .workspace { padding-top: var(--space-6); }
+.workspace-inner.bottega-creazione { height: auto; min-height: 0; padding-top: var(--space-12); padding-bottom: 0; }
+.bottega-scroll { flex: none; overflow: visible; margin: 0; padding: 0; min-height: 0; }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 48: "Annulla creazione" = link di testo (non button) in alto a destra nell'intestazione del workspace, in tutti i passi; tolto il pulsante Annulla dal footer del pannello ===== */
+.bottega-cancel-link { margin-left: auto; flex: none; margin-top: var(--space-2); font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--status-danger-fg); text-decoration: none; cursor: pointer; }
+.bottega-cancel-link { transition: opacity var(--motion-duration-150) var(--motion-easing-ease); } /* 16/10/2026, richiesta Ruggi: tolta la sottolineatura in hover (nel sito i link di testo non la usano); feedback hover = opacity come .panel-alert-action */
+.bottega-cancel-link:hover { opacity: 0.8; }
+.bottega-cancel-link:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; border-radius: var(--radius-sm); }
+.bottega-page-header > div { flex: 1 1 auto; min-width: 0; } /* il testo dell'intestazione usa lo spazio libero a sinistra del link */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 49: con il dettaglio del tema aperto il pannello perde lo stepper e mostra in cima il .panel-header standard (solo frecce tema prec./succ.); tolta la variante custom .bottega-specs-nav ===== */
+.bottega-panel-specs > .panel-header { display: none; }
+.product-detail-panel.is-theme-open .bottega-panel-steps { display: none; }
+.product-detail-panel.is-theme-open .bottega-panel-specs > .panel-header { display: flex; }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 50: panel-header del dettaglio tema senza divider, frecce a sinistra ===== */
+.bottega-panel-specs > .panel-header { border-bottom: 0; margin-bottom: 0; }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 51: titolo "Specifiche Tema" = titolo del pannello Drop (drop-statico.css: #panelHeaderProductTitle → font: var(--type-title-xl), 28px bold) invece del title-lg base (20px regular) ===== */
+.card-title.title-lg.bottega-specs-title { font: var(--type-title-xl); } /* specificità pari a .card-title.title-lg, che viene prima */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 52: nel pannello il banner info (theme-detail-note) sta SOPRA il titolo "Specifiche Tema" ===== */
+.bottega-panel-specs .theme-detail-note { margin: var(--space-2) 0 var(--space-6); }
+.bottega-panel-specs .bottega-specs-title { margin-top: 0; }
+
+/* rev. 68 — hover freccia "torna ai temi": --item-active-hover-bg coincide con neutral-100 (nessun cambio visibile) → un gradino più scuro (locale/candidato) */
+.bottega-back:hover { background: var(--color-neutral-200); }
+
+/* ===== 15/10/2026 (Ruggi) — rev. 70: passo Identità = form in contenitore "a tabella" (righe con hairline, etichetta sopra il campo), sottotitoli sostituiti da icona ⓘ con tooltip (data-tooltip del DS), input più alti. Tutto locale/candidato, solo variabili esistenti. ===== */
+.bottega-form-table { gap: 0; border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); background: var(--bg); }
+.bottega-form-table .bottega-form-row { gap: var(--space-2); padding: var(--space-4) var(--space-4); border-bottom: var(--border-width-hairline) solid var(--border); }
+.bottega-form-table .bottega-form-row:last-child { border-bottom: 0; }
+.bottega-label-row { display: flex; align-items: center; gap: var(--space-2); }
+.bottega-info { display: inline-flex; align-items: center; justify-content: center; width: var(--spacing-6); height: var(--spacing-6); padding: 0; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--color-blue-500); cursor: help; }
+.bottega-info:hover { background: var(--hover-bg); color: var(--color-blue-500); }
+.bottega-info:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; }
+.bottega-input { padding: var(--space-3) var(--space-3); }
+
+/* rev. 71 — passo Identità: tabella a tutta larghezza del workspace (senza anteprima laterale), righe senza divider */
+[data-step-panel="2"] .bottega-split { grid-template-columns: minmax(0, 1fr); }
+[data-step-panel="2"] .bottega-form-table { max-width: none; }
+.bottega-form-table .bottega-form-row { border-bottom: 0; }
+
+/* rev. 72 — tabella Identità come `.products-panel` del DS (ordini-statico): sfondo trasparente, bordo hairline neutral-200, radius-md, padding space-6, margin-top space-16 (come `.grid` sotto tab-panel-hidden); input più alti (padding space-4) */
+.bottega-form-table { background: transparent; border-color: var(--color-neutral-100); border-radius: var(--radius-md); padding: var(--space-6); margin-top: var(--space-16); gap: var(--space-6); }
+.bottega-form-table .bottega-form-row { padding: 0; }
+.bottega-input { padding: var(--space-4) var(--space-3); }
+
+/* rev. 73 — passo Identità: etichette con lo stile label del DS (.panel-field-label: 12px, --text-muted); anteprima "Così apparirà" spostata nel pannello destro (visibile solo al passo 2) */
+#identityForm .bottega-label.panel-field-label { font-size: var(--font-size-12); font-weight: var(--font-weight-regular, 400); color: var(--text-muted); }
+#identityForm .bottega-label .bottega-required { font-weight: inherit; }
+.bottega-panel-preview { display: none; position: static; flex: 1 1 auto; margin-bottom: var(--space-6); }
+.product-detail-panel.is-minimal[data-step="2"] .bottega-panel-preview { display: flex; }
+
+/* rev. 74 — anteprima del passo: titolo "Così apparirà" = card-title title-lg (come "Specifiche Tema"); mock = composizione completa del tema scelto, altezza naturale (non più ritagliata 16/10); tolto il testo su colore e font */
+.bottega-mini-body { aspect-ratio: auto; }
+.bottega-mini-preview .bottega-specs-title { margin: 0 0 var(--space-2); }
+
+/* rev. 76 — passo Marchio e social: stessa struttura del passo Identità (tabella, ⓘ al posto dei sottotitoli, etichette `.panel-field-label`), anteprima nel pannello destro anche al passo 3 */
+[data-step-panel="3"] .bottega-split { grid-template-columns: minmax(0, 1fr); }
+[data-step-panel="3"] .bottega-form-table { max-width: none; }
+[data-step-panel="3"] .bottega-label.panel-field-label { font-size: var(--font-size-12); font-weight: var(--font-weight-regular, 400); color: var(--text-muted); }
+.product-detail-panel.is-minimal[data-step="3"] .bottega-panel-preview { display: flex; }
+
+/* rev. 77 — "Salta" = link-button tutto a sinistra nel footer del pannello (locale/candidato; stile come .bottega-cancel-link ma neutro) */
+.bottega-link-btn { margin-right: auto; padding: 0; border: 0; background: transparent; font: inherit; font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.bottega-link-btn:hover { color: var(--text); }
+.bottega-link-btn:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; border-radius: var(--radius-sm); }
+.bottega-link-btn[hidden] { display: none; }
+
+/* rev. 78 — titolo "Anteprima" = `.card-title.title-lg` puro (come "Elenco ordini" in products-panel), senza l'override 28px di "Specifiche Tema" */
+.bottega-mini-preview .card-title.title-lg { margin: 0 0 var(--space-2); }
+
+/* rev. 80 — etichette degli input (passi 2 e 3) con lo stile `.metrica-label` del DS (cruscotto.css): 14px, --text-muted, peso normale */
+#identityForm .bottega-label.panel-field-label, .bottega-form-table .bottega-label.panel-field-label { font-size: var(--font-size-14); font-weight: var(--font-weight-regular, 400); color: var(--text-muted); }
+
+/* rev. 81 — lightbox immagini del tema (clic su copertina/componenti nel dettaglio): sfondo scuro opacizzato (stessa ricetta della vecchia modale tema: --dark 92%), X in alto a destra, mock a tutta larghezza scalato senza ritaglio. Locale/candidato. */
+.theme-view-hero, .theme-component-frame { cursor: zoom-in; }
+.theme-component-frame:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; }
+.theme-lightbox { position: fixed; inset: 0; z-index: var(--zIndex-50); overflow-y: auto; padding: var(--space-16) var(--space-6) var(--space-12); background: color-mix(in srgb, var(--dark) 92%, transparent); }
+.theme-lightbox[hidden] { display: none; }
+.theme-lightbox-stage { display: flex; justify-content: center; }
+.theme-lightbox-close { position: fixed; top: var(--space-4); right: var(--space-4); z-index: 1; display: inline-flex; align-items: center; justify-content: center; width: var(--spacing-10); height: var(--spacing-10); padding: 0; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--color-text-inverse); cursor: pointer; }
+.theme-lightbox-close:hover { background: color-mix(in srgb, var(--color-text-inverse) 14%, transparent); }
+.theme-lightbox-close:focus-visible { outline: 2px solid var(--color-text-inverse); outline-offset: 2px; }
+
+/* rev. 82 — card-header nelle tabelle con input: il distacco lo dà il gap della tabella (space-6), non il margin-bottom del card-header */
+.bottega-form-table > .card-header { margin-bottom: 0; }
+.bottega-form-table > .card-divider { margin: 0; }
+
+/* rev. 84 — sezioni del tema tutte della stessa grandezza (riquadro fisso, sezione intera scalata e centrata, sfondo = sfondo del tema) + lightbox con frecce sinistra/destra (e tasti ←/→), didascalia "nome · n / tot", riquadro a proporzione fissa. Locale/candidato. */
+.theme-components[data-view="desktop"] .theme-component-frame { aspect-ratio: 16 / 10; }
+.theme-lightbox { display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: var(--space-12) var(--space-16); }
+.theme-lightbox-stage { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); width: 100%; }
+.theme-lightbox-box { position: relative; overflow: hidden; width: min(80rem, 100%); border-radius: var(--radius-lg); background: var(--bg); }
+.theme-lightbox-box.is-mobile { width: min(24rem, 100%); }
+.theme-lightbox-box { aspect-ratio: 16 / 10; width: min(80rem, 100%, calc((100vh - 9rem) * 1.6)); }
+.theme-lightbox-box.is-mobile { aspect-ratio: 9 / 16; width: min(24rem, 100%, calc((100vh - 9rem) * 0.5625)); }
+.theme-lightbox-caption { margin: 0; font-size: var(--font-size-14); color: var(--color-text-inverse); }
+.theme-lightbox-nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 1; display: inline-flex; align-items: center; justify-content: center; width: var(--spacing-12); height: var(--spacing-12); padding: 0; border: 0; border-radius: var(--radius-full); background: transparent; color: var(--color-text-inverse); cursor: pointer; }
+.theme-lightbox-nav.is-prev { left: var(--space-4); }
+.theme-lightbox-nav.is-next { right: var(--space-4); }
+.theme-lightbox-nav:hover:not(:disabled) { background: color-mix(in srgb, var(--color-text-inverse) 14%, transparent); }
+.theme-lightbox-nav:disabled { opacity: .3; cursor: default; }
+.theme-lightbox-nav:focus-visible { outline: 2px solid var(--color-text-inverse); outline-offset: 2px; }
+
+/* rev. 85 — Riepilogo: 3 blocchi (Tema / Identità / Marchio e social) in tabelle come i passi 2-3 (card-header col titolo dello step), righe con divider dentro il padding della tabella, margin-top space-16, matita al posto di "Modifica" (testi: modifica inline; tema: torna al passo 1 e dopo la scelta al riepilogo; logo/favicon: selettore file). Anteprima nel pannello destro anche al passo 4. "Salta" senza sottolineatura. Locale/candidato. */
+.bottega-summary { margin: var(--space-16) 0 0; gap: var(--space-6); border: 0; border-radius: 0; }
+.bottega-summary-list { margin: 0; display: flex; flex-direction: column; }
+.bottega-summary-row { padding: var(--space-4) 0; }
+.bottega-summary-row:first-child { padding-top: 0; }
+.bottega-summary-row:last-child { padding-bottom: 0; }
+.bottega-summary-row + .bottega-summary-row { border-top: var(--border-width-hairline) solid var(--border); }
+.bottega-summary-row.is-editing dd { grid-column: 2 / -1; }
+.bottega-summary-row.is-editing .icon-btn { display: none; }
+.product-detail-panel.is-minimal[data-step="4"] .bottega-panel-preview { display: flex; }
+.bottega-link-btn { text-decoration: none; }
+.bottega-summary .bottega-summary-block { display: flex; flex-direction: column; margin-top: 0; }
+
+/* rev. 86 — passo 1: barra filtri temi (stile da riferimento Ruggi: barra grigia, pill bianche alte). LOCALE/CANDIDATO: nessuna Foundation nuova */
+.theme-filters { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-16); padding: var(--space-2); background: var(--color-neutral-100); border-radius: var(--radius-md); }
+.theme-filter { position: relative; }
+.theme-filter-btn { display: inline-flex; align-items: center; gap: var(--space-2); height: var(--spacing-12); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font: inherit; font-size: var(--font-size-14); cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.theme-filter-btn:hover { background: var(--hover-bg); }
+.theme-filter-btn:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; }
+.theme-filter.is-active .theme-filter-btn { background: var(--dark); color: var(--color-text-inverse); }
+.theme-filter-btn svg { transition: transform var(--motion-duration-150) var(--motion-easing-ease); }
+.theme-filter-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.theme-filter-menu { position: absolute; top: calc(100% + var(--space-1)); left: 0; z-index: var(--zIndex-50); min-width: 220px; padding: var(--space-2); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: var(--space-0-5); }
+.theme-filter-menu[hidden] { display: none; }
+.theme-filter-opt { display: flex; align-items: center; gap: var(--space-2); padding: var(--sidebar-sidebar_item-padding); border-radius: var(--sidebar-sidebar_item-border_radius); font-size: var(--font-size-14); color: var(--text); cursor: pointer; }
+.theme-filter-opt:hover { background: var(--hover-bg); }
+.theme-filters-spacer { flex: 1; }
+.theme-filters-count { display: inline-flex; align-items: center; justify-content: center; min-width: var(--spacing-6); height: var(--spacing-6); padding: 0 var(--space-2); border-radius: var(--radius-full); background: var(--dark); color: var(--color-text-inverse); font-size: var(--font-size-12); }
+.theme-filters-count[hidden] { display: none; }
+.theme-filters-empty { margin: var(--space-6) 0 0; color: var(--text-muted); font-size: var(--font-size-14); }
+.theme-filters + .theme-preview-grid, .theme-filters ~ .theme-preview-grid { margin-top: var(--space-4); }
+.theme-choice[hidden] { display: none; }
+
+/* rev. 86 — input a altezza di scala DS: spacing-12 (48px) al posto del padding verticale (era 51px) */
+.bottega-input { height: var(--spacing-12); padding-top: 0; padding-bottom: 0; }
+.bottega-textarea { height: auto; min-height: calc(var(--spacing-12) * 2); padding-top: var(--space-3); padding-bottom: var(--space-3); }
+
+/* rev. 88 — barra filtri temi: senza sfondo, pill outline (bordo hairline come `.filter-chip`), più aria verso le card */
+.theme-filters { background: transparent; padding: 0; }
+.theme-filter-btn { background: transparent; border: var(--border-width-hairline) solid var(--border); }
+.theme-filter-btn:hover { background: var(--hover-bg); }
+.theme-filter.is-active .theme-filter-btn { background: transparent; color: var(--text); border-color: var(--dark); }
+.theme-filters ~ .theme-preview-grid { margin-top: var(--space-8); }
+.theme-filters-empty { margin-top: var(--space-8); }
+
+/* rev. 89 — stepper: passi spuntati ma "disattivati" (lilla più chiaro) durante il cambio tema dal riepilogo */
+.phase-step.is-muted .phase-step-marker { background: var(--color-lilla-300); border-color: var(--color-lilla-300); }
+.phase-step.is-muted:not(:last-child)::before { background: var(--color-lilla-200); }
+.phase-step.is-muted .phase-step-title, .phase-step.is-muted .phase-step-desc { color: var(--text-faint); }
+
+/* rev. 90 — titolo specifiche: "Specifiche" (font attuale) • nome tema (card-title title-lg, come "Anteprima") */
+.card-title.title-lg.bottega-specs-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2); }
+.bottega-specs-sep { color: var(--text-muted); }
+.card-title.title-lg.bottega-specs-title .bottega-specs-theme { font: var(--type-title-lg); color: var(--text); }
+
+/* rev. 91 — filtri temi: voci con radio (non checkbox); radio come quelli dei temi: hover = riempimento neutro (anche sull'intera etichetta), selezionato = lilla; contatore lilla dentro "Azzera filtri" */
+.theme-filter-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.theme-filter-opt { position: relative; }
+.theme-filter-radio { flex: none; width: var(--spacing-5); height: var(--spacing-5); box-sizing: border-box; border: var(--border-width-moderate) solid var(--text); border-radius: var(--radius-full); background: var(--bg); display: flex; align-items: center; justify-content: center; }
+.theme-filter-opt:hover .theme-filter-radio::after { content: ""; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-full); background: var(--color-neutral-300); }
+.theme-filter-opt input:checked + .theme-filter-radio { border-color: var(--btn-primary-bg); }
+.theme-filter-opt input:checked + .theme-filter-radio::after { content: ""; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-full); background: var(--btn-primary-bg); }
+.theme-filter-opt input:focus-visible + .theme-filter-radio { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.theme-radio:not([aria-checked="true"]):hover::after { content: ""; width: var(--space-3); height: var(--space-3); border-radius: var(--radius-full); background: var(--color-neutral-300); }
+.theme-filters-count { background: var(--btn-primary-bg); color: var(--color-text-inverse); }
+
+/* rev. 92 — stepper del pannello: divider sotto (neutral-200) con padding-bottom space-4; contenitore .bottega-panel-steps con padding-bottom space-12 */
+.phase-stepper { padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-neutral-100); }
+.bottega-panel-steps { padding-bottom: var(--space-12); }
+
+/* rev. 93 — Riepilogo: pulsante modifica = `.icon-btn` del DS (32px, tondo, hover contestuale) al posto di `.icon-btn-ghost`, classe che nel DS non esiste (usciva con il bordo di default del browser) */
+.bottega-summary .icon-btn { border: 0; background: transparent; padding: 0; color: var(--text-muted); font: inherit; }
+.bottega-summary .icon-btn:hover { background: var(--item-active-hover-bg); color: var(--text); }
+.bottega-summary .icon-btn:focus-visible { outline: 2px solid var(--color-lilla-500); outline-offset: 2px; }
+
+/* rev. 94 — Riepilogo: UNA sola tabella (.bottega-form-table) divisa in sezioni per passo (titolo + divider + righe) invece di 3 tabelle */
+.bottega-summary-section { display: flex; flex-direction: column; gap: var(--space-6); }
+.bottega-summary-section > .card-header { margin-bottom: 0; }
+.bottega-summary-section > .card-divider { margin: 0; }
+
+/* rev. 96 — Riepilogo: di nuovo 3 tabelle (una per passo); modifica con Salva/Annulla; logo/favicon = stesso box upload del passo 3 se assenti, miniatura + matita se presenti; social in lista (matita sul primo) */
+.bottega-summary-row[data-edit="logo"]:not(.has-asset) > .icon-btn, .bottega-summary-row[data-edit="favicon"]:not(.has-asset) > .icon-btn { display: none; }
+.bottega-summary-row.has-asset .bottega-upload { padding: 0; border-color: transparent; }
+.bottega-summary-row.has-asset .bottega-upload-actions { display: none; }
+.bottega-summary-row[data-edit="social"] { align-items: start; }
+.bottega-summary-row[data-edit="social"] dt { padding-top: var(--space-1); }
+#sumSocial { display: flex; flex-direction: column; gap: var(--space-2); }
+.bottega-summary-row.is-editing dd { display: flex; flex-direction: column; }
+.bottega-edit-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-3); }
+.bottega-summary-row.is-editing .bottega-social-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.bottega-summary-row.is-editing .bottega-add-link { margin-top: var(--space-2); }
+.bottega-summary .bottega-input[aria-invalid="true"] { border-color: var(--color-red-500, var(--btn-danger-bg, #c83f2b)); }
+
+/* rev. 98 — titolo specifiche: le due parti ("Specifiche" e nome tema) centrate verticalmente (prima sulla linea di base) */
+.card-title.title-lg.bottega-specs-title { align-items: center; }
+
+/* ===== 15/10/2026 (Ruggi) — revisione 98: breadcrumb (stile in ../breadcrumb.css). Qui solo i valori di layout di questa pagina:
+   il workspace ha SEMPRE il pannello destro aperto, quindi il suo margin-right e' quello di .body.panel-open (serve a calcolare la x del titolo a sidebar aperta). ===== */
+body .shell { --bc-mr: calc(var(--panel-w) + var(--space-4) * 2); } /* "body" = specificita' maggiore di .shell in ../breadcrumb.css, caricato dopo */
+
+/* ===== 15/10/2026 (Ruggi) — revisione 99: icona toggle sidebar INATTIVA (sidebar bloccata chiusa nel flusso di creazione) =====
+   Resta in topbar (decisione 13/10: l'icona deve esserci sempre) ma non risponde: colore disabled, niente hover, cursore normale. Tooltip esplicativo via data-tooltip. */
+#sidebarToggle[aria-disabled="true"] { color: var(--color-text-disabled); cursor: default; }
+#sidebarToggle[aria-disabled="true"] .svg-icon { color: var(--color-text-disabled); } /* .svg-icon ha un colore proprio (text-primary, button.css): senza questa riga l'icona non cambiava */
+#sidebarToggle[aria-disabled="true"]:hover { background: transparent; }
+
+/* ===== 15/10/2026 · Anteprime reali del tema (iframe srcdoc dal pacchetto Temi/NN_tema_Package) — sostituiscono i mock .bp ===== */
+.theme-frame { position: absolute; top: 0; left: 0; display: block; max-width: none; border: 0; background: #fff; transform-origin: 0 0; pointer-events: none; }
+.theme-frame.is-live { pointer-events: auto; }
+.theme-thumb { position: relative; overflow: hidden; aspect-ratio: 16 / 10; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: var(--bg); }
+.theme-component-caption { display: flex; justify-content: space-between; gap: var(--space-3); }
+.theme-component-sub { opacity: .6; white-space: nowrap; }
+/* anteprima passi 2-3: pagina intera scalata, il riquadro scorre in verticale */
+.bottega-mini-body { position: relative; aspect-ratio: auto; overflow-x: hidden; overflow-y: auto; max-height: min(70vh, 40rem); scrollbar-gutter: stable; }
+.bottega-mini-sizer { position: relative; width: 100%; }
+/* editor (passo 5): iframe a tutta larghezza, altezza = contenuto, scorre con la pagina */
+.bottega-editor-stage { background: var(--bg); }
+.bottega-editor-stage .theme-frame { position: static; width: 100%; height: 40rem; transform: none; pointer-events: auto; }
+
+/* ===== 16/10/2026 (Ruggi): "Pagine e componenti" — didascalie sempre su UNA riga (etichetta corta + numero di entità: "N componenti" per le pagine, "N esempi" per i gruppi). L'etichetta si tronca con i puntini solo se la colonna è molto stretta; il conteggio non va mai a capo. Vista Mobile: 3 colonne come Desktop (le 4 colonne da ~168px rendevano illeggibili le anteprime). Sotto i 761px resta la regola a 2 colonne già presente. ===== */
+.theme-component-caption > span:first-child { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.theme-component-caption > .theme-component-sub { flex: none; }
+@media (min-width: 761px) { .theme-components[data-view="mobile"] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* ===== 16/10/2026 (Ruggi) — footer del pannello destro FISSO in fondo in tutti i passi: se il contenuto (es. anteprima passi 2-4) supera l'altezza del pannello, la barra con i pulsanti resta ancorata in basso e scorre solo il resto. bottom negativo = compensa il padding-bottom del pannello (space-6), come il margin-bottom della barra. ===== */
+.bottega-step-actions { position: sticky; bottom: calc(-1 * var(--space-6)); z-index: var(--zIndex-10); }
+
+/* ===== 16/10/2026 (Ruggi) — Riepilogo: l'etichetta (dt) delle righe testuali modificabili resta ferma quando si apre il campo. Prima era centrata in verticale nella riga (align-items:center) e scendeva con l'altezza di input + Salva/Annulla. Ora è ancorata in alto in un box alto quanto la matita (--spacing-8), centrata: stessa posizione della riga a riposo. Social già allineata in alto. ===== */
+.bottega-summary-row:is([data-edit="name"], [data-edit="slug"], [data-edit="bio"]) dt { align-self: start; display: flex; align-items: center; min-height: var(--spacing-8); }
+@media (max-width: 760px) { .bottega-summary-row:is([data-edit="name"], [data-edit="slug"], [data-edit="bio"]) dt { min-height: 0; } }
+
+/* 16/10/2026 (Ruggi): nell'editor il link in alto a destra non annulla nulla ma riporta alla pagina Bottega -> colore neutro invece del rosso di "Annulla creazione". */
+.bottega-cancel-link.is-back { color: var(--text-muted); }
+
+/* 22/10/2026 (Ruggi): nel dettaglio tema la freccia indietro e' sostituita da "Torna ai temi" = link di testo (button senza aspetto da button), muted, a destra dell'intestazione (space-between), senza sottolineatura. Riusa lo stile di .bottega-cancel-link.is-back. */
+button.bottega-cancel-link { padding: 0; border: 0; background: transparent; font-family: inherit; line-height: inherit; }
+.bottega-cancel-link[hidden] { display: none; }
+
+/* 22/10/2026 (Ruggi): icone nei link di testo — chevron sinistra su "Torna ai temi", cestino su "Annulla creazione", chevron destra dopo "Salta" */
+.bottega-cancel-link, .bottega-link-btn { display: inline-flex; align-items: center; gap: var(--space-1); }
+.bottega-cancel-link svg, .bottega-link-btn svg { flex: none; }
+
+/* 29/10/2026 (Ruggi): "Torna ai temi" sta SOPRA il titolo (dentro il blocco titolo, a sinistra), non piu' a destra dell'intestazione. */
+/* 29/10/2026 (Ruggi): hover dei link "indietro" (Torna ai temi, Tutte le sezioni nella modale dell'editor, Torna alle botteghe): testo E icona diventano neri (--text) invece della sfumatura di opacita'. */
+.bottega-cancel-link.is-back { transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.bottega-cancel-link.is-back:hover { color: var(--text); opacity: 1; }
+
+/* 29/10/2026 (Ruggi): label AFFIANCATA a un value/bottone = 14px anche fuori da .panel-field-row (la regola condivisa copre solo le righe .panel-field-row non .stacked): righe Logo/Favicon del pannello (label + "Scegli file") e dt dei fatti del tema (label | value). Le label sopra un campo restano come sono. */
+.bottega-panel-row > .panel-field-label, .theme-fact > .panel-field-label { font-size: var(--font-size-14); }
+
+/* 4/11/2026 (Ruggi): titolo = nome del tema grande (card-title title-lg, font xl), sotto «Specifiche» / «Anteprima» come card-title title-lg */
+.card-title.title-lg.bottega-specs-title { display: block; }
+.card-title.title-lg.bottega-specs-sub { margin: var(--space-6) 0 var(--space-2); }
+.bottega-mini-preview .card-title.title-lg.bottega-specs-sub { margin: var(--space-1) 0 var(--space-4); }
+.bottega-mini-preview .card-title.title-lg.bottega-specs-title { margin: 0; }
+
+/* 24/11/2026: bordo + label rossi dei ghost di annullamento/eliminazione = .btn-ghost.danger in design-system/components/button.css; primario distruttivo = .btn-pill-dark.danger (rosso pieno) */
+
+/* ===== 24/11/2026 (Ruggi) — la pagina non scorre mai oltre il workspace: a scroll finito del pannello sinistro non si deve poter scorrere ulteriormente (niente body/documento che si muove, niente scroll chaining). Stessa regola di bottega-editor.css. ===== */
+html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
+.workspace { overscroll-behavior: contain; }
+
+/* 24/11/2026 (Ruggi) — modale di CONFERMA «Annulla creazione» (confirm-cancel.js), valida per creazione bottega e creazione prodotto. Stile .order-modal di Ordini (titolo, testo, azioni; niente header diviso, niente X, niente divisori); padding space-8 come tutte le modali (decisione 5/11), button a taglia normale. Distinta dalla modale di LAVORO (.editor-modal: header con X, body, footer). Candidato locale. */
+.confirm-modal { position: fixed; inset: 0; z-index: var(--zIndex-50); display: flex; align-items: center; justify-content: center; padding: var(--space-6); }
+.confirm-modal-backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--dark) 40%, transparent); }
+.confirm-modal-box { position: relative; width: 100%; max-width: 420px; box-sizing: border-box; outline: none; padding: var(--space-8); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-lg); box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent); }
+.confirm-modal-title { font: var(--type-title-lg); color: var(--text); margin-bottom: var(--space-2); }
+.confirm-modal-text { margin: 0 0 var(--space-8); font-size: var(--font-size-14); line-height: var(--font-lineHeight-20); color: var(--text-muted); }
+.confirm-modal-actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+.confirm-modal .btn-pill-dark.secondary { background: transparent; color: var(--text); border: var(--border-width-hairline) solid var(--border); } /* come .order-modal: «Annulla» non pesa più dell'azione */

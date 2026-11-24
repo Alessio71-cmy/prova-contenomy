@@ -1,0 +1,25 @@
+/* 13/10/2026, richiesta Ruggi: regola del workspace valida per TUTTE le pagine Venditore (file condiviso, un'unica fonte).
+   - contenuto corto (sta nella pagina, nessuno scroll): .workspace-content-fit -> angoli arrotondati anche in basso, bordo inferiore e margin-bottom var(--space-4);
+   - contenuto lungo (scorre): .workspace resta come da base, attaccato in basso, angoli inferiori piatti.
+   La classe e' gestita da workspace-fit.js. Vale uguale con pannello destro aperto o chiuso (stessa regola, nessuna eccezione).
+   Solo variabili Foundation gia' usate dal .workspace di base. */
+.workspace.workspace-content-fit {
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+}
+
+/* 13/10/2026, richiesta Ruggi: pannello destro in funzione del workspace.
+   - workspace con contenuto corto (.body.workspace-fit): il pannello ha la STESSA altezza del workspace -> top allineato al bordo superiore del workspace (sotto la topbar), bottom space-4 come il suo margin-bottom;
+   - workspace con contenuto lungo (scorre): il pannello e' piu' piccolo e centrato rispetto allo spazio del workspace (distacco space-4 sopra e sotto) = regole base dei pannelli (top: header-h + space-4; bottom: space-4), invariate.
+   Vale con pannello aperto o chiuso; il passaggio e' animato come l'apertura del pannello. */
+.product-detail-panel,
+.drop-detail-panel {
+  transition: transform var(--motion-duration-280) var(--motion-easing-ease), top var(--motion-duration-280) var(--motion-easing-ease);
+}
+/* 15/10/2026, richiesta Ruggi (tutte le pagine): il pannello resta SEMPRE nella posizione "a riposo" (top = bordo alto del workspace), anche quando il workspace scorre —
+   prima, con contenuto lungo, scendeva di space-4 (top: header-h + space-4). Il bottom resta space-4 (regola base). */
+.product-detail-panel,
+.drop-detail-panel {
+  top: var(--header-h);
+}

@@ -1,0 +1,509 @@
+@import url("../../../../design-system/build/css/tokens.css");
+@import url("../../../../design-system/build/css/compatibility.css");
+@import url("../../../../design-system/components/shell.css");
+@import url("../../../../design-system/components/shell-lists.css");
+@import url("../../../../design-system/components/shell-interactive.css");
+@import url("../../../../design-system/components/button-lists.css");
+@import url("../../../../design-system/components/button.css");
+@import url("../../../../design-system/components/card.css");
+@import url("../../../../design-system/components/card-lists.css");
+@import url("../../../../design-system/components/navigation-interactive-lists.css");
+@import url("../../../../design-system/components/navigation-lists.css");
+@import url("../../../../design-system/components/navigation.css");
+@import url("../../../../design-system/components/feedback-lists.css");
+@import url("../../../../design-system/components/forms-and-filters-lists.css");
+@import url("../../../../design-system/components/product-table-lists.css");
+@import url("../../../../design-system/components/product-table-interactive-lists.css");
+@import url("../../../../design-system/components/product-table-static-product-and-drop.css");
+@import url("../../../../design-system/components/product-panel-static-product-and-drop.css");
+@import url("../../../../design-system/components/product-panel.css");
+@import url("../../../../design-system/components/tooltip.css");
+
+
+:root {
+
+  --item-active-hover-bg: var(--color-neutral-100); /* 16/9/2026, decisione Ruggi: da color-mix a valore fisso (scalabilita' e modifica precisa in caso di cambi futuri, invece di una formula derivata) — riuso diretto della Foundation neutral.100 esistente, nessun nuovo valore. Numericamente quasi identico al risultato del vecchio mix (~#e0dee1 vs #e5e3e6): stessa leggerezza visiva di oggi, solo scritto come letterale invece che come formula. Vedi STRUTTURA_E_STATO.md per il ragionamento completo (contrasto, bucket bianco/neutral, scelta leggerezza su accessibilita' stretta). */
+
+  --hover-bg: var(--item-hover-bg); /* 21/9/2026: default = superficie BIANCA (#F3F1F4). Le superfici neutral lo sovrascrivono a --item-active-hover-bg (#E5E3E6) — vedi blocco dopo :root. */
+
+  --rank-bar-fill: var(--text-muted); /* alias: rank-bar-fill — riempimento della barra di classifica prodotti (DEC-039, decisione Ruggi 11/9); prima condiviso con incassi/drop sotto il nome data-fill-neutral, ora ruolo indipendente perche' potra' avere un colore proprio in futuro */
+  --progress-segmented-fill: var(--text-muted); /* 15/9/2026: MANCAVA qui — riusata più sotto in .drop-row-progress-fill senza essere mai dichiarata in questo file (var() non risolta, segnalato da Ruggi: "drop non è legato a niente"). Stessa definizione/alias di cruscotto.css (DEC-039, decisione Ruggi 11/9) — stesso valore, non un nuovo token, solo la dichiarazione che mancava in questo :root duplicato. */
+  --success: var(--status-success-fg); /* alias: success — stato positivo/completato (DEC-039, decisione Ruggi 11/9); 15/9/2026: ripuntato a status-success-fg (feedback.success, green.500) per coerenza totale con trend/status-pill — non più isolato, decisione Ruggi. Verificato: 5.38:1 testo bianco su questo sfondo (.status-dot.done) e 5.38:1 come stroke su bianco (.ring-fill) */
+
+  /* Alias feedback (success/warning/danger) — 15/9/2026, decisione Ruggi: stesso "salto"
+     sfondo-50/testo+pallino-500 per tutte e 3 le famiglie, verificato AA (4.7:1-5.1:1
+     sul proprio chip). Vedi tokens/alias/color/feedback.json e tokens-preview.css. */
+
+  --panel-w: 480px; /* pannello dettaglio prodotto, 20 × --space-6 (9/9) */
+}
+
+/* 21/9/2026, decisione Ruggi — HOVER CONTESTUALE per icone e chip (icon-btn, icon-btn-ghost, btn-ghost, status-chip, filter-pill, view-switch-btn, filter-chip, badge cliccabili, frecce paginazione, chiudi/naviga pannello, chevron riga).
+   Regola: su sfondo BIANCO -> #F3F1F4 (--item-hover-bg); su sfondo NEUTRAL (25/50) -> #E5E3E6 (--item-active-hover-bg). Stesso valore per icone e chip.
+   --hover-bg e' impostata dalla superficie che contiene l'elemento e si eredita ai figli; dove la superficie cambia con .body.panel-open, l'override e' invertito.
+   Nessun nuovo valore Foundation. Candidato locale (4 file pilota), non alias formale. NON toccati: righe tabella, .sidebar-item (neutral-200), bottoni scuri, stati :active. */
+.topbar, .card, .filter-row, .view-switch { --hover-bg: var(--item-active-hover-bg); }
+/* 2/11/2026 (Ruggi): dentro le TABELLE (.products-panel: icone della toolbar, status-chip, frecce di paginazione, ecc.) l'hover e' SEMPRE #F3F1F4 (--item-hover-bg), a riposo e a pannello aperto; modifica la regola contestuale del 21/9 solo per le tabelle. Eccezione: .view-switch (la sua traccia e' gia' #F3F1F4, l'hover resterebbe invisibile) mantiene #E5E3E6. */
+.products-panel { --hover-bg: var(--item-hover-bg); }
+.products-panel .view-switch { --hover-bg: var(--item-active-hover-bg); }
+.body.panel-open .card { --hover-bg: var(--item-active-hover-bg); } /* 28/9/2026, richiesta Ruggi: bucket hover neutral (era item-hover-bg/bucket bianco) — .card a pannello aperto ora e' neutral-25, non piu' bianca */
+
+/* Sistema semantico primary/secondary (11/9, ragionato con Ruggi): oggi .primary e
+   .secondary sono visivamente IDENTICI (entrambi scuri, nessun colore definito ancora per
+   il secondary) — servono a marcare fin da ora quali bottoni scuri sono l'azione principale
+   di un contesto (Nuovo prodotto, Gestisci variante) vs quali sono scuri ma di importanza
+   minore (Condividi, Nuova variante, Nuovo drop, Ripubblica) — cosi quando il secondary
+   avra un trattamento diverso sara un cambio di due righe CSS, non una caccia nell'HTML. */
+.btn-pill-dark.primary { }
+
+/* Pannello dettaglio prodotto (click riga): affiancato, non overlay (9/9). Corretto il 9/9:
+   NON a filo con i bordi — gap di 16px (--space-4) su sopra/destra/sotto, bordo dello
+   stesso peso/colore standard usato ovunque nel sistema (--border, 1px), non un colore
+   più scuro dedicato. Scroll interno indipendente dal workspace. */
+.product-detail-panel {
+  position: fixed;
+  top: calc(var(--header-h) + var(--space-4));
+  right: var(--space-4);
+  bottom: var(--space-4);
+  width: var(--panel-w);
+  background: var(--color-neutral-25); /* 16/9/2026, su richiesta di Ruggi (era var(--bg), bianco): stesso neutro di .workspace, ora che i due box sono davvero affiancati (vedi .body.panel-open .workspace) invece che sovrapposti. */
+  border: var(--border-width-hairline) solid var(--color-neutral-100); /* 16/9/2026: reintrodotto su richiesta di Ruggi — §8.95 lo aveva rimosso contando solo sul gap per distinguere i due box; stesso valore di prima della rimozione (border.container, {color.neutral.200}), ora su sfondo neutral-25 invece che bianco. */
+  border-radius: var(--radius-lg); /* 30/9/2026 (Ruggi): era radius-md, uniformato a rounded-lg come tutti i pannelli laterali destri */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: var(--zIndex-30);
+  /* Apertura/chiusura animata, stessa motion della sidebar sinistra (transition: width .28s
+     ease) per coerenza di sistema: sempre nel DOM, quando chiuso è spostato fuori dal
+     viewport a destra (mai display:none, altrimenti non c'è nulla da animare) e non è
+     interagibile (9/9) */
+  transform: translateX(calc(100% + var(--space-4)));
+  transition: transform var(--motion-duration-280) var(--motion-easing-ease);
+  pointer-events: none;
+}
+
+.product-detail-panel::-webkit-scrollbar { display: none; }
+
+/* Il workspace si restringe esattamente di panel-w + il gap fra il pannello e il vero bordo
+   destro dello schermo (--space-4, lo stesso usato per il "right" del pannello). NON si
+   aggiunge un secondo --space-4 per il gap contenuto↔pannello: quello lo fornisce già il
+   padding destro di .workspace-inner, che sale a --space-10 (40px, uguale su entrambi i
+   lati) esattamente quando il pannello è aperto (vedi regola .body.panel-open
+   .workspace-inner più sotto) — sommare qui un secondo --space-4 renderebbe il gap
+   contenuto↔pannello diverso e più largo di quello sidebar↔contenuto, rompendo la regola
+   "stesso margine sui due lati" (bug trovato da Ruggi, 9/9; padding dinamico invece che fisso
+   a 40 aggiunto il 10/9 per far coincidere lo stato di riposo con Cruscotto). */
+.workspace { transition: margin-right var(--motion-duration-280) var(--motion-easing-ease); } /* 16/9/2026, su richiesta di Ruggi: .workspace deve restringersi davvero (box con sfondo/radius, non solo il suo contenuto) quando il pannello si apre, invece di restare a piena larghezza sotto il pannello fisso con solo il contenuto spinto via da un padding-right dinamico — vedi regola sotto */
+.body.panel-open .workspace { --hover-bg: var(--item-active-hover-bg); } /* 28/9/2026, correzione Ruggi: mancava rispetto alle altre pagine — bucket hover neutral, il workspace a pannello aperto e' ora neutral-50, non piu' bianco. */
+.body.panel-open .workspace {
+  margin-right: calc(var(--panel-w) + var(--space-4) * 2); /* sostituisce interamente il margin-right base (var(--space-6)) della regola .workspace: spazio per il pannello (panel-w + il suo stesso inset dal bordo viewport, space-4) più un secondo space-4 come distanza fra i due box, stesso gap già in uso ovunque nel sistema. padding-right non più necessario: torna quello base (space-6, uguale agli altri 3 lati), il box stesso ora finisce prima del pannello invece di restarci sotto. */
+  /* 28/9/2026, richiesta Ruggi: rimosso l'override di background — il workspace ora usa SEMPRE neutral-50 (vedi .workspace di base), sia a riposo che a pannello aperto: niente più cambio di colore/bordo fra i due stati. */
+}
+.panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-4) 0; /* 5/10/2026 (Ruggi): .panel-header in tutte le pagine = padding var(--space-4) solo sopra e sotto, nessun padding laterale */ border-bottom: var(--border-width-hairline) solid var(--border);
+}
+.panel-title { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--text); }
+.panel-close-btn {
+  width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none;
+  display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
+  background: var(--color-neutral-25); /* 28/9/2026, richiesta Ruggi: i ghost button icon-only devono avere sfondo neutral-25 */
+  transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease); /* 11/9: mancava, aggiunta per coerenza con gli altri pulsanti */
+}
+.panel-close-btn:hover { background: var(--hover-bg); color: var(--text); } /* 21/9/2026: hover contestuale (--hover-bg), vedi blocco dopo :root — eventuali commenti sul "bucket" sopra sono superati */
+.panel-body { padding: var(--space-4); }
+
+ /* 14/9/2026: allineato a cruscotto.css, mancava qui */
+
+/* --- Workspace --- */
+/* .workspace è l'area scrollabile: copre tutta la larghezza residua della flex (nessun
+   max-width qui), altrimenti — con max-width + margin:auto — lo spazio vuoto ai lati del
+   contenuto centrato finisce FUORI dal box scrollabile e lo scroll lì non funziona (bug
+   segnalato da Ruggi, 9/9). Il centramento/padding vive in .workspace-inner, che non ha
+   overflow proprio: lo scroll copre sempre l'intera area, non solo dove c'è testo/card. */
+.workspace {
+  flex: 1;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 var(--space-4) 0;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--color-neutral-100); /* 12/10/2026, richiesta Ruggi: border workspace neutral-200 */
+  border-bottom: 0;
+  background: var(--color-background-default); /* 12/10/2026, richiesta Ruggi: tutti i workspace su sfondo bianco (alias color.background.default = neutral.0); era var(--color-neutral-50). Nota: l'alias color.background.workspace resta su neutral.50 e al momento non è usato. */ /* 28/9/2026, richiesta Ruggi: il workspace ha sempre bg neutral-50 e bordo neutral-100, identico a riposo e a pannello aperto — eliminato l'effetto di cambio colore fra i due stati (prima: bianco a riposo, neutral-50 aperto). */
+}
+/* 12/10/2026, richiesta Ruggi: a sidebar chiusa il workspace si appoggia alla sidebar compressa — margin-left 0 (shell.css lo portava a var(--sidebar-shell_sidebar_collapsed_workspace-margin_left) = spacing-2); top 0, right e bottom restano space-4 dalla regola base. Solo margin-left, di proposito: così non interferisce con `.body.panel-open .workspace { margin-right }` (stessa specificità). */
+.shell.sidebar-collapsed .workspace { margin-left: 0; }
+
+
+ /* 16/9/2026: rimossa la differenziazione aperto/chiuso legata al pannello laterale (era max-width 70->65rem, padding 24->40px, per compensare .workspace che non si restringeva mai) — non più necessaria da quando il box si restringe davvero via margin-right (vedi nota su .body.panel-open .workspace sopra). 17/9/2026: reintrodotta una differenziazione aperto/chiuso di natura diversa, legata allo stato della SIDEBAR (non del pannello laterale) — vedi regola sotto. */
+/* 21/9/2026, su richiesta di Ruggi: RIMOSSO l'override `.shell.sidebar-collapsed .workspace-inner { max-width: 70rem; }` (17/9). A sidebar chiusa .workspace-inner resta a 80rem, come a sidebar aperta: le tabelle guadagnano spazio invece di restare a 70rem. */
+
+.page-header { margin-bottom: var(--space-12); display: flex; align-items: flex-start; justify-content: space-between; }
+.page-header-actions { display: flex; align-items: flex-start; gap: var(--space-2); flex: none; }
+
+
+ /* 14/9/2026: stato "premuto", un filo più marcato dell'hover, distinto da un'eventuale classe .active di selezione (qui non esiste, ma il criterio è lo stesso) */
+.page-title { font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); }
+.page-sub { font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); font-weight: var(--font-weight-regular); color: var(--text-muted); margin-top: var(--space-2); }
+
+.body.panel-open .card {
+  background: transparent; /* 28/9/2026, richiesta Ruggi: .card a pannello aperto resta neutral-25 (era var(--bg)/bianco) — non deve piu' tornare bianca, il workspace intorno e' ora neutral-50. */
+}
+
+.chev {
+  width: 6px; height: 6px; border-right: var(--border-width-moderate) solid var(--text-muted); border-bottom: var(--border-width-moderate) solid var(--text-muted);
+  transform: rotate(-45deg); flex: none;
+}
+.chev.inline { margin-left: var(--space-1); }
+.link { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); display: flex; align-items: center; text-decoration: none; }
+
+#filtersDivider, #dropFiltersDivider { margin: var(--space-4) 0 var(--space-8); }
+
+
+ /* verso il basso, non verso destra come il chev di default (usato altrove per righe cliccabili) — 9/9 */
+
+/* --- Tabella prodotti --- */
+/* Contenitore unico per toolbar + chip di stato + filtri (nascosti di default) + tabella:
+   bordo e padding tornano qui (var(--space-6)), non più sulla sola tabella (9/9, rollback
+   della scelta precedente "tabella senza bordo") */
+.products-panel {
+  border-radius: var(--radius-md);
+  border: var(--border-width-hairline) solid var(--color-neutral-100); /* 1/10/2026 (Ruggi): bordo neutral-100 sulle tabelle (sostituisce l'assenza di bordo del 28/9) */
+  padding: var(--space-6);
+  /* 28/9/2026, correzione Ruggi: .products-panel torna a sfondo neutral-25 (non piu' bianco a riposo), quindi il border-neutral-200 e' stato rimosso. */
+  background: transparent; /* 12/10/2026, richiesta Ruggi: panel/tabelle trasparenti (workspace bianco) */ /* 28/9/2026, correzione Ruggi: .products-panel a riposo torna neutral-25 (bianco era un errore); ora sta su workspace bianco a riposo (vedi correzione .workspace), quindi il contrasto e' garantito. A pannello aperto resta neutral-25, invariato. */
+}
+
+/* Le azioni Drop usano button semantici; l'azzeramento resta circoscritto alla toolbar per
+   conservare l'aspetto identico alle icon-action già presenti nel resto della pagina. */
+.table-toolbar .icon-btn, .table-toolbar .search-close-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+}
+/* Il reset scoped sopra ha la stessa specificità di .icon-btn:hover e viene dopo la
+   regola base: senza questo override annullava lo sfondo hover di cerca, filtri e ordine. */
+.table-toolbar .icon-btn:hover { background: var(--hover-bg); color: var(--text); } /* 21/9/2026: hover contestuale (--hover-bg), vedi blocco dopo :root — eventuali commenti sul "bucket" sopra sono superati */
+.table-toolbar .icon-btn:active { background: var(--item-active-hover-bg); }
+.search-close-btn {
+  flex: none; width: var(--spacing-6); height: var(--spacing-6); border-radius: var(--radius-pill);
+  display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer;
+  opacity: 0; pointer-events: none; transition: opacity var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.search-close-btn:hover { background: var(--hover-bg); color: var(--text); }
+
+
+/* Vista calendario del Drop: è un'alternativa temporale all'elenco, non una griglia di card.
+   Quando è attiva, il controllo di stato e la paginazione della tabella non sono pertinenti. */
+.products-panel.calendar-view .table-pagination,
+.products-panel.calendar-view .status-chips { display: none; }
+.products-panel.calendar-view .table-toolbar { justify-content: flex-end; }
+.drop-calendar-view { margin-top: var(--space-2); }
+.drop-calendar-heading {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--space-4); margin-bottom: var(--space-5);
+}
+.drop-calendar-title { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--text); }
+.drop-calendar-subtitle { margin-top: var(--space-0-5); font-size: var(--font-size-14); color: var(--text-muted); }
+.drop-calendar-active-summary {
+  flex: none; border-radius: var(--radius-pill); padding: var(--space-1) var(--space-3);
+  background: var(--item-active-bg); color: var(--text); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold);
+}
+.drop-calendar-weekdays, .drop-calendar-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.drop-calendar-weekdays { border-bottom: var(--border-width-hairline) solid var(--table-border-color); }
+.drop-calendar-weekdays span { padding: var(--space-2); font-size: var(--font-size-12); color: var(--text-muted); }
+.calendar-day {
+  min-height: var(--spacing-24); padding: var(--space-2); border-right: var(--border-width-hairline) solid var(--table-border-color);
+  border-bottom: var(--border-width-hairline) solid var(--table-border-color); display: flex; flex-direction: column;
+  align-items: flex-start; gap: var(--space-1); color: var(--text); font-size: var(--font-size-12);
+}
+.calendar-day:nth-child(7n) { border-right: none; }
+.calendar-day--outside { color: var(--text-faint); background: var(--item-hover-bg); }
+.calendar-day--today > :first-child {
+  width: 22px; height: 22px; border-radius: var(--radius-pill); display: inline-flex;
+  align-items: center; justify-content: center; background: var(--dark); color: var(--color-text-inverse);
+}
+.calendar-event {
+  display: block; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  border-radius: var(--radius-sm); padding: var(--space-1); font-size: 11px; line-height: 1.25;
+}
+.calendar-event--scheduled { background: var(--color-lilla-100); color: var(--color-lilla-500); }
+.calendar-event--past { background: var(--item-active-bg); color: var(--text-muted); }
+@media (max-width: 760px) {
+  .calendar-day { min-height: 72px; }
+  .calendar-event { font-size: 0; padding: var(--space-1); width: 6px; height: 6px; border-radius: var(--radius-pill); }
+  .drop-calendar-heading { align-items: flex-start; flex-direction: column; }
+}
+
+.count { color: var(--text-muted); margin-left: var(--space-1); }
+
+.product-variant-row { padding: var(--space-3) var(--space-2); }
+
+/* Riga variante: stesso hover della riga prodotto; la sola freccia, posizionata in
+   absolute, apre la pagina prodotto già sulla variante selezionata. */
+.product-variant-row { position: relative; border-radius: var(--radius-sm); transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+
+/* 21/9/2026: stessa dissolvenza di .product-row-date per l'ultima colonna dati di Elenco drop:
+   le azioni (freccia + ⋮) sono assolute sopra la riga, quindi l'ultima cella sfuma invece di
+   essere tagliata di netto (decisione Ruggi: niente colonna riservata alle azioni). */
+.drop-row:hover > :nth-last-child(2) {
+  mask-image: linear-gradient(to right, black calc(100% - var(--row-actions-fade-start)), transparent calc(100% - var(--row-actions-reserve)));
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--row-actions-fade-start)), transparent calc(100% - var(--row-actions-reserve)));
+}
+
+.row-actions {
+  position: absolute; top: 0; right: 0; bottom: 0; transform: none;
+  z-index: var(--zIndex-2); display: flex; align-items: center; gap: var(--space-0-5);
+  padding: 0 var(--space-2) 0 var(--row-actions-pad-left);
+  background: var(--row-bg);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  opacity: 0; transition: opacity var(--motion-duration-150) var(--motion-easing-ease);
+} /* Azioni della sola riga principale: freccia per la pagina prodotto + menu ⋮ per
+     le azioni di livello prodotto. Le sotto-righe espongono una sola freccia che apre
+     la stessa pagina con la relativa variante già selezionata. */
+.drop-row {
+  --row-actions-width: calc(28px + 28px + var(--space-0-5));
+  --row-actions-reserve: calc(var(--row-actions-width) + var(--space-2));
+  --row-actions-fade-start: calc(var(--row-actions-reserve) + var(--space-8));
+}
+.product-row:hover .row-actions, .drop-row:hover .row-actions { opacity: 1; }
+ /* dentro il wrapper la posizione, l'opacità e il transform li gestisce .row-actions, non
+     più se stesso (fuori dal wrapper, nelle sotto-righe, .row-menu-btn resta invariato:
+     absolute + opacity + transform propri, vedi le regole originali più sotto). Bug 11/9
+     (segnalato da Ruggi): mancava l'azzeramento di transform — .row-menu-btn portava ancora
+     il suo translateY(-50%) pensato per l'auto-centraggio di quando era absolute da solo,
+     spostandolo più in alto di .row-goto-btn dentro il wrapper */
+.row-goto-btn {
+  width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none;
+  display: flex; align-items: center; justify-content: center; cursor: pointer;
+  color: var(--text-muted); text-decoration: none;
+  transition: color var(--motion-duration-150) var(--motion-easing-ease);
+} /* stessa icona usata in Cruscotto per "Vai alla rendicontazione (Conti)" — qui porta alla
+     pagina del prodotto (destinazione non ancora costruita in questo wireframe, come per
+     l'equivalente in Cruscotto: href="#" segnaposto). Stile identico a .row-menu-btn (niente
+     bordo, solo il colore cambia in hover, coerente col resto della riga) invece dello stile
+     con bordo di Cruscotto — scelta esplicita di Ruggi 11/9, per non introdurre un elemento
+     visivamente estraneo accanto ai tre puntini nella stessa riga */
+.row-goto-btn:hover { color: var(--text); }
+/* 21/9/2026: azione distruttiva in riga (cestino "Elimina bozza"): icona rossa sempre, non solo in hover (Ruggi). */
+.row-goto-btn.row-action-danger, .row-goto-btn.row-action-danger:hover { color: var(--status-danger-fg); }
+
+
+.product-row:hover .row-menu-btn, .drop-row:hover .row-menu-btn { opacity: 1; }
+
+/* =========================================================================
+   PANORAMICA — tab di default (convenzione IA 9/9: prima tab, tab di default,
+   sotto-metriche + andamento; niente card-metriche in stile Cruscotto)
+   ========================================================================= */
+
+.overview {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-16); /* stesso valore di .grid nel Cruscotto */
+}
+/* .overview { display: grid } ha la stessa specificità della regola nativa
+   [hidden] { display: none }, e la vince essendo dichiarata dopo nel foglio di
+   stile — quindi il pannello Panoramica restava visibile anche a tab "Elenco"
+   attiva. Specificità più alta qui per garantire che [hidden] vinca sempre. */
+.overview[hidden] {
+  display: none;
+}
+
+/* Griglia base 12 colonne, riusata per la tab Elenco prodotti (filtri + tabella) —
+   stessa definizione di .grid nel Cruscotto, non era mai stata copiata qui: bug corretto 9/9 */
+.grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-6); margin-top: var(--space-16); }
+.span-4 { grid-column: span 4; }
+.span-6 { grid-column: span 6; }
+.span-8 { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+
+/* Grafico andamento vendite */
+.chart-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--space-4); }
+
+.chart-svg { width: 100%; height: auto; display: block; }
+.chart-line { fill: none; stroke: var(--dark); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.chart-dot { fill: var(--bg); stroke: var(--dark); stroke-width: 2; cursor: pointer; transition: fill var(--motion-duration-150) var(--motion-easing-ease); } /* transition aggiunta 11/9 per coerenza hover */
+.chart-dot:hover { fill: var(--dark); }
+.chart-axis-label { font-size: 10px; fill: var(--text-muted); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+.chart-end-label { font-size: var(--font-size-12); font-weight: var(--font-weight-bold); fill: var(--text); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+.chart-baseline { stroke: var(--border); stroke-width: 1; }
+
+  /* 15/9/2026: promosso, vedi cruscotto.css — mancava anche questa in drop.css, stesso drift */
+/* 17/9/2026: rimosso il blocco duplicato di questa sezione (.submetric-trend.up/.down + .submetric-subvalue
+   ripetuti due volte identici, righe ~1053-1065 prima del fix) — bug di drift indipendente, trovato mentre
+   si rimuoveva .submetric-subvalue su richiesta di Ruggi (vedi §8.109). .submetric-subvalue non era comunque
+   mai usata in drop.html: era codice morto anche prima della duplicazione. */
+
+/* =========================================================================
+   DROP — specifico di pagina (15/9/2026)
+   ========================================================================= */
+
+/* --- Timer (Aperti ora): colonna dedicata, PRIMA colonna della riga — richiesta
+   esplicita di Ruggi 15/9 ("molta più importanza al timer, deve essere il primo").
+   Numero su una riga propria, barra di avanzamento segmentata sotto (non più
+   affiancata alla fase, che ora è la colonna successiva). Stessi alias/colore del
+   componente originale in Cruscotto (progress-segmented-fill), solo riorganizzato. */
+.drop-row-timer { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.drop-row-timer-content { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.drop-row-countdown { font-size: var(--font-size-20); font-weight: var(--font-weight-bold); color: var(--text); line-height: var(--font-lineHeight-normal); } /* type/display/xs — enfasi maggiore rispetto alla versione precedente (16px), su richiesta */
+.drop-row-progress { display: flex; gap: var(--space-1); width: 100%; max-width: var(--spacing-24); }
+.drop-row-progress-seg { flex: 1; height: var(--spacing-1); border-radius: var(--radius-pill); background: var(--border); overflow: hidden; }
+.drop-row-progress-fill { height: 100%; background: var(--progress-segmented-fill); border-radius: inherit; }
+
+/* --- Fase/stadio: colonna a sé, accanto al timer, testo semplice (15/9: "stadio
+   lo dividerei... ha una riga a sé"). Stessa scala di .product-row-price/.product-row-stat
+   (trattamento "riga principale", non subrow/muted — 15/9: "il testo deve essere
+   come la tabella principale non come le subrow"). --- */
+.drop-row-phase { font-size: var(--font-size-14); color: var(--text); white-space: nowrap; }
+
+/* --- Riga Elenco drop: griglia propria (colonne diverse da Elenco prodotti — non
+   forzata sullo stesso grid-template-columns, il contenuto è diverso). Riusa gli
+   stessi primitivi (padding, border, tipografia) di .product-row. Ordine: Timer,
+   Stadio, Prodotto, Venduti, Like, Avvisami, Quorum. La chevron vive accanto al
+   Timer, prima voce della riga, e le azioni sono assolute: nessuna delle due
+   riserva una colonna. --- */
+.drop-row-head, .drop-row {
+  display: grid;
+  /* Aperti, Full: 4/3/6/2/2/2/2/3 = 24 unita. Chevron e azioni restano
+     interne/sovrapposte e non partecipano al conteggio delle colonne. */
+  grid-template-columns: var(--tableLayout-drop-aperti-full-template);
+  align-items: center;
+  gap: var(--space-3);
+  /* Stesso padding di .product-row (var(--space-4) var(--space-2), 16px/8px) — prima era
+     var(--space-3) 4px (12px/4px), più stretto senza motivo e incoerente con Elenco prodotti
+     (segnalato da Ruggi: "non rispettano per niente il padding corretto"). */
+  padding: var(--space-4) var(--space-2);
+}
+.drop-row-head {
+  font-size: var(--font-size-12);
+  color: var(--text-muted);
+  border-bottom: var(--border-width-hairline) solid var(--table-border-color, var(--border));
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+/* Riga non cliccabile nel suo insieme (nessun pannello dettaglio drop esiste ancora, a
+   differenza di Prodotti) — ma stessi raggio/hover leggero delle altre righe tabellari del
+   sistema per coerenza visiva, non più cursor:default piatto senza alcun trattamento. */
+.drop-row { position: relative; border-radius: var(--radius-sm); cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); } /* Stesso affordance delle righe prodotto: la riga espone azioni e, quando disponibile, l'espansione delle varianti. */
+.drop-row:hover { background: var(--item-hover-bg); }
+.drop-row-name { display: block; font-size: var(--font-size-16); color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* 21/9/2026: nome su una sola riga, troncato con ellipsis (richiesta Ruggi, colonna Prodotto ridotta); testo completo nel title. Effetto futuro (segnato, NON implementato): in hover il testo scorre (marquee) — da rendere non-hover-only per tastiera/touch e disattivare con prefers-reduced-motion. */
+/* 21/9/2026: colonne data. Periodo = "inizio – fine" (inizio teaser → chiusura della finestra o passaggio allo shop; in Passati la fine effettiva); ore nel title. Fine drop (Programmati) = data + riga muted che dice quale dei due casi è. */
+/* .drop-row-period: solo gancio per nasconderla a pannello aperto (drop-statico.css); stile = .product-row-date (21/9/2026) */
+.drop-row-variant-count { font-size: var(--font-size-12); color: var(--text-muted); margin-top: var(--space-0-5); display: block; }
+.drop-row-stat { font-size: var(--font-size-14); color: var(--text); white-space: nowrap; } /* venduti/totale — stesso trattamento di .product-row-stat */
+/* Like e avvisami: due colonne separate (15/9: "dividerei i like dagli avvisami"),
+   stesso trattamento "riga principale" di .drop-row-stat — non più muted/12px come
+   nella versione a cella unica, che leggeva come una subrow. */
+.drop-row-social { font-size: var(--font-size-14); color: var(--text); white-space: nowrap; }
+.drop-row-social strong { font-weight: var(--font-weight-semibold); }
+/* Quorum: badge compatto, stesso trattamento "riga principale". Azione dietro il
+   badge NON ancora decisa (15/9: Ruggi non è sicuro che vada bene così) — resta
+   solo testo/colore per ora, nessun comportamento di click aggiunto qui. */
+.drop-row-quorum { font-size: var(--font-size-14); color: var(--text); white-space: nowrap; }
+.drop-row-quorum.warning { color: var(--status-warning-fg); font-weight: var(--font-weight-semibold); } /* badge "Azione richiesta" (IA §4.1, quorum_non_raggiunto) — riusa alias warning esistente, nessun colore nuovo */
+.drop-row-quorum.empty { color: var(--text-faint); }
+
+/* --- Riga con chevron (varianti nel drop): stesso pattern di
+   .product-row-chevron/.product-variants in Elenco prodotti. Qui la prima voce è
+   Timer, perciò la chevron vive nella riga del timer, non in una colonna propria. */
+/* min-height allineata a .product-row-main (36px): stesso motivo, evitare che le righe con
+   "N varianti" (due righe di testo) risultino più alte delle righe a riga singola (15/9,
+   correzione dopo segnalazione di Ruggi su padding/dimensioni non rispettate). */
+.drop-row-main { display: flex; align-items: center; gap: var(--space-2); min-width: 0; min-height: var(--spacing-9); padding-right: var(--space-4); } /* 21/9/2026: 16px di respiro dopo l'ellissi del nome troncato (richiesta Ruggi: più spazio bianco dopo i caratteri troncati) */
+/* 21/9/2026: segnaposto largo quanto .product-row-chevron (20px) per le righe senza varianti, così il nome resta allineato a quello delle righe con chevron nella colonna Prodotto (Programmati). */
+.drop-row-chevron-spacer { width: var(--spacing-5); height: var(--spacing-5); flex: none; }
+.drop-row-textblock { min-width: 0; }
+
+/* Varianti del solo tab Aperti ora: stessa griglia della riga Drop per mantenere i
+   dati sotto alle rispettive intestazioni. Le colonne Stadio, Avvisami e Quorum restano
+   intenzionalmente vuote nelle sotto-righe, senza introdurre div segnaposto nel markup. */
+.drop-table[data-status-panel="aperti"] .product-variant-head,
+.drop-table[data-status-panel="aperti"] .product-variant-row {
+  grid-template-columns: var(--tableLayout-drop-aperti-full-template);
+}
+.drop-table[data-status-panel="aperti"] .drop-variant-heading--timer,
+.drop-table[data-status-panel="aperti"] .product-variant-name { grid-column: 1; padding-left: var(--space-8); }
+.drop-table[data-status-panel="aperti"] .drop-variant-heading--product,
+.drop-table[data-status-panel="aperti"] .product-variant-price { grid-column: 3; }
+.drop-table[data-status-panel="aperti"] .drop-variant-heading--sold,
+.drop-table[data-status-panel="aperti"] .product-variant-stat { grid-column: 4; }
+.drop-table[data-status-panel="aperti"] .drop-variant-heading--likes,
+.drop-table[data-status-panel="aperti"] .product-variant-row > .status-pill { grid-column: 5; }
+
+/* --- Programmati: colonne proprie (Prodotto, Step, Apertura pubblica, Chiusura
+   prevista). Chevron nella cella Prodotto e azioni assolute: nessuna traccia tecnica
+   comprime il contenuto. --- */
+.drop-table[data-status-panel="programmati"] .drop-row-head,
+.drop-table[data-status-panel="programmati"] .drop-row {
+  grid-template-columns: var(--tableLayout-drop-programmati-full-template);
+}
+.drop-stepper { display: flex; align-items: center; min-width: 0; padding-right: var(--space-8); } /* 21/9/2026: 32px di respiro fra l'ultimo step e la colonna Inizio drop (Ruggi: troppo attaccati) */
+.drop-step { display: inline-flex; align-items: center; gap: var(--space-1); flex: none; color: var(--text-muted); font-size: var(--font-size-14); white-space: nowrap; }
+.drop-step.is-current { color: var(--text); font-weight: var(--font-weight-semibold); }
+.drop-step-icon { display: inline-flex; width: 18px; height: 18px; flex: none; }
+.drop-step-icon svg { width: 100%; height: 100%; }
+.drop-step-connector { height: 1px; width: var(--space-3); flex: none; margin: 0 var(--space-2); background: var(--border); } /* 21/9/2026: connettore 32 → 12px (space-8 → space-3) per far stare fino a 4 step (Anteprima · Priorità · Pubblico · Chiusura) nella colonna Step */
+.drop-row-opening-date { color: var(--color-lilla-500); font-weight: var(--font-weight-semibold); }
+
+/* --- Bozze (21/9/2026): Prodotto · Da completare · Ultima modifica. Stessa struttura delle
+   altre tabelle (chevron/azioni non riservano tracce). --- */
+.drop-table[data-status-panel="bozze"] .drop-row-head,
+.drop-table[data-status-panel="bozze"] .drop-row {
+  grid-template-columns: var(--tableLayout-drop-bozze-full-template);
+}
+
+/* --- Passati: colonne proprie (Prodotto, Stato, Venduti, Chiusura). Stessa struttura:
+   la chevron è interna a Prodotto e le azioni in hover non riservano una colonna. */
+.drop-table[data-status-panel="passati"] .drop-row-head,
+.drop-table[data-status-panel="passati"] .drop-row {
+  grid-template-columns: var(--tableLayout-drop-passati-full-template);
+}
+
+/* Espandi/collassa chevron: stesse regole di .product-row.expanded, scoped a .drop-row
+   invece di riusare la classe .product-row (che porterebbe con sé hover/selected non
+   pertinenti a questa tabella). Stesso comportamento visivo (rotazione + apertura). */
+.drop-row.expanded .product-row-chevron svg { transform: rotate(90deg); }
+.drop-row.expanded + .product-variants { grid-template-rows: minmax(0, 1fr); }
+.drop-row.expanded + .product-variants .product-variants-inner { padding: var(--space-2) 0; margin: var(--space-0-5) 0; }
+
+/* --- Stato finale (Passati): riusa .status-pill già definito per Elenco prodotti,
+   nuovi modificatori di colore/testo per gli esiti propri di Drop (esaurito è già
+   una variante di status-pill in Prodotti; concluso/archiviato/interrotto sono
+   nuovi solo nel testo, non in un nuovo colore — da confermare in audit se il
+   trattamento cromatico coincide o va distinto). --- */
+.drop-empty-substate {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--font-size-14);
+}
+
+/* 12/10/2026, richiesta Ruggi: a pannello laterale destro aperto il workspace ha sfondo trasparente (si vede lo shell-body). */
+.body.panel-open .workspace { background: transparent; }
+
+/* 29/10/2026, richiesta Ruggi (esteso da ordini-statico a tutte le tabelle): maschera azioni di riga = pannello PIENO e opaco (il wrapper .row-actions), alto quanto la riga, largo quanto le icone + padding-left definito (--row-actions-pad-left), taglio netto senza gradiente. Colore sempre = sfondo reale della riga (--row-bg: hover neutro / selezionata lilla). Hover icone: --row-icon-hover-bg (neutral-100 su riga neutra, lilla-100 su riga selezionata). */
+.product-row, .drop-row { --row-bg: var(--item-hover-bg); --row-icon-hover-bg: var(--item-active-hover-bg); --row-actions-pad-left: var(--space-2); }
+.product-row.selected, .drop-row.selected { --row-bg: var(--color-lilla-50); --row-icon-hover-bg: var(--color-lilla-100); }
+.row-actions .row-menu-btn, .row-actions .row-goto-btn { transition: color var(--motion-duration-150) var(--motion-easing-ease), background var(--motion-duration-150) var(--motion-easing-ease); }
+.row-actions .row-menu-btn:hover, .row-actions .row-goto-btn:hover { background: var(--row-icon-hover-bg); color: var(--text); }
+/* 29/10/2026 (Ruggi): icone delle azioni di riga (freccia + ⋮) in var(--text) (#1B1A1B) a riposo, non piu' muted: sopra la riga evidenziata non si leggevano. Vale per tutte le tabelle; la variante pericolo (Drop) resta rossa. */
+.row-actions .row-menu-btn, .row-actions .row-goto-btn:not(.row-action-danger), .product-variant-row .row-menu-btn, .product-variant-row .row-goto-btn:not(.row-action-danger) { color: var(--text); }
+/* 29/10/2026 (Ruggi): la maschera delle azioni di riga ha una leggera SFUMATURA a sinistra (transparent -> --row-bg) invece del taglio netto; annulla il "taglio netto senza gradiente" del 29/10 mattina. Padding-left space-6 = spazio per la sfumatura (la larghezza delle sotto-righe segue la stessa variabile). */
+.product-row, .drop-row, .product-variant-row { --row-actions-pad-left: var(--space-6); }
+.row-actions, .product-variant-row::after { background: linear-gradient(to right, transparent, var(--row-bg) var(--space-5)); }
+/* Gradienti sulle celle sotto le azioni: sostituiti dal pannello pieno */
+.drop-row:hover > :nth-last-child(2),
+.product-row:hover .product-row-date,
+.body.panel-open .product-row:hover .status-pill { mask-image: none; -webkit-mask-image: none; }
+
+/* Sotto-righe (varianti): un solo bottone assoluto senza wrapper -> la maschera piena e' un ::after della riga, stessa larghezza/logica (bottone 28px + right space-2 + padding-left), sotto il bottone (z-index) e sopra le celle. */
+.product-variant-row { --row-bg: var(--item-hover-bg); --row-icon-hover-bg: var(--item-active-hover-bg); --row-actions-pad-left: var(--space-2); }
+.product-variant-row::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; width: calc(var(--spacing-7) + var(--space-2) + var(--row-actions-pad-left)); background: var(--row-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; opacity: 0; transition: opacity var(--motion-duration-150) var(--motion-easing-ease); }
+.product-variant-row:hover::after { opacity: 1; }
+.product-variant-row .row-menu-btn, .product-variant-row .row-goto-btn { z-index: 1; transition: opacity var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease), background var(--motion-duration-150) var(--motion-easing-ease); }
+.product-variant-row .row-menu-btn:hover, .product-variant-row .row-goto-btn:hover { background: var(--row-icon-hover-bg); color: var(--text); }

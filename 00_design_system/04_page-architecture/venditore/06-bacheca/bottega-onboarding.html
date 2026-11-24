@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Bottega (primo accesso) — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="bottega-onboarding.css">
+<link rel="stylesheet" href="../workspace-fit.css">
+<link rel="stylesheet" href="../onboarding-banner.css"> <!-- 16/10/2026: banner di completamento account (copia di cruscotto-onboarding) --> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== TOPBAR (larghezza piena, sopra sidebar+workspace) ===================== -->
+  <!-- 17/9/2026, propagato da prodotti-panel-static.css su richiesta di Ruggi (fix bug: sidebar-header era finita dentro la sidebar invece che nella topbar): icona toggle sidebar + logo Contenomy tornano qui dentro .topbar-left (via .sidebar-header rimossa). -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+  <!-- ===================== SIDEBAR (piena altezza dell'area sotto la topbar) ===================== -->
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bacheca</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <!-- 12/10/2026, onboarding Bottega: pagina di ingresso e anteprime delle botteghe pubbliche. -->
+    <main class="workspace">
+      <div class="workspace-inner bottega-onboarding">
+        <header class="page-header bottega-page-header">
+          <div>
+            <h1 class="page-title" id="bottega-title">La tua bottega</h1>
+            <p class="page-sub">Crea, personalizza e pubblica lo spazio in cui racconti il tuo negozio.</p>
+          </div>
+          <div class="page-header-actions">
+            <button class="btn-pill-dark primary" type="button" id="createShopBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Crea bottega</button>
+          </div>
+        </header>
+
+        <!-- 16/10/2026 (Ruggi): stessa struttura in entrambi gli stati: titolo generale + "Crea bottega"; sezione "Le tue botteghe" (riquadro tratteggiato finché non ce n'è nessuna, poi le card + lo stesso riquadro in fondo) e sempre sotto "Botteghe da cui prendere ispirazione". Le card le costruisce bottega-onboarding.js. -->
+        <!-- 16/10/2026 (Ruggi): banner di attivazione account comprimibile, generato da ../account-setup.js (stesso componente del Cruscotto). Nascosto senza botteghe. -->
+        <section id="onbBanner" aria-label="Completa il tuo account" hidden></section>
+
+        <section class="bottega-list" aria-labelledby="mine-heading">
+          <div class="theme-section-heading">
+            <div>
+              <h2 class="card-title title-lg" id="mine-heading">Le tue botteghe</h2>
+              <p>Quelle che hai creato: una sola può essere pubblicata, le altre restano bozze finché non decidi di pubblicarle.</p>
+            </div>
+          </div>
+          <div class="bottega-grid" id="bottegaGrid"></div>
+        </section>
+
+        <section class="theme-exploration" aria-labelledby="theme-heading">
+          <div class="theme-section-heading">
+            <div>
+              <h2 class="card-title title-lg" id="theme-heading">Botteghe da cui prendere ispirazione</h2>
+              <p>Esplora le botteghe della community per scoprire idee e modi diversi di raccontarsi.</p>
+            </div>
+          </div>
+
+          <div class="theme-preview-grid">
+            <article class="theme-preview">
+              <div class="theme-art theme-art-story" aria-hidden="true">
+                <div class="preview-window"><span class="preview-kicker">La bottega</span><span class="preview-line long"></span><span class="preview-line short"></span><span class="preview-cta"></span></div>
+                <div class="preview-orb"></div>
+              </div>
+              <div class="theme-preview-copy"><div class="card-header-titles theme-preview-titles"><div class="theme-preview-title">La bottega di Marta</div><div class="card-sub">Marta • Ceramiche</div></div><a class="btn-ghost sm theme-preview-action" href="#bottega-marta"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>Apri bottega</a></div>
+            </article>
+
+            <article class="theme-preview">
+              <div class="theme-art theme-art-collection" aria-hidden="true">
+                <div class="preview-collection-title"><span class="preview-kicker">La selezione</span><span class="preview-line long"></span></div>
+                <div class="preview-product-row"><span></span><span></span><span></span></div>
+              </div>
+              <div class="theme-preview-copy"><div class="card-header-titles theme-preview-titles"><div class="theme-preview-title">La bottega di Luca</div><div class="card-sub">Luca • Accessori</div></div><a class="btn-ghost sm theme-preview-action" href="#bottega-luca"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>Apri bottega</a></div>
+            </article>
+
+            <article class="theme-preview">
+              <div class="theme-art theme-art-news" aria-hidden="true">
+                <div class="preview-news-image"><span class="preview-sun"></span></div>
+                <div class="preview-news-copy"><span class="preview-kicker">Appena arrivato</span><span class="preview-line long"></span><span class="preview-line short"></span></div>
+              </div>
+              <div class="theme-preview-copy"><div class="card-header-titles theme-preview-titles"><div class="theme-preview-title">La bottega di Sara</div><div class="card-sub">Sara • Abbigliamento</div></div><a class="btn-ghost sm theme-preview-action" href="#bottega-sara"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>Apri bottega</a></div>
+            </article>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+  </div>
+</div>
+
+<!-- 10/11/2026 (Ruggi): conferma di eliminazione bottega = modale (header titolo + X, body, footer), non più seconda scritta nel menu -->
+<div class="del-modal" id="delModal" hidden>
+  <div class="del-modal-backdrop"></div> <!-- 24/11/2026 (Ruggi): la conferma non si chiude col click sullo sfondo -->
+  <div class="del-modal-box" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="delModalTitle">
+    <div class="del-modal-head">
+      <h2 class="card-title title-lg" id="delModalTitle">Elimina bottega</h2>
+      <button type="button" class="panel-close-btn del-modal-close" data-close data-tooltip="Chiudi" aria-label="Chiudi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="del-modal-body"><p id="delModalText"></p></div>
+    <div class="del-modal-foot">
+      <button type="button" class="btn-pill-dark primary danger" id="delConfirm">Elimina</button>
+      <button type="button" class="btn-ghost danger" id="delCancel" data-close>Annulla</button>
+    </div>
+  </div>
+</div>
+<script>
+  /* Sidebar comprimibile (identico a cruscotto.js). */
+  document.addEventListener('DOMContentLoaded', function () {
+    var shell = document.querySelector('.shell');
+    var btn = document.getElementById('sidebarToggle');
+    if (shell && btn) btn.addEventListener('click', function () { shell.classList.toggle('sidebar-collapsed'); });
+
+  });
+</script>
+<script src="../../../../Temi/01_tema/01_tema_Package/package.js"></script>
+<script src="bottega-store.js"></script>
+<script src="../account-setup.js"></script>
+<script src="bottega-thumb.js"></script>
+<script src="bottega-onboarding.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

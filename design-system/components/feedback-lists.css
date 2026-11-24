@@ -1,0 +1,135 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.status-pill {
+  display: var(--status_pill-status_pill-display);
+  align-items: var(--status_pill-status_pill-align_items);
+  gap: var(--status_pill-status_pill-gap);
+  font-size: var(--status_pill-status_pill-font_size);
+  font-weight: var(--status_pill-status_pill-font_weight);
+  padding: var(--status_pill-status_pill-padding);
+  border-radius: var(--status_pill-status_pill-border_radius);
+  width: var(--status_pill-status_pill-width);
+}
+
+.status-pill .dot {
+  width: var(--status_pill-status_pill_dot-width);
+  height: var(--status_pill-status_pill_dot-height);
+  border-radius: var(--status_pill-status_pill_dot-border_radius);
+  display: var(--status_pill-status_pill_dot-display);
+}
+
+.status-pill.bozza {
+  background: var(--status_pill-status_pill_bozza-background);
+  color: var(--status_pill-status_pill_bozza-color);
+}
+
+.status-pill.bozza .dot {
+  background: var(--status_pill-status_pill_bozza_dot-background);
+}
+
+.status-pill.pubblicato {
+  background: var(--status_pill-status_pill_pubblicato-background);
+  color: var(--status_pill-status_pill_pubblicato-color);
+}
+
+.status-pill.pubblicato .dot {
+  background: var(--status_pill-status_pill_pubblicato_dot-background);
+}
+
+.status-pill.pausa {
+  background: var(--status_pill-status_pill_pausa-background);
+  color: var(--status_pill-status_pill_pausa-color);
+}
+
+.status-pill.pausa .dot {
+  background: var(--status_pill-status_pill_pausa_dot-background);
+}
+
+.status-pill.esaurito {
+  background: var(--status_pill-status_pill_esaurito-background);
+  color: var(--status_pill-status_pill_esaurito-color);
+}
+
+.status-pill.esaurito .dot {
+  background: var(--status_pill-status_pill_esaurito_dot-background);
+}
+
+.status-pill.archiviato {
+  background: var(--status_pill-status_pill_archiviato-background);
+  color: var(--status_pill-status_pill_archiviato-color);
+  border: var(--status_pill-status_pill_archiviato-border);
+}
+
+.status-pill.archiviato .dot {
+  background: var(--status_pill-status_pill_archiviato_dot-background);
+}
+
+.badge-cluster {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.badge-icon {
+  width: var(--spacing-7);
+  height: var(--spacing-7);
+  border-radius: var(--radius-pill);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  border: var(--border-width-hairline) solid var(--border);
+  cursor: default;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.badge-icon.clickable {
+  cursor: pointer;
+  color: var(--text);
+}
+
+.badge-icon.clickable:hover {
+  background: var(--hover-bg);
+}
+
+.badge-icon.empty {
+  border-style: dashed;
+  color: var(--text-muted);
+}
+
+.badge-icon.drop {
+  background: var(--text);
+  border-color: var(--text);
+  color: var(--color-text-inverse);
+}
+
+.badge-icon.drop.clickable:hover {
+  background: var(--text);
+  opacity: .85;
+}
+
+.badge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-12);
+  color: var(--text);
+  background: var(--item-active-bg);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  cursor: default;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.badge-chip.clickable {
+  cursor: pointer;
+}
+
+.badge-chip.clickable:hover {
+  background: var(--hover-bg);
+}
+
+.badge-chip svg {
+  flex: none;
+}

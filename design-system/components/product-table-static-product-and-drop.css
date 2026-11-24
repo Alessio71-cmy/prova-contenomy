@@ -1,0 +1,14 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.product-row, .product-row-head {
+  display: grid;
+  grid-template-columns: var(--tableLayout-product-full-template);
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.product-variant-head, .product-variant-row {
+  display: grid;
+  grid-template-columns: var(--tableLayout-product-full-template);
+  align-items: center;
+  gap: var(--space-3);
+}

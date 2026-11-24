@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Editor bottega — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="bottega-editor.css">
+<link rel="stylesheet" href="../breadcrumb.css">
+</head>
+<body>
+
+<!-- 22/10/2026 (Ruggi): pagina EDITOR della bottega, separata da bottega-creazione (decisione 16/10 e 22/10).
+     Shell dedicata (eccezione dichiarata alle regole di workspace/sidebar, vale solo per questa pagina): topbar della piattaforma + toolbar dell'editor sotto,
+     nessuna sidebar, canvas a tutta larghezza con il tema in un iframe a larghezza reale, pannello destro stretto (contenuto = quello di prima, da ridefinire).
+     Si apre con ?bottega=ID. Stati dimostrativi: ?stripe=on simula Stripe collegato. -->
+<div class="shell sidebar-collapsed editor-shell" id="editorShell">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle" role="button" aria-disabled="true" data-tooltip="Sidebar non disponibile nell’editor" aria-label="Sidebar non disponibile nell’editor"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+    <!-- 22/10/2026: l'uscita dall'editor e' il breadcrumb (niente freccia ‹ nella toolbar): "Bottega" torna alla sezione.
+         1/11/2026 (Ruggi): il percorso e' dinamico (JS, renderBreadcrumb): Home = «Bottega / Nome bottega»; altre pagine = «Bottega / Nome bottega / Pagina»; prodotto = «Bottega / Nome bottega / Prodotto / Nome prodotto». Non c'e' piu' la voce «Editor». -->
+    <nav class="breadcrumb" aria-label="Percorso di navigazione">
+      <ol>
+        <li><a href="bottega-onboarding.html" id="bcBack">Bottega</a></li>
+      </ol>
+    </nav>
+  </header>
+
+  <!-- 22/10/2026 (Ruggi): la sidebar c'e' ma resta CHIUSA e bloccata (non si apre con l'icona), raggiungibile solo in hover (flyout): stesso comportamento di bottega-creazione, nessun terzo comportamento. -->
+  <div class="shell-body">
+
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body">
+
+
+    <!-- ===================== TOOLBAR DELL'EDITOR ===================== -->
+    <div class="editor-toolbar" role="toolbar" aria-label="Strumenti dell’editor">
+      <div class="editor-tb-group">
+        <!-- 1/11/2026 (Ruggi): «Sezioni» esce dal pannello destro: questo pulsante (prima del «+») apre/chiude il pannello della struttura a SINISTRA, SOPRA l'anteprima (overlay: il canvas non si restringe). Resta aperto finche' non si chiude con la X o con questo pulsante. -->
+        <div class="editor-tb-lead">
+          <button type="button" class="editor-tool" id="structBtn" aria-pressed="false" aria-controls="structPanel" data-tooltip="Struttura" aria-label="Struttura"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></button>
+          <button type="button" class="editor-tool is-primary" id="addSectionBtn" data-tooltip="Aggiungi sezione in fondo alla pagina" aria-label="Aggiungi sezione in fondo alla pagina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+          <span class="editor-tb-sep" aria-hidden="true"></span>
+        </div>
+        <button type="button" class="editor-tool" aria-disabled="true" data-tooltip="Annulla" aria-label="Annulla"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
+        <button type="button" class="editor-tool" aria-disabled="true" data-tooltip="Ripeti" aria-label="Ripeti"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 14 5-5-5-5"/><path d="M20 9H10a6 6 0 0 0 0 12h3"/></svg></button>
+        <!-- 22/10/2026 (Ruggi): il pulsante apre un menu per scegliere la pagina del tema da vedere. 1/11/2026: voci Home, Prodotto | divider | Drop, Riepilogo; «Prodotto» apre la lista dei prodotti nel workspace (niente sottomenu). -->
+        <span class="editor-pages">
+          <button type="button" class="editor-tool" id="pagesBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="pagesMenu" data-tooltip="Pagine" aria-label="Pagine"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-3a2 2 0 0 1-2-2V2"/><path d="M9 18a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h7l4 4v10a2 2 0 0 1-2 2Z"/><path d="M3 7.6v12.8A1.6 1.6 0 0 0 4.6 22h9.8"/></svg></button>
+          <div class="editor-pages-menu" id="pagesMenu" role="menu" aria-label="Pagine del tema" hidden></div>
+        </span>
+      </div>
+
+      <!-- WIREFRAME 22/10: simula la barra degli indirizzi del browser — favicon scelta (o icona generica), indirizzo e badge Bozza / Attivo. Lo stato di salvataggio sta nel tooltip e in una regione live nascosta. -->
+      <div class="editor-tb-title editor-browser" id="edBrowser" tabindex="0">
+        <span class="editor-browser-fav" id="edFavicon" aria-hidden="true"></span>
+        <span class="editor-browser-url" id="edUrl"></span>
+        <span id="edStatus"></span>
+        <span class="visually-hidden" id="edSave" aria-live="polite"></span>
+      </div>
+
+      <div class="editor-tb-group is-right">
+        <button type="button" class="editor-tool" aria-disabled="true" data-tooltip="Apri l’anteprima in una nuova scheda" aria-label="Apri l’anteprima in una nuova scheda"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></button>
+        <div class="editor-device-switch" role="group" aria-label="Dispositivo dell’anteprima">
+          <button type="button" class="editor-tool" data-view="desktop" data-tooltip="Desktop" aria-label="Desktop"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></button>
+          <button type="button" class="editor-tool" data-view="mobile" data-tooltip="Mobile" aria-label="Mobile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg></button>
+        </div>
+        <button type="button" class="editor-tool is-active" id="panelToggle" aria-pressed="true" data-tooltip="Mostra o nascondi il pannello" aria-label="Mostra o nascondi il pannello"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M15 3v18"/></svg></button>
+        <span class="editor-publish" id="publishWrap">
+          <button class="btn-pill-dark primary" type="button" id="publishBtn" disabled>Pubblica</button>
+        </span>
+      </div>
+    </div>
+
+
+    <!-- 19/11/2026 (Ruggi): bannerino lilla sotto la toolbar dopo la pubblicazione, finche' mancano dati fiscali e/o Stripe (sostituisce il pulsante «Attiva i pagamenti» in testata). Pulsanti in fondo: «Attiva pagamenti» (apre l'invito) + link «Non mostrare più». -->
+    <div class="editor-setup-banner-wrap">
+    <div class="editor-setup-banner" id="setupBanner" role="region" aria-label="Attiva i pagamenti" hidden>
+      <div class="editor-setup-banner-copy"><h2 class="editor-setup-banner-title" id="setupBannerTitle"></h2>
+      <p class="editor-setup-banner-text" id="setupBannerText"></p></div>
+      <div class="editor-setup-banner-actions">
+        <button type="button" class="bottega-cancel-link" id="setupBannerOff">Non mostrare più</button>
+        <button type="button" class="btn-pill-dark primary" id="setupBannerGo">Attiva pagamenti</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="editor-main">
+
+      <!-- ===================== CANVAS: il tema vive in un iframe a larghezza reale ===================== -->
+      <main class="editor-canvas" id="editorCanvas" aria-label="Anteprima modificabile della bottega">
+        <div class="editor-device" id="editorDevice" data-view="desktop"></div>
+        <!-- 1/11/2026 (Ruggi): «Prodotto» nel menu Pagine apre QUI la lista dei prodotti al posto dell'anteprima (ricercabile). Si seleziona una riga: il pannello destro mostra le info e «Modifica pagina» (doppio clic = apre subito). Colonna «Pagina» (stato della pagina del prodotto): da decidere. -->
+        <section class="editor-products" id="editorProducts" aria-label="Lista prodotti" hidden>
+          <div class="editor-products-inner">
+            <!-- 2/11/2026 (Ruggi): stessa struttura della pagina Prodotti (prodotti-panel-static): titolo + sottotitolo (page-title / page-sub), divider (qui senza tab) e card .products-panel span-12 con toolbar (chip di stato + ricerca) e tabella a righe. -->
+            <div class="page-header"><div>
+              <h1 class="page-title">Lista prodotti</h1>
+              <p class="page-sub">Scegli un prodotto per modificare la sua pagina</p>
+            </div></div>
+            <div class="editor-page-divider"></div>
+            <div class="grid"><div class="products-panel span-12">
+              <div class="card-header"><div class="card-header-titles">
+                <div class="card-title title-lg">Elenco prodotti</div>
+                <div class="card-sub">Tutti i prodotti del tuo catalogo</div>
+              </div>
+              <div class="table-pagination">
+            <span class="table-pagination-range" id="prodRange">1 – 4</span>
+            <button class="pagination-arrow" disabled data-tooltip="Precedenti" aria-label="Precedenti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></button>
+            <button class="pagination-arrow" disabled data-tooltip="Successivi" aria-label="Successivi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6l6 6-6 6"/></svg></button>
+          </div>
+              </div>
+              <div class="card-divider"></div>
+              <div class="table-toolbar">
+                <div class="status-chips" id="prodChips">
+                  <button type="button" class="status-chip active" data-status="tutti">Tutti<span class="count"></span></button>
+                  <span class="status-chip-divider"></span>
+                  <button type="button" class="status-chip" data-status="pubblicato">Pubblicati<span class="count"></span></button>
+                  <span class="status-chip-divider"></span>
+                  <button type="button" class="status-chip" data-status="bozza">Bozze<span class="count"></span></button>
+                </div>
+                <div class="table-toolbar-actions" id="toolbarActions">
+                  <div class="toolbar-icons-group" id="toolbarIconsGroup">
+              <div class="view-switch" id="viewSwitch">
+                <button class="view-switch-btn active" data-tooltip="Vista elenco" aria-label="Vista elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                <button class="view-switch-btn" data-tooltip="Vista griglia" aria-label="Vista griglia"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></button>
+              </div>
+              <div class="icon-btn" id="toggleFiltersBtn" data-tooltip="Filtri" aria-label="Filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></div>
+              <div class="icon-btn" id="sortBtn" data-tooltip="Ordina" aria-label="Ordina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></div>
+            </div>
+                  <div class="search-box" id="searchBox">
+                    <div class="icon-btn search-toggle" id="searchToggleBtn" role="button" tabindex="0" data-tooltip="Cerca" aria-label="Cerca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Cerca" tabindex="-1" aria-label="Cerca un prodotto">
+                    <div class="search-close-btn" id="searchCloseBtn" role="button" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+                  </div>
+                </div>
+              </div>
+              <div class="products-table" id="prodRows"></div>
+              <p class="editor-modal-empty" id="prodEmpty" hidden>Nessun prodotto trovato.</p>
+            </div></div>
+          </div>
+        </section>
+        <!-- 1/11/2026 (Ruggi): struttura della pagina (ex tab «Sezioni» del pannello destro): pannello a sinistra SOPRA l'anteprima, si apre con il pulsante «Sezioni» in toolbar, resta aperto finche' non lo chiudi con la X o con lo stesso pulsante. -->
+        <aside class="editor-struct-panel" id="structPanel" aria-label="Struttura della pagina" hidden>
+          <!-- 2/11/2026 (Ruggi): pannello MOBILE: si trascina dalla testata (cursore grab), parte vicino al pulsante «Struttura» e a ogni apertura riparte da li'. Divider sotto il titolo (come «Nuovo colore»); il pulsante a sinistra della X lo riduce a ~4 righe (il resto scorre). -->
+          <div class="editor-struct-head">
+            <h2 class="card-title title-sm" id="structTitle"></h2>
+            <div class="editor-struct-actions">
+              <button type="button" class="panel-close-btn editor-struct-min" id="structMin" data-tooltip="Riduci" aria-label="Riduci la struttura" aria-expanded="true"></button>
+              <button type="button" class="panel-close-btn" id="structClose" data-tooltip="Chiudi" aria-label="Chiudi la struttura"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+          <div class="editor-struct-body" id="structBody">
+            <p class="bottega-hint" id="sezioniNote" hidden></p>
+            <section class="panel-section" id="sezAggiuntive">
+              <ol class="editor-struct" id="structList" aria-label="Sezioni della pagina"></ol>
+            </section>
+          </div>
+        </aside>
+      </main>
+
+      <!-- ===================== PANNELLO DESTRO (contenuto invariato rispetto all'editor di prima: da ridefinire) ===================== -->
+      <aside class="editor-panel" id="editorPanel" data-mode="home" data-page="bottega" data-foot="off" aria-label="Personalizza la bottega">
+        <!-- 22/10/2026 (Ruggi): intestazione del pannello SEMPRE uguale: X (chiude il pannello, come il toggle della toolbar) + frecce sezione precedente/successiva (solo con una sezione selezionata). 1/11/2026: niente piu' tab Generali/Sezioni: il pannello segue la SELEZIONE. Senza selezione = Generali (Home) / messaggio (lista prodotti, editor prodotto); con una sezione selezionata = vista della sezione (impostazioni ancora da definire). Nell'editor/lista prodotto l'intestazione fissa mostra nome, stato, prezzo, disponibilita' e «Dati del prodotto». -->
+        <div class="editor-panel-head">
+          <div class="panel-header">
+            <div class="panel-header-left">
+              <div class="panel-header-group">
+                <button type="button" class="panel-close-btn" id="panelCloseBtn" data-tooltip="Chiudi pannello" aria-label="Chiudi pannello"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+              </div>
+              <div class="panel-header-group" id="sectionNav" hidden>
+                <button type="button" class="panel-nav-btn" id="sectionPrevBtn" aria-disabled="true" data-tooltip="Sezione precedente" aria-label="Sezione precedente"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 15l-6-6-6 6"/></svg></button>
+                <button type="button" class="panel-nav-btn" id="sectionNextBtn" aria-disabled="true" data-tooltip="Sezione successiva" aria-label="Sezione successiva"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+              </div>
+            </div>
+            <!-- 2/11/2026 (Ruggi): al posto di «Ultima modifica: data» c'e' lo stato di salvataggio: Salvato (icona verde piena con tick + label verde) / Salvataggio… (spinner + label disabilitata). Non compare dove non c'e' nulla da salvare (lista Prodotti, Drop, Riepilogo). -->
+            <div class="editor-head-right"><span class="editor-save" id="panelSave" data-state="saved"><span class="editor-save-ico" aria-hidden="true">✓</span><span class="editor-save-label" id="panelSaveLabel">Salvato</span></span>
+</div>
+          </div>
+          
+          <!-- 2/11/2026 (Ruggi): su Home tornano le tab: Generali (impostazioni della bottega) e Sezioni (seguono la selezione; senza selezione, riquadro tratteggiato). Nell'editor prodotto e nella lista non ci sono tab. -->
+          <!-- 7/11/2026 (Ruggi): «Vai al prodotto» sta nella riga delle tab (a destra); senza tab (lista prodotti) occupa la stessa posizione da solo. «Tutti i prodotti» resta in cima alla tab Prodotto. -->
+          <div class="editor-head-tabrow">
+          <nav class="panel-tabs" id="editorTabs" role="tablist" aria-label="Contenuto del pannello" hidden>
+            <div class="panel-tab active" role="tab" id="tabPagina" aria-selected="true" aria-controls="tabpanelPagina" data-tab="pagina" data-label="Generali" tabindex="0">Generali</div>
+            <div class="panel-tab" role="tab" id="tabSezioni" aria-selected="false" aria-controls="tabpanelSezioni" data-tab="sezioni" data-label="Sezioni" tabindex="0">Sezioni</div>
+            <span class="panel-tab-active-line" aria-hidden="true"></span>
+          </nav>
+          </div>
+        </div>
+        <div class="editor-panel-body" id="bottegaPanelBody">
+          <!-- 2/11/2026: l'intestazione prodotto sta DENTRO il corpo che scorre (prima era nella testata fissa e, con il contenuto lungo, il pannello non scorreva piu'). -->
+          <!-- 2/11/2026 (Ruggi): intestazione prodotto = stesso blocco di .panel-header-title-row di 02-Prodotti/prodotti-panel-static (titolo title-xl, poi stato | categoria | tag) SENZA data (la data di pubblicazione resta solo nella pagina Prodotti) e con il badge «In vetrina» (`badge-icon`) accanto al titolo, come in Prodotti. Sotto: prezzo • varianti; disponibilita' solo per i prodotti pubblicati. -->
+          <!-- 10/11/2026 (Ruggi, 14:04): «Tutti i prodotti» (a sinistra) e «Vai al prodotto» (SEMPRE a destra) stanno in una riga SOTTO le tab, in cima al corpo del pannello, in tutte le tab del prodotto e nella lista con un prodotto selezionato. Con entrambi: space-between; con solo «Vai al prodotto»: a destra. -->
+          <div class="editor-body-toprow" id="bodyTopRow"><button type="button" class="bottega-cancel-link is-back" id="prodBack" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span>Tutti i prodotti</span></button><a class="editor-prod-goto" id="prodGoto" href="#" hidden><span>Vai al prodotto</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></div>
+          <div class="editor-prod-head" id="prodHead" hidden>
+            
+            <!-- 3/11/2026 (Ruggi): prodotto PUBBLICATO senza tiratura = nessun «N pezzi rimanenti», nessuna barra, nessun Lotto: banner info con «Gestisci tiratura» e «Non mostrare più» (per prodotto). -->
+            <div class="panel-alert-banner info" id="noTirBanner" hidden>
+              <div class="panel-alert-icon" aria-hidden="true">i</div>
+              <div class="panel-alert-body">
+                <span class="panel-alert-title">Nessuna tiratura</span>
+                <span class="panel-alert-text">Non ti avvisiamo quando sta per esaurirsi: tieni d'occhio le scorte.</span>
+                <div class="panel-alert-actions">
+                  <button type="button" class="panel-alert-dismiss" id="noTirDismiss">Non mostrare più</button>
+                  <a class="panel-alert-action" id="noTirManage" href="#">Gestisci tiratura</a>
+                </div>
+              </div>
+              <button type="button" class="panel-alert-close" id="noTirClose" aria-label="Chiudi avviso"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg></button>
+            </div>
+            <div class="panel-header-title-row">
+              <div class="panel-header-title-line"><div class="panel-header-title-group"><div class="card-title title-lg" id="prodName"></div><span class="badge-icon" id="prodFeat" data-tooltip="In vetrina" aria-label="In vetrina" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span></div></div>
+              <div class="panel-header-title-meta-row">
+                <span id="prodStatus"></span>
+                <span class="panel-header-title-meta-divider" id="prodMetaDiv" aria-hidden="true"></span>
+                <span class="panel-product-category" id="prodCat"></span>
+                <span class="tag" id="prodTag" hidden></span>
+              </div>
+            </div>
+            <div class="editor-prod-stock" id="prodStockRow" hidden>
+              <div class="panel-stock-number"><span id="prodStockNum" class="editor-prod-stock-num"></span><span><span id="prodStockLabel">pezzi rimanenti</span><span class="variant-esaurito-warning" id="prodStockWarn" role="img" hidden><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span></span><span class="panel-stock-lot" id="prodLot"></span></div>
+            </div>
+            <!-- 3/11/2026 (Ruggi): riepilogo BOZZA = prezzo (o range) grande come il numero stock + sottotitolo a fianco; con tiratura: «Tiratura totale N pezzi • N varianti» sotto. -->
+            <div class="editor-prod-draft" id="prodDraft" hidden>
+              <div class="editor-prod-draft-main"><span class="editor-prod-stock-num" id="prodDraftPrice"></span><span class="editor-prod-draft-sub" id="prodDraftSub"></span></div>
+              <div class="editor-prod-draft-sub" id="prodDraftTir" hidden></div>
+            </div>
+            <div class="panel-stock-meta" id="prodMeta">
+              <span class="panel-product-price" id="prodPrice"></span>
+              <span class="panel-meta-sep" id="prodVarSep" aria-hidden="true">•</span>
+              <span class="product-row-stat" id="prodVariants"></span>
+            </div>
+            <progress class="panel-stock-progress" id="prodProgress" hidden></progress>
+            <a class="panel-attention-row" id="prodAttention" href="../02-Prodotti/prodotti-panel-static.html" hidden>
+              <span class="panel-attention-symbol" aria-hidden="true">!</span>
+              <span class="panel-attention-body"><strong class="panel-attention-title">Disponibilità da gestire</strong><span class="panel-attention-text" id="prodAttentionText"></span></span>
+              <span class="panel-attention-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+            </a>
+            <!-- 2/11/2026 (Ruggi, 17:38): sotto la disponibilita': «Drop collegato» (panel-drop-col, solo se il prodotto ha un drop), poi l'intestazione «Varianti prodotto» SENZA il pulsante «Nuova variante» (le varianti si gestiscono in Prodotti) e le variant-card SEMPLIFICATE (stato, nome, prezzo, taglie; niente vendite/salvati/avvisi, niente «Gestisci variante», niente dettagli). -->
+            <div class="panel-drop-col editor-prod-drop" id="prodDrop" hidden>
+              <div class="drop-col-head"><span class="panel-drop-title" id="prodDropTitle">Drop collegato</span><span class="drop-col-date" id="prodDropDate" hidden></span></div>
+              <div class="drop-countdown-row">
+                <div class="drop-countdown-info"><div class="drop-countdown" id="prodDropTime"></div><div class="drop-phase" id="prodDropPhase"></div></div>
+                <a class="drop-goto-btn" href="../03-Drop/drop.html" data-tooltip="Vai al drop" aria-label="Vai al drop"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              </div>
+              <div class="drop-progress" id="prodDropSegs"></div>
+            </div>
+            <!-- 2/11/2026 (Ruggi, 21:48): bozza SENZA drop = riquadro d'invito (bordo tratteggiato lilla, CTA nera sm con «+»); prodotto «In drop» = nota info blu al posto del footer. CANDIDATI locali. -->
+            <div class="editor-drop-invite" id="prodDropInvite" hidden>
+              <div class="editor-drop-invite-body">
+                <span class="editor-drop-invite-title panel-drop-title">Fallo diventare un evento!</span>
+              <p class="editor-drop-invite-text">Un drop è un'uscita a tempo e a tiratura limitata: chi ti segue lo scopre per primo.</p>
+              </div>
+              <a class="btn-pill-dark sm secondary" href="../03-Drop/drop.html"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Crea drop</a>
+            </div>
+            <!-- 19/11/2026 (Ruggi): riquadro "Anteprima recensioni" per la sezione fissa Recensioni (pagina prodotto), stesso pattern di #secDropPreview, senza pulsante. -->
+            <div class="editor-drop-invite" id="secReviewsPreview" hidden>
+              <div class="editor-drop-invite-body">
+                <span class="editor-drop-invite-title panel-drop-title">Anteprima recensioni</span>
+                <p class="editor-drop-invite-text">Questa sezione mostra come appariranno le recensioni, con esempi. Quelle vere arrivano dai clienti: qui puoi cambiare solo colore e spaziature.</p>
+              </div>
+            </div>
+            <!-- 3/11/2026 (Ruggi): ESAURITO = riquadro «Tutto venduto!» (stesso pattern dell'invito drop): «Riproponi» (nuovo lotto, NON passa sempre da un drop: apre il flusso in Prodotti) + link «Archivia prodotto». -->
+            <div class="editor-drop-invite" id="prodReprop" hidden>
+              <div class="editor-drop-invite-body">
+                <span class="editor-drop-invite-title panel-drop-title">Tutto venduto!</span>
+                <p class="editor-drop-invite-text">Vuoi riproporlo? Scegli tiratura e prezzo di un nuovo lotto.</p>
+              </div>
+              <div class="editor-drop-invite-actions">
+                <a class="btn-ghost sm" id="prodArchiveBtn" href="#" aria-label="Archivia prodotto"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/></svg>Archivia</a>
+                <a class="btn-pill-dark sm secondary" id="prodRepropBtn" href="#"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 16h6"/><path d="M19 13v6"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><path d="M3.29 7 12 12l8.71-5"/><path d="M12 22V12"/></svg>Riproponi</a>
+              </div>
+            </div>
+            <!-- 3/11/2026 (Ruggi): ARCHIVIATO = riquadro come «Tutto venduto!» (titolo, testo corto, due pulsanti: «Ripristina» = torna visibile nello shop, «Riproponi» = nuovo lotto con pezzi e prezzi) + nota blu con icona SOTTO i pulsanti. Con pezzi invenduti si possono anche modificare le quantita'. -->
+            <div class="editor-drop-invite" id="prodArchived" hidden>
+              <div class="editor-drop-invite-group">
+                <div class="editor-drop-invite-body">
+                  <span class="editor-drop-invite-title panel-drop-title" id="prodArchTitle">Tutto venduto!</span>
+                  <p class="editor-drop-invite-text" id="prodArchText"></p>
+                </div>
+                <p class="editor-prod-note"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg><span>Archiviato: non è visibile nel tuo shop.</span></p>
+              </div>
+              <div class="editor-drop-invite-actions">
+                <a class="btn-ghost sm" id="prodArchRepropBtn" href="#"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 16h6"/><path d="M19 13v6"/><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><path d="M3.29 7 12 12l8.71-5"/><path d="M12 22V12"/></svg>Riproponi</a>
+                <a class="btn-pill-dark sm secondary" id="prodRestoreBtn" href="#"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>Ripristina</a>
+              </div>
+            </div>
+            <p class="editor-prod-note" id="prodDropNote" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg><span>Il prodotto verrà pubblicato nelle fasi del drop.</span></p>
+          </div>
+          <!-- 22/10/2026 (Ruggi): gli avvisi stanno SOTTO LE TAB, in cima al corpo del pannello (come i banner degli altri pannelli laterali), visibili in entrambe le tab; niente sezione fissa in fondo. -->
+          <div class="panel-alert-banner warning" id="stripeBanner">
+            <div class="panel-alert-icon" aria-hidden="true">!</div>
+            <div class="panel-alert-body">
+              <span class="panel-alert-title">Stripe non collegato</span>
+              <span class="panel-alert-text">Senza Stripe la bottega resta solo in anteprima.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss" id="stripeDismissBtn">Non mostrare più</button>
+                <button type="button" class="panel-alert-action" id="stripeConnectBtn">Collega Stripe</button>
+              </div>
+            </div>
+            <button type="button" class="panel-alert-close" id="stripeCloseBtn" aria-label="Chiudi avviso"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg></button>
+          </div>
+          <div class="panel-alert-banner info" id="pendingBanner" hidden>
+            <div class="panel-alert-icon" aria-hidden="true">i</div>
+            <div class="panel-alert-body">
+              <span class="panel-alert-title">Modifiche non pubblicate</span>
+              <span class="panel-alert-text">I visitatori vedono ancora la versione online. Con «Aggiorna» pubblichi queste modifiche.</span>
+            </div>
+          </div>
+
+          <!-- 5/11/2026 (Ruggi): avviso sul nome della bottega fuori dal pannello Generali (visibile in ogni tab, anche Sezioni) + «Non mostrare più» come gli altri banner -->
+          <div class="panel-alert-banner info" id="nameBanner" hidden>
+            <div class="panel-alert-icon" aria-hidden="true">i</div>
+            <div class="panel-alert-body">
+              <span class="panel-alert-title">Stai cambiando il nome della bottega</span>
+              <span class="panel-alert-text">Il nome compare in navbar, footer e nei risultati di ricerca. Puoi cambiarlo quando vuoi.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss" id="nameBannerDismiss">Non mostrare più</button>
+              </div>
+            </div>
+            <button class="panel-alert-close" type="button" id="nameBannerClose" aria-label="Chiudi avviso"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+          </div>
+
+          <div id="tabpanelPagina" role="tabpanel" aria-labelledby="tabPagina">
+
+
+
+          <!-- 22/10/2026 (Ruggi): tab Generali (id interno "pagina") = come il pannello "Pagina" di WordPress, ma solo le voci utili: titolo = nome del tema + "Modificato il…" + Indirizzo (solo input, senza etichetta) in alto, niente accordion per un solo campo, poi accordion `.panel-accordion` (stesso componente di Prodotti): Colori, Marchio, Contatti, Link social, Font (nascosto finché il tema non li rende selezionabili). -->
+          <div class="editor-head-title">
+            <h2 class="card-title title-lg" id="panelThemeName"></h2>
+          </div>
+          <div class="editor-slug">
+            <div class="editor-slug-row">
+              <div class="bottega-input-group">
+                <span class="bottega-input-prefix" aria-hidden="true">contenomy.it/</span>
+                <input class="bottega-input" id="panelSlug" type="text" autocomplete="off" spellcheck="false" aria-describedby="panelSlugHint">
+                <button type="button" class="editor-slug-copy" id="slugCopyBtn" data-tooltip="Copia link" aria-label="Copia link" hidden><svg class="slug-ic-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg><svg class="slug-ic-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>
+              </div>
+
+            </div>
+            <p class="bottega-hint" id="panelSlugHint">Modificabile fino alla prima pubblicazione.</p>
+          </div>
+
+          <details class="panel-accordion editor-accordion">
+            <summary class="panel-accordion-header">
+              <span class="panel-accordion-header-label">Colori</span>
+              <span class="panel-accordion-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="panel-accordion-body" id="colorRows">
+              <!-- WIREFRAME: i tre slot (Sfondo, Primario, Secondario) non sono ancora collegati al tema (serve la rifattorizzazione ink/paper + colorSlots nel manifest). Valori di prova. -->
+            </div>
+          </details>
+
+          <details class="panel-accordion editor-accordion" id="fontSection">
+            <summary class="panel-accordion-header">
+              <span class="panel-accordion-header-label">Font</span>
+              <span class="panel-accordion-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="panel-accordion-body" id="fontRows">
+              <!-- WIREFRAME: tipologie di font del tema (Titoli, Testo) con "usato per", scelta e Ripristina; non ancora collegate al tema (manifest fonts.selectable = false). -->
+            </div>
+          </details>
+
+          <details class="panel-accordion editor-accordion editor-accordion-marchio">
+            <summary class="panel-accordion-header">
+              <span class="panel-accordion-header-label">Marchio</span>
+              <span class="panel-accordion-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="panel-accordion-body">
+              <div class="panel-field-row">
+                <span class="panel-field-label">Logo</span>
+                <button class="btn-ghost sm" type="button" id="panelLogoBtn">Scegli file</button>
+              </div>
+              <div class="panel-field-row">
+                <span class="bottega-label-row"><span class="panel-field-label">Favicon</span><button type="button" class="bottega-info" data-tooltip="È l’icona che compare in alto nella scheda del browser." aria-label="Maggiori informazioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></svg></button></span>
+                <button class="btn-ghost sm" type="button" id="panelFaviconBtn">Scegli file</button>
+              </div>
+              <input type="file" accept="image/*" id="logoInput" hidden>
+              <input type="file" accept="image/*" id="faviconInput" hidden>
+            </div>
+          </details>
+
+          <details class="panel-accordion editor-accordion">
+            <summary class="panel-accordion-header">
+              <span class="panel-accordion-header-label">Contatti</span>
+              <span class="panel-accordion-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="panel-accordion-body editor-accordion-add">
+              <div class="bottega-social-list" id="panelContattiList"></div>
+              <div class="editor-add-wrap"><button class="btn-pill-dark sm secondary bottega-add-link" type="button" id="addContattoBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Aggiungi contatto</button></div>
+            </div>
+          </details>
+
+          <details class="panel-accordion editor-accordion">
+            <summary class="panel-accordion-header">
+              <span class="panel-accordion-header-label">Link social</span>
+              <span class="panel-accordion-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="panel-accordion-body editor-accordion-add">
+              <div class="bottega-social-list" id="panelSocialList"></div>
+              <button class="btn-pill-dark sm secondary bottega-add-link" type="button" id="addSocialBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Aggiungi link</button>
+            </div>
+          </details>
+
+          </div>
+          <!-- 2/11/2026: Sezioni = vista della sezione selezionata (impostazioni ancora da definire) oppure, senza selezione, il riquadro tratteggiato (.bottega-panel-placeholder, lo stesso di bottega-creazione). -->
+          <div id="tabpanelSezioni" role="tabpanel" aria-labelledby="tabSezioni" hidden>
+            <div class="bottega-panel-placeholder" id="secEmpty"><span>Seleziona un elemento<br>per poterlo modificare</span></div>
+          <div id="viewSection" hidden>
+            <div class="editor-head-title"><h2 class="card-title title-lg" id="secTitle"></h2></div>
+            <p class="bottega-hint" id="secNote"></p>
+            <div id="secControls" class="editor-ctl"></div>
+            <!-- 12/11/2026 (Ruggi): riquadro "Anteprima drop" per le sezioni Drop in editor (Home: Banner drop; pagina Drop: Drop e Banner drop fisso in basso) -- stesso pattern di prodDropInvite, in aggiunta ai controlli generici sopra. -->
+            <div class="editor-drop-invite" id="secDropPreview" hidden>
+              <div class="editor-drop-invite-body">
+                <span class="editor-drop-invite-title panel-drop-title">Anteprima drop</span>
+                <p class="editor-drop-invite-text">Questa sezione mostra come apparirà con un drop attivo. Crea e gestisci i tuoi drop dalla pagina dedicata.</p>
+              </div>
+              <a class="btn-pill-dark sm secondary" href="../03-Drop/drop.html"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Crea drop</a>
+            </div>
+          </div>
+          </div>
+          <div class="bottega-panel-placeholder" id="viewHint" hidden><span id="viewHintText"></span></div> <!-- 2/11/2026: stato vuoto = riquadro tratteggiato (stesso componente della tab Sezioni) -->
+        </div>
+        <!-- 1/11/2026 (Ruggi): azione fissa in fondo al pannello: «Modifica pagina» nella lista prodotti (con un prodotto selezionato); «Pubblica prodotto» nell'editor di un prodotto in Bozza. Disabilitato = aria-disabled (resta focalizzabile) con il motivo in tooltip e in una riga di testo. -->
+        <div class="editor-panel-foot" id="panelFoot">
+          <p class="bottega-hint" id="footReason" hidden></p>
+          <!-- 2/11/2026 (Ruggi): nell'editor di un prodotto GIA' pubblicato con modifiche il piede ha «Ripristina» (torna alla versione online, conferma inline) + «Aggiorna prodotto» (online subito). Lo stato (Salvataggio… / Salvato / Da pubblicare) sta in alto a destra, dove c'e' #panelSave. Autosave: niente «Salva». -->
+          <div class="editor-foot-row">
+            <button type="button" class="btn-ghost" id="panelReset" data-tooltip="Torna alla versione online" hidden>Ripristina</button>
+            <button type="button" class="btn-pill-dark primary" id="panelPrimary"></button>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+  </div><!-- /.body -->
+  </div><!-- /.shell-body -->
+</div>
+
+<!-- 22/10/2026 (Ruggi): modale «Aggiungi una sezione». Si apre dal "+" nella pagina (prima/dopo i prodotti), dal "+" in toolbar e dal pulsante in fondo al pannello (sempre dopo i prodotti). Catalogo = famiglie del manifest del tema raggruppate come card (UI_GROUPS in bottega-editor.js); clic su una card = dettaglio con anteprima, varianti e colore (palette del tema). WIREFRAME: la sezione compare nell'elenco Struttura ma non ancora nell'anteprima. Classi .editor-modal* = locali/candidate (nel design system non esiste una modale). -->
+<div class="editor-modal" id="addModal" hidden>
+  <div class="editor-modal-backdrop" data-close></div>
+  <div class="editor-modal-box" tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="addModalTitle">
+    <div class="editor-modal-head">
+      <h2 class="card-title title-lg" id="addModalTitle">Aggiungi una sezione</h2>
+      <button type="button" class="panel-close-btn editor-modal-close" data-close data-tooltip="Chiudi" aria-label="Chiudi"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="editor-modal-body">
+      <div class="editor-modal-view" id="addGridView">
+        <input class="bottega-input" id="addSearch" type="search" autocomplete="off" spellcheck="false" placeholder="Cerca una sezione" aria-label="Cerca una sezione">
+        <div class="editor-modal-grid" id="addGrid"></div>
+        <p class="editor-modal-empty" id="addEmpty" hidden>Nessuna sezione trovata.</p>
+      </div>
+      <div class="editor-modal-view editor-modal-detail" id="addDetailView" hidden>
+        <div class="editor-modal-detail-head">
+          <button type="button" class="bottega-cancel-link is-back" id="addBack"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Tutte le sezioni</button>
+        </div>
+        <div class="editor-modal-detail-body">
+          <div class="editor-modal-preview" id="addPreview"></div>
+          <div class="editor-modal-controls">
+            <div class="editor-modal-intro">
+              <div class="editor-head-title"><h2 class="card-title title-lg" id="addDetailTitle"></h2></div>
+              <p class="editor-modal-desc" id="addDetailDesc"></p>
+            </div>
+            <div class="editor-modal-block">
+              <h3 class="panel-card-title">Variante</h3>
+              <div class="editor-modal-variants" id="addVariants" role="radiogroup" aria-label="Variante"></div>
+            </div>
+            <div class="editor-modal-block" id="addToneWrap">
+              <h3 class="panel-card-title">Colore</h3>
+              <div class="bottega-swatches" id="addTones" role="radiogroup" aria-label="Colore della sezione"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="editor-modal-foot" id="addFoot" hidden>
+      <button type="button" class="btn-ghost danger" data-close>Annulla</button>
+      <button type="button" class="btn-pill-dark primary" id="addConfirm" disabled>Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<script src="../../../../Temi/01_tema/01_tema_Package/package.js"></script>
+<script src="bottega-store.js"></script>
+<script src="bottega-editor.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

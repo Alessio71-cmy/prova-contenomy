@@ -1,0 +1,4 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.shell.sidebar-collapsed .sidebar:hover .sidebar-group-label {
+  display: var(--sidebar-shell_sidebar_collapsed_sidebar_hover_sidebar_group_label-display);
+}

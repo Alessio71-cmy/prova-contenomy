@@ -1,0 +1,25 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.search-close-btn {
+  flex: var(--search-search_close_btn-flex);
+  width: var(--search-search_close_btn-width);
+  height: var(--search-search_close_btn-height);
+  border-radius: var(--search-search_close_btn-border_radius);
+  display: var(--search-search_close_btn-display);
+  align-items: var(--search-search_close_btn-align_items);
+  justify-content: var(--search-search_close_btn-justify_content);
+  color: var(--search-search_close_btn-color);
+  cursor: var(--search-search_close_btn-cursor);
+  opacity: var(--search-search_close_btn-opacity);
+  pointer-events: var(--search-search_close_btn-pointer_events);
+  transition: var(--search-search_close_btn-transition);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.search-close-btn:hover {
+  background: var(--hover-bg);
+  color: var(--search-search_close_btn_hover-color);
+}

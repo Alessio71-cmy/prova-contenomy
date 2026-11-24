@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Drop — Venditore — Protocollo 04</title>
+<link rel="stylesheet" href="drop.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===================== TOPBAR (larghezza intera) — identica a Cruscotto/Prodotti ===================== -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+    <!-- ===================== SIDEBAR — identica a Cruscotto/Prodotti, "Drop" attivo ===================== -->
+    <aside class="sidebar" id="sidebarV2">
+      <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+      </div>
+    </aside>
+
+    <div class="body">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Drop</h1>
+          <p class="page-sub">Gestisci le vendite a tiratura limitata</p>
+        </div>
+        <div class="page-header-actions">
+          <!-- CTA fissa, sempre visibile, non è una tab (IA_Venditore §4: "Pattern di navigazione: tab Elenco drop + CTA fissa Nuovo drop") -->
+          <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo drop</button>
+        </div>
+      </div>
+
+      <!-- TAB BAR — pagina unica "Drop" (IA_Venditore §4 + convenzione Panoramica, vedi A-log-pagine.md 9/9).
+           Solo le due tab previste dalla IA per ora: altre eventuali tab non sono decise, non aggiunte per inferenza. -->
+      <nav class="tabs">
+        <div class="tab active" data-tab="panoramica" data-label="Panoramica">Panoramica</div>
+        <div class="tab" data-tab="elenco" data-label="Elenco drop">Elenco drop</div>
+        <span class="tab-active-line" aria-hidden="true"></span>
+      </nav>
+
+      <!-- PANORAMICA — tab di default (convenzione IA 9/9). Contenuto confermato con
+           Ruggi il 15/9/2026 (IA_Venditore §2.4 lasciava solo la convenzione aperta,
+           il contenuto è una scelta presa qui in Page Architecture):
+           4 metriche (regola "sempre 4", stessa forma di Prodotti) + grafico andamento
+           + ripartizione acquisti per tier. "Clienti con accesso prioritario" è un dato
+           cross-entità (PriorityAccess/Badge, #9), non nativo di Drop — mostrato qui su
+           richiesta esplicita di Ruggi per comodità operativa, segnalato come tale. -->
+      <!-- Aggiornamento 22/9/2026 (Ruggi): confermato che "Accesso prioritario" è la somma di badge Tra i primi + PriorityAccess temporaneo attivo (già così). Etichetta accorciata da "Accesso prioritario sulla bottega" e aggiunto trend +/-N (stesso pattern di Tasso di sold-out) per mostrare la variazione netta rispetto a chi perde priority access. Valore trend ancora segnaposto, nessun dato reale collegato. -->
+      <div class="overview" data-panel="panoramica">
+
+        <div class="submetrics-row span-12">
+          <div class="submetric">
+            <span class="submetric-value">3<span class="unit unit-text">drop attivi</span></span>
+            <span class="submetric-label">In corso ora (tutte le fasi)</span>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">28<span class="unit unit-text">clienti</span></span>
+            <div class="submetric-label-row">
+              <span class="submetric-label" data-tooltip="Clienti con badge Tra i primi o PriorityAccess temporaneo attivo sulla tua bottega — dato aggregato da Clienti/Priorità, non specifico di un drop" aria-label="Clienti con badge Tra i primi o PriorityAccess temporaneo attivo sulla tua bottega — dato aggregato da Clienti/Priorità, non specifico di un drop">Accesso prioritario</span>
+              <span class="submetric-trend up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 12 9l6 6"/></svg>+4</span>
+            </div>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">61<span class="unit">%</span></span>
+            <div class="submetric-label-row">
+              <span class="submetric-label">Tasso di sold-out</span>
+              <span class="submetric-trend up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 12 9l6 6"/></svg>8%</span>
+            </div>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">€ 4.180<span class="unit unit-text">dai drop</span></span>
+            <span class="submetric-label">Lordo, drop conclusi</span>
+          </div>
+        </div>
+
+        <div class="card span-12">
+          <div class="chart-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Andamento vendite nei drop</div>
+              <div class="card-sub">Pezzi venduti per settimana, solo drop</div>
+            </div>
+            <div class="filter-row">
+              <button class="filter-pill active">1 settimana</button>
+              <button class="filter-pill">3 mesi</button>
+              <button class="filter-pill">6 mesi</button>
+              <button class="filter-pill">1 anno</button>
+            </div>
+          </div>
+
+          <svg class="chart-svg" viewBox="0 0 640 160" preserveAspectRatio="none" role="img" aria-label="Andamento pezzi venduti nei drop nelle ultime 8 settimane">
+            <line class="chart-baseline" x1="8" y1="134" x2="632" y2="134" />
+            <path class="chart-line" d="M 8.0 129.0 L 97.1 104.0 L 186.3 119.0 L 275.4 64.0 L 364.6 84.0 L 453.7 24.0 L 542.9 44.0 L 632.0 19.0" />
+            <circle class="chart-dot" cx="8.0" cy="129.0" r="4"><title>6 Lug — 5 pezzi</title></circle>
+            <circle class="chart-dot" cx="97.1" cy="104.0" r="4"><title>13 Lug — 9 pezzi</title></circle>
+            <circle class="chart-dot" cx="186.3" cy="119.0" r="4"><title>20 Lug — 7 pezzi</title></circle>
+            <circle class="chart-dot" cx="275.4" cy="64.0" r="4"><title>27 Lug — 18 pezzi</title></circle>
+            <circle class="chart-dot" cx="364.6" cy="84.0" r="4"><title>3 Ago — 14 pezzi</title></circle>
+            <circle class="chart-dot" cx="453.7" cy="24.0" r="4"><title>10 Ago — 28 pezzi</title></circle>
+            <circle class="chart-dot" cx="542.9" cy="44.0" r="4"><title>17 Ago — 23 pezzi</title></circle>
+            <circle class="chart-dot" cx="632.0" cy="19.0" r="4"><title>24 Ago — 30 pezzi</title></circle>
+            <text class="chart-end-label" x="600" y="8" text-anchor="end">30</text>
+            <text class="chart-axis-label" x="8" y="150">6 Lug</text>
+            <text class="chart-axis-label" x="632" y="150" text-anchor="end">24 Ago</text>
+          </svg>
+        </div>
+
+        <!-- 15/9/2026: "Vendite per fase" passa da span-12 a span-6, affiancata alla nuova
+             card "Tempo medio per fase" (span-6) — richiesta esplicita di Ruggi, stesso layout
+             a due colonne già usato in Prodotti (Vendite per categoria / Top prodotti). -->
+        <div class="card span-6">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Vendite per fase</div>
+            <div class="card-sub" data-tooltip="Confermato con Ruggi 15/9: dato che solo Drop può raccontare, distinto dalle rank-bar di Prodotti" aria-label="Confermato con Ruggi 15/9: dato che solo Drop può raccontare, distinto dalle rank-bar di Prodotti">Pezzi venduti, priorità vs pubblico — periodo corrente</div>
+          </div>
+          <div class="rank-bars">
+            <div class="rank-bar">
+              <span class="rank-bar-label">Primi sostenitori (tier1)</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 100%;"></span></span>
+              <span class="rank-bar-value">34</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Primi acquirenti (tier2)</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 53%;"></span></span>
+              <span class="rank-bar-value">18</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Pubblico (aperto)</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 24%;"></span></span>
+              <span class="rank-bar-value">8</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tempo medio per fase prima di esaurirsi — candidato proposto in chat 15/9/2026,
+             confermato da Ruggi MA il dato richiede un tracking (log dei passaggi di fase) non
+             ancora modellato (stesso tipo di gap già segnalato per iscritti_avvisami/conversione
+             e "eleggibili in quel momento" — vedi chat). Card presente in struttura, contenuto
+             in placeholder finché il tracking non viene aggiunto: nessun numero inventato. -->
+        <div class="card span-6">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Tempo medio per fase</div>
+            <div class="card-sub">Prima di esaurirsi — richiede tracking non ancora implementato</div>
+          </div>
+          <div class="tab-panel-placeholder" style="margin-top: var(--space-6);">
+            In attesa del log dei passaggi di fase su Drop (non ancora modellato — segnalato 15/9/2026).
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ELENCO DROP — nascosto di default (Panoramica è la tab attiva).
+           Struttura a 3 sotto-tab fissata da IA_Venditore §4.1 ("3 tab: Aperti ora · Programmati
+           · Passati"). Wrapper card-header/divider/table-toolbar riusa lo stesso schema di
+           .products-panel in Elenco prodotti (02-Prodotti/prodotti.html) — stesso ruolo
+           strutturale (contenitore di una tabella con toolbar), non un elemento nuovo.
+           Contenuto delle colonne/righe della tabella NON ancora deciso: nessun dato inventato,
+           vedi proposta in chat in attesa di conferma. -->
+      <div class="tab-panel-hidden" data-panel="elenco" hidden>
+      <div class="grid">
+      <div class="products-panel span-12">
+
+        <div class="card-header">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Elenco drop</div>
+            <div class="card-sub">Tutti i drop: aperti, programmati, bozze e passati</div>
+          </div>
+          <!-- Stesso slot di Elenco prodotti: il range cambia con la sotto-tab attiva.
+               Le frecce restano disabilitate finché tutti i record della vista stanno in
+               una pagina; il controllo è comunque presente come contratto della tabella. -->
+          <div class="table-pagination" aria-label="Paginazione elenco drop">
+            <span class="table-pagination-range" id="dropPaginationRange">1 – 2</span>
+            <button class="pagination-arrow" type="button" disabled data-tooltip="Precedenti" aria-label="Pagina precedente"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></button>
+            <button class="pagination-arrow" type="button" disabled data-tooltip="Successivi" aria-label="Pagina successiva"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <!-- Sotto-navigazione Aperti ora / Programmati / Bozze / Passati (IA_Venditore §4.1 prevede 3 tab:
+             la tab Bozze è stata chiesta da Ruggi il 21/9/2026, conflitto IA aperto, vedi A-log-pagine.md).
+             Riuso degli status-chip già usati in Elenco prodotti come pattern più vicino
+             disponibile: da confermare come alias candidato per questo ruolo, non ancora
+             promosso — vedi alias-candidati.md. -->
+        <div class="table-toolbar">
+          <div class="status-chips">
+            <button class="status-chip active" data-status="aperti" data-pagination-range="1 – 2">Aperti ora<span class="count">2</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="programmati" data-pagination-range="1 – 2">Programmati<span class="count">2</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="bozze" data-pagination-range="1 – 2">Bozze<span class="count">2</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="passati" data-pagination-range="1 – 2">Passati<span class="count">2</span></button>
+          </div>
+          <div class="table-toolbar-actions" id="dropToolbarActions">
+            <div class="toolbar-icons-group">
+              <div class="view-switch" role="group" aria-label="Vista elenco drop">
+                <button class="view-switch-btn active" type="button" data-drop-view="elenco" data-tooltip="Vista elenco" aria-label="Vista elenco" aria-pressed="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                <button class="view-switch-btn" type="button" data-drop-view="calendario" data-tooltip="Vista calendario" aria-label="Vista calendario" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></button>
+              </div>
+              <button class="icon-btn" id="dropToggleFiltersBtn" type="button" data-tooltip="Filtri" aria-label="Mostra filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></button>
+              <button class="icon-btn" id="dropSortBtn" type="button" data-tooltip="Ordina" aria-label="Ordina elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></button>
+            </div>
+            <div class="search-box" id="dropSearchBox">
+              <button class="icon-btn search-toggle" id="dropSearchToggleBtn" type="button" data-tooltip="Cerca" aria-label="Cerca drop"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></button>
+              <input type="search" class="search-input" id="dropSearchInput" placeholder="Cerca un drop" aria-label="Cerca un drop" tabindex="-1">
+              <button class="search-close-btn" id="dropSearchCloseBtn" type="button" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- I filtri sono un'estensione della toolbar e non duplicano la sotto-navigazione:
+             stato del drop resta nei chip, qui restano i criteri trasversali alla lista. -->
+        <div class="filters-collapse" id="dropFiltersCollapse">
+          <div class="filters-collapse-inner">
+            <div class="filters-row">
+              <button class="filter-chip" type="button">Prodotto<span class="chev"></span></button>
+              <button class="filter-chip" type="button">Periodo<span class="chev"></span></button>
+              <button class="filter-chip" type="button">Esito<span class="chev"></span></button>
+            </div>
+            <div class="card-divider" id="dropFiltersDivider"></div>
+          </div>
+        </div>
+
+        <!-- Vista calendario: alternativa all'elenco per leggere aperture, chiusure ed esiti
+             nel tempo. Le informazioni non databili dei drop in corso restano nell'elenco,
+             così la vista non inventa date che il modello non espone. -->
+        <section class="drop-calendar-view" id="dropCalendarView" aria-label="Calendario drop, settembre 2026" hidden>
+          <div class="drop-calendar-heading">
+            <div>
+              <div class="drop-calendar-title">Settembre 2026</div>
+              <div class="drop-calendar-subtitle">Aperture, chiusure e drop programmati</div>
+            </div>
+            <span class="drop-calendar-active-summary">2 drop in corso</span>
+          </div>
+          <div class="drop-calendar-weekdays" aria-hidden="true"><span>Lun</span><span>Mar</span><span>Mer</span><span>Gio</span><span>Ven</span><span>Sab</span><span>Dom</span></div>
+          <div class="drop-calendar-grid" role="grid" aria-label="Settembre 2026">
+            <div class="calendar-day calendar-day--outside" role="gridcell"><span>31</span></div>
+            <div class="calendar-day" role="gridcell"><span>1</span></div>
+            <div class="calendar-day" role="gridcell"><span>2</span><span class="calendar-event calendar-event--past">Candela · archiviato</span></div>
+            <div class="calendar-day" role="gridcell"><span>3</span><span class="calendar-event calendar-event--past">Tote bag · esaurito</span></div>
+            <div class="calendar-day" role="gridcell"><span>4</span></div><div class="calendar-day" role="gridcell"><span>5</span></div><div class="calendar-day" role="gridcell"><span>6</span></div>
+            <div class="calendar-day" role="gridcell"><span>7</span></div><div class="calendar-day" role="gridcell"><span>8</span></div><div class="calendar-day" role="gridcell"><span>9</span></div><div class="calendar-day" role="gridcell"><span>10</span></div><div class="calendar-day" role="gridcell"><span>11</span></div><div class="calendar-day" role="gridcell"><span>12</span></div><div class="calendar-day" role="gridcell"><span>13</span></div>
+            <div class="calendar-day" role="gridcell"><span>14</span></div><div class="calendar-day" role="gridcell"><span>15</span></div><div class="calendar-day" role="gridcell"><span>16</span></div>
+            <div class="calendar-day calendar-day--today" role="gridcell" aria-label="17 settembre, oggi"><span>17</span></div>
+            <div class="calendar-day" role="gridcell"><span>18</span></div><div class="calendar-day" role="gridcell"><span>19</span></div><div class="calendar-day" role="gridcell"><span>20</span></div>
+            <div class="calendar-day" role="gridcell"><span>21</span></div><div class="calendar-day" role="gridcell"><span>22</span></div><div class="calendar-day" role="gridcell"><span>23</span></div><div class="calendar-day" role="gridcell"><span>24</span></div><div class="calendar-day" role="gridcell"><span>25</span></div><div class="calendar-day" role="gridcell"><span>26</span></div><div class="calendar-day" role="gridcell"><span>27</span></div>
+            <div class="calendar-day" role="gridcell"><span>28</span><span class="calendar-event calendar-event--scheduled">Felpa logo · apertura</span></div>
+            <div class="calendar-day" role="gridcell"><span>29</span></div><div class="calendar-day" role="gridcell"><span>30</span></div>
+            <div class="calendar-day calendar-day--outside" role="gridcell"><span>1</span></div><div class="calendar-day calendar-day--outside" role="gridcell"><span>2</span></div><div class="calendar-day calendar-day--outside" role="gridcell"><span>3</span></div><div class="calendar-day calendar-day--outside" role="gridcell"><span>4</span></div>
+          </div>
+        </section>
+
+        <!-- APERTI ORA (IA_Venditore §4.1): nome prodotto (con varianti se presenti) ·
+             stadio (counter+fase+progress, stesso componente del widget Drop in Cruscotto,
+             versione compatta) · venduti/totale (numero esatto, solo venditore) ·
+             like/iscritti avvisami · quorum condizionale · freccia verso il prodotto
+             (row-goto-btn, riusa 02-Prodotti/prodotto-detail.html) + ⋮ per le azioni
+             di livello prodotto. Le sotto-righe variante espongono invece solo la freccia.
+             Confermato con Ruggi 15/9/2026: niente immagine in riga (coerente con
+             Elenco prodotti, che non ne ha nemmeno lui), nessuna colonna priority per
+             riga (il dato vive in Panoramica). -->
+        <!-- Ordine colonne rivisto 15/9/2026 su richiesta di Ruggi: timer per primo
+             (colonna propria, numero + barra sotto), stadio come colonna a sé accanto
+             al timer, like/avvisami separati, testo a trattamento "riga principale"
+             (non più subrow/muted). Azione dietro il badge quorum NON decisa — resta
+             solo lettura, nessun click aggiunto (Ruggi non è sicuro vada bene così). -->
+        <!-- 21/9/2026: aggiunta colonna finale "Periodo" (inizio – fine, senza ore) e
+             prodotto troncato su una riga con ellissi (marquee on hover solo annotato:
+             non implementato, non deve essere l'unico modo di leggere il nome e deve
+             rispettare prefers-reduced-motion). -->
+        <div class="drop-table" data-status-panel="aperti">
+          <div class="drop-row-head">
+            <div>Timer</div>
+            <div>Stadio</div>
+            <div>Prodotto</div>
+            <div>Venduti</div>
+            <div>Like</div>
+            <div>Avvisami</div>
+            <div>Quorum</div>
+            <div>Periodo</div>
+          </div>
+
+          <div class="drop-row" data-has-variants="true">
+            <div class="drop-row-timer">
+              <span class="product-row-chevron" data-tooltip="Mostra varianti" aria-label="Mostra varianti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+              <div class="drop-row-timer-content">
+                <span class="drop-row-countdown">2h 26m</span>
+                <div class="drop-row-progress">
+                  <div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:100%"></div></div>
+                  <div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:100%"></div></div>
+                  <div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:55%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="drop-row-phase">Primi sostenitori</div>
+            <div class="drop-row-main">
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Maglione oversize" aria-label="Maglione oversize">Maglione oversize</span>
+                <span class="drop-row-variant-count">3 varianti nel drop</span>
+              </div>
+            </div>
+            <div class="drop-row-stat"><strong>38</strong> di <strong>80</strong></div>
+            <div class="drop-row-social"><strong>64</strong></div>
+            <div class="drop-row-social"><strong>112</strong></div>
+            <div class="drop-row-quorum empty">—</div>
+            <div class="product-row-date drop-row-period" data-tooltip="Inizio teaser 15 Set 2026 · fine drop 22 Set 2026, 18:00" aria-label="Inizio teaser 15 Set 2026 · fine drop 22 Set 2026, 18:00">15 Set – 22 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+            </div>
+          </div>
+          <div class="product-variants">
+           <div class="product-variants-inner">
+            <!-- 17/9/2026: Prezzo e Stato sono espliciti per ogni variante. La loro griglia
+                 è quella del tab Aperti ora: Variante sotto Timer, Prezzo sotto Prodotto,
+                 Venduti sotto Venduti e Stato sotto Like. Prezzo è quello della stessa
+                 variante nella scheda prodotto; Stato è derivato da venduti/tiratura,
+                 candidato finché il modello dati non espone uno stato variante nel drop. -->
+            <div class="product-variant-head">
+              <div class="drop-variant-heading--timer">Variante</div>
+              <div class="drop-variant-heading--product">Prezzo</div>
+              <div class="drop-variant-heading--sold">Venduti</div>
+              <div class="drop-variant-heading--likes">Stato</div>
+            </div>
+            <div class="product-variant-row">
+              <div class="product-variant-name">Nero</div>
+              <div class="product-variant-price">€ 49</div>
+              <div class="product-variant-stat"><strong>18</strong> di <strong>30</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html?variant=Nero" data-tooltip="Vai alla variante Nero nella pagina prodotto" aria-label="Vai alla variante Nero nella pagina prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+            </div>
+            <div class="product-variant-divider"></div>
+            <div class="product-variant-row">
+              <div class="product-variant-name">Blu</div>
+              <div class="product-variant-price">€ 49</div>
+              <div class="product-variant-stat"><strong>20</strong> di <strong>20</strong></div>
+              <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html?variant=Blu" data-tooltip="Vai alla variante Blu nella pagina prodotto" aria-label="Vai alla variante Blu nella pagina prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+            </div>
+            <div class="product-variant-divider"></div>
+            <div class="product-variant-row">
+              <div class="product-variant-name">Rosso</div>
+              <div class="product-variant-price">€ 52</div>
+              <div class="product-variant-stat"><strong>0</strong> di <strong>30</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html?variant=Rosso" data-tooltip="Vai alla variante Rosso nella pagina prodotto" aria-label="Vai alla variante Rosso nella pagina prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+            </div>
+           </div>
+          </div>
+
+          <div class="table-row-divider"></div>
+
+          <div class="drop-row">
+            <div class="drop-row-timer">
+              <span class="product-row-chevron placeholder"></span>
+              <div class="drop-row-timer-content">
+                <span class="drop-row-countdown">3g 4h</span>
+                <div class="drop-row-progress">
+                  <div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:30%"></div></div>
+                  <div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:0%"></div></div>
+                  <div class="drop-row-progress-seg"><div class="drop-row-progress-fill" style="width:0%"></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="drop-row-phase">Evento (quorum)</div>
+            <div class="drop-row-main">
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Tazza in ceramica — edizione autunno" aria-label="Tazza in ceramica — edizione autunno">Tazza in ceramica — edizione autunno</span>
+              </div>
+            </div>
+            <div class="drop-row-stat"><strong>6</strong> di <strong>20</strong></div>
+            <div class="drop-row-social"><strong>19</strong></div>
+            <div class="drop-row-social"><strong>31</strong></div>
+            <div class="drop-row-quorum warning">6 di 15</div>
+            <div class="product-row-date drop-row-period" data-tooltip="Inizio teaser 18 Set 2026 · fine drop 30 Set 2026" aria-label="Inizio teaser 18 Set 2026 · fine drop 30 Set 2026">18 Set – 30 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROGRAMMATI (IA §4.1) — riscritto 21/9/2026 con Ruggi: prodotto (troncato su una riga) ·
+             step del percorso (Anteprima · Priorità · Pubblico, + Chiusura se il drop ha una
+             finestra di acquisto; nei drop "in shop" l'ultimo step è Shop) · Inizio (inizio
+             anteprima) · Fine drop (data di chiusura vendita oppure di passaggio allo shop,
+             con sotto-riga muted che dice quale). Date senza ore (le ore stanno nel title).
+             La fase "Preparazione" (bozza privata) non è più uno step e le bozze NON stanno
+             in Programmati (decisione Ruggi 21/9: serve una tab propria, da definire).
+             Date sempre con anno (Ruggi 21/9); negli intervalli l'anno compare una volta, in fondo. -->
+        <div class="drop-table" data-status-panel="programmati" hidden>
+          <div class="drop-row-head">
+            <div>Prodotto</div>
+            <div>Step</div>
+            <div>Inizio drop</div>
+            <div>Fine drop</div>
+          </div>
+
+          <div class="drop-row" data-has-variants="true">
+            <div class="drop-row-main">
+              <span class="product-row-chevron" data-tooltip="Mostra varianti" aria-label="Mostra varianti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Felpa logo — drop invernale" aria-label="Felpa logo — drop invernale">Felpa logo — drop invernale</span>
+                <span class="drop-row-variant-count">2 varianti nel drop</span>
+              </div>
+            </div>
+            <div class="drop-stepper" aria-label="Fasi del drop: Anteprima, Priorità, Pubblico, Chiusura">
+              <div class="drop-step is-current">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v-2l12-4v12L4 14v-2Z"/><path d="M16 10.5 20 8v8l-4-2.5"/><path d="M7 15v4"/></svg></span>
+                <span>Anteprima</span>
+              </div>
+              <span class="drop-step-connector" aria-hidden="true"></span>
+              <div class="drop-step">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z"/></svg></span>
+                <span>Priorità</span>
+              </div>
+              <span class="drop-step-connector" aria-hidden="true"></span>
+              <div class="drop-step">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z"/></svg></span>
+                <span>Pubblico</span>
+              </div>
+              <span class="drop-step-connector" aria-hidden="true"></span>
+              <div class="drop-step">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg></span>
+                <span>Chiusura</span>
+              </div>
+            </div>
+            <div class="product-row-date" data-tooltip="Inizio teaser 21 Set 2026 (apertura pubblica 28 Set 2026, 18:00)" aria-label="Inizio teaser 21 Set 2026 (apertura pubblica 28 Set 2026, 18:00)">21 Set 2026</div>
+            <div class="product-row-date" data-tooltip="Chiusura vendita 2 Ott 2026, 18:00" aria-label="Chiusura vendita 2 Ott 2026, 18:00">2 Ott 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+            </div>
+          </div>
+          <div class="table-row-divider"></div>
+
+          <div class="drop-row">
+            <div class="drop-row-main">
+              <span class="drop-row-chevron-spacer" aria-hidden="true"></span>
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Sciarpa in lana — edizione limitata" aria-label="Sciarpa in lana — edizione limitata">Sciarpa in lana — edizione limitata</span>
+              </div>
+            </div>
+            <div class="drop-stepper" aria-label="Fasi del drop: Anteprima, Priorità, Pubblico">
+              <div class="drop-step">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v-2l12-4v12L4 14v-2Z"/><path d="M16 10.5 20 8v8l-4-2.5"/><path d="M7 15v4"/></svg></span>
+                <span>Anteprima</span>
+              </div>
+              <span class="drop-step-connector" aria-hidden="true"></span>
+              <div class="drop-step is-current">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z"/></svg></span>
+                <span>Priorità</span>
+              </div>
+              <span class="drop-step-connector" aria-hidden="true"></span>
+              <div class="drop-step">
+                <span class="drop-step-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18Z"/></svg></span>
+                <span>Pubblico</span>
+              </div>
+            </div>
+            <div class="product-row-date" data-tooltip="Inizio teaser 17 Set 2026" aria-label="Inizio teaser 17 Set 2026">17 Set 2026</div>
+            <div class="product-row-date" data-tooltip="Apertura al pubblico e passaggio allo shop 30 Set 2026, 18:00" aria-label="Apertura al pubblico e passaggio allo shop 30 Set 2026, 18:00">30 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOZZE (drop in `preparazione`, privati) — tab aggiunta 21/9/2026 su richiesta di Ruggi,
+             tra Programmati e Passati: una bozza non ha date né step, quindi non va mescolata
+             ai programmati (conflitto con IA_Venditore §4.1 riga 172, da risolvere in bulk).
+             Colonne: Prodotto · Da completare (UNA sola voce: la prossima schermata di "Nuovo drop"
+             ancora da compilare — Prodotto e quantità / Tempistiche e priorità / Anteprima e
+             pubblica — con "Passo N di 3" sotto, NON l'elenco di tutto ciò che manca) · Ultima
+             modifica. Azioni in hover: freccia (apre la pagina del drop) + cestino (Elimina, solo
+             per `preparazione`, IA §4.3). "Pubblica" non è in riga: si trova aprendo la bozza
+             (pannello laterale, dove si può anche modificare). Le bozze non compaiono nel Calendario (Ruggi 21/9: non hanno data, "Ultima modifica" è
+             l'unica data presente). -->
+        <div class="drop-table" data-status-panel="bozze" hidden>
+          <div class="drop-row-head">
+            <div>Prodotto</div>
+            <div>Da completare</div>
+            <div>Ultima modifica</div>
+          </div>
+
+          <div class="drop-row">
+            <div class="drop-row-main">
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Cappello in feltro" aria-label="Cappello in feltro">Cappello in feltro</span>
+                <span class="drop-row-variant-count">2 varianti nel drop</span>
+              </div>
+            </div>
+            <div class="drop-row-textblock">
+              <span class="drop-row-stat">Tempistiche e priorità</span>
+              <span class="drop-row-variant-count">Passo 2 di 3</span>
+            </div>
+            <div class="product-row-date" data-tooltip="Ultima modifica: 20 Set 2026, 16:42" aria-label="Ultima modifica: 20 Set 2026, 16:42">20 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-goto-btn row-action-danger" role="button" tabindex="0" data-tooltip="Elimina bozza" aria-label="Elimina bozza"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+            </div>
+          </div>
+
+          <div class="table-row-divider"></div>
+
+          <div class="drop-row">
+            <div class="drop-row-main">
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Portacandele in ceramica" aria-label="Portacandele in ceramica">Portacandele in ceramica</span>
+                <span class="drop-row-variant-count">1 variante nel drop</span>
+              </div>
+            </div>
+            <div class="drop-row-textblock">
+              <span class="drop-row-stat">Anteprima e pubblica</span>
+              <span class="drop-row-variant-count">Passo 3 di 3</span>
+            </div>
+            <div class="product-row-date" data-tooltip="Ultima modifica: 18 Set 2026, 11:05" aria-label="Ultima modifica: 18 Set 2026, 11:05">18 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-goto-btn row-action-danger" role="button" tabindex="0" data-tooltip="Elimina bozza" aria-label="Elimina bozza"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PASSATI (archivio, IA §4.1) — 21/9/2026: prodotto · stato finale (esaurito · in shop /
+             archiviato / interrotto con motivazione) · venduti/totale · Periodo (inizio – fine
+             effettiva del drop). La colonna "Chiusura" (data decisione_post_drop_il) è stata
+             rimossa: la data della decisione non è più mostrata in tabella. -->
+        <div class="drop-table" data-status-panel="passati" hidden>
+          <div class="drop-row-head">
+            <div>Prodotto</div>
+            <div>Stato</div>
+            <div>Venduti</div>
+            <div>Inizio drop</div>
+            <div>Fine drop</div>
+          </div>
+
+          <div class="drop-row">
+            <div class="drop-row-main">
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Tote bag estate" aria-label="Tote bag estate">Tote bag estate</span>
+              </div>
+            </div>
+            <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+            <div class="drop-row-stat"><strong>40</strong> di <strong>40</strong></div>
+            <div class="product-row-date" data-tooltip="Inizio teaser 29 Ago 2026" aria-label="Inizio teaser 29 Ago 2026">29 Ago 2026</div>
+            <div class="product-row-date" data-tooltip="Fine drop 3 Set 2026 (esaurito)" aria-label="Fine drop 3 Set 2026 (esaurito)">3 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+            </div>
+          </div>
+
+          <div class="table-row-divider"></div>
+
+          <div class="drop-row">
+            <div class="drop-row-main">
+              <div class="drop-row-textblock">
+                <span class="drop-row-name" data-tooltip="Candela in cera di soia" aria-label="Candela in cera di soia">Candela in cera di soia</span>
+              </div>
+            </div>
+            <span class="status-pill archiviato"><i class="dot"></i>Archiviato</span>
+            <div class="drop-row-stat"><strong>12</strong> di <strong>25</strong></div>
+            <div class="product-row-date" data-tooltip="Inizio teaser 26 Ago 2026" aria-label="Inizio teaser 26 Ago 2026">26 Ago 2026</div>
+            <div class="product-row-date" data-tooltip="Fine drop 2 Set 2026 (archiviato)" aria-label="Fine drop 2 Set 2026 (archiviato)">2 Set 2026</div>
+            <div class="row-actions">
+              <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+              <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div>
+      </div>
+
+      </div>
+    </main>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // Sidebar comprimibile a sola-icona — stessa logica di prodotti.html/cruscotto.js (9/9).
+  var sidebarToggleBtn = document.getElementById('sidebarToggle');
+  var shellEl = document.querySelector('.shell');
+  if (sidebarToggleBtn && shellEl) {
+    sidebarToggleBtn.addEventListener('click', function () {
+      shellEl.classList.toggle('sidebar-collapsed');
+    });
+  }
+
+  // Dissolvenza dinamica della tab bar — stessa logica di prodotti.html (9/9).
+  var tabsEl = document.querySelector('.tabs');
+  function updateTabsFade() {
+    if (!tabsEl) { return; }
+    var maxScroll = tabsEl.scrollWidth - tabsEl.clientWidth;
+    var fadeL = tabsEl.scrollLeft > 1 ? '28px' : '0px';
+    var fadeR = tabsEl.scrollLeft < maxScroll - 1 ? '28px' : '0px';
+    tabsEl.style.setProperty('--fade-l', fadeL);
+    tabsEl.style.setProperty('--fade-r', fadeR);
+  }
+  if (tabsEl) {
+    tabsEl.addEventListener('scroll', updateTabsFade);
+  }
+
+  // Linea della tab attiva — stessa logica di prodotti.html (14-15/9/2026).
+  var tabActiveLine = document.querySelector('.tab-active-line');
+  function updateTabActiveLine(tab, animate) {
+    if (!tabsEl || !tabActiveLine || !tab) { return; }
+    var tabRect = tab.getBoundingClientRect();
+    var navRect = tabsEl.getBoundingClientRect();
+    var left = (tabRect.left - navRect.left) + tabsEl.scrollLeft;
+    if (!animate) { tabActiveLine.style.transition = 'none'; }
+    tabActiveLine.style.width = tabRect.width + 'px';
+    tabActiveLine.style.transform = 'translateX(' + left + 'px)';
+    if (!animate) {
+      tabActiveLine.offsetHeight; // forza il reflow prima di riabilitare la transition
+      tabActiveLine.style.transition = '';
+    }
+  }
+  // L'accesso globale del calendario usa la query string per arrivare direttamente
+  // nell'Elenco Drop, senza introdurre una seconda destinazione o duplicare la vista.
+  var requestedView = new URLSearchParams(window.location.search);
+  if (requestedView.get('tab') === 'elenco') {
+    document.querySelectorAll('.tab[data-tab]').forEach(function (tab) {
+      tab.classList.toggle('active', tab.getAttribute('data-tab') === 'elenco');
+    });
+    document.querySelectorAll('[data-panel]').forEach(function (panel) {
+      panel.hidden = panel.getAttribute('data-panel') !== 'elenco';
+    });
+  }
+  var initialActiveTab = document.querySelector('.tab[data-tab].active') || document.querySelector('.tab[data-tab]');
+  updateTabActiveLine(initialActiveTab, false);
+  if (tabsEl && typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(function () {
+      updateTabActiveLine(document.querySelector('.tab[data-tab].active'), false);
+    }).observe(tabsEl);
+  }
+
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      // 23/9/2026, richiesta esplicita di Ruggi: con .tab a larghezza fissa (flex:none, vedi
+      // shell-lists.css) le tab in eccesso restano mascherate e raggiungibili solo scorrendo
+      // lateralmente .tabs. Oltre a portare sempre la tab cliccata interamente in vista (già dal
+      // 9/9), se la tab cliccata è già del tutto visibile ed è la penultima (o la seconda) tra
+      // quelle visibili, la barra avanza/arretra di una tab in più per rivelarne un'altra ancora
+      // mascherata — altrimenti cliccare una tab già visibile non sposterebbe nulla e l'utente non
+      // scoprirebbe mai le tab nascoste senza centrare esattamente lo spicchio mascherato.
+      var allTabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+      var containerRect = tabsEl.getBoundingClientRect();
+      var visibleTabs = allTabs.filter(function (t) {
+        var r = t.getBoundingClientRect();
+        return r.left >= containerRect.left - 0.5 && r.right <= containerRect.right + 0.5;
+      });
+      var isSecondToLastVisible = visibleTabs.length > 1 &&
+        visibleTabs[visibleTabs.length - 2] === tab &&
+        visibleTabs[visibleTabs.length - 1] !== allTabs[allTabs.length - 1];
+      var isSecondVisible = visibleTabs.length > 1 &&
+        visibleTabs[1] === tab &&
+        visibleTabs[0] !== allTabs[0];
+      var scrollTarget = tab;
+      var inlineAlign = 'nearest';
+      if (isSecondToLastVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[visibleTabs.length - 1]) + 1];
+        inlineAlign = 'end';
+      } else if (isSecondVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[0]) - 1];
+        inlineAlign = 'start';
+      }
+      if (scrollTarget) { scrollTarget.scrollIntoView({ behavior: 'smooth', inline: inlineAlign, block: 'nearest' }); }
+      setTimeout(updateTabsFade, 300);
+      if (!tab.hasAttribute('data-tab')) { return; }
+      document.querySelectorAll('.tab[data-tab]').forEach(function (t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      updateTabActiveLine(tab, true);
+      var target = tab.getAttribute('data-tab');
+      document.querySelectorAll('[data-panel]').forEach(function (panel) {
+        panel.hidden = panel.getAttribute('data-panel') !== target;
+      });
+    });
+  });
+
+  // Striscia dei filtri rapidi con pannello aperto: dissolve solo i bordi che hanno
+  // contenuto oltre la vista e fa avanzare/arretrare la striscia dai chip mascherati.
+  var statusChipsEl = document.querySelector('.status-chips');
+  function updateStatusChipsFade() {
+    if (!statusChipsEl) { return; }
+    var maxScroll = statusChipsEl.scrollWidth - statusChipsEl.clientWidth;
+    statusChipsEl.style.setProperty('--status-chips-fade-l', statusChipsEl.scrollLeft > 1 ? '48px' : '0px');
+    statusChipsEl.style.setProperty('--status-chips-fade-r', statusChipsEl.scrollLeft < maxScroll - 1 ? '48px' : '0px');
+  }
+  if (statusChipsEl) {
+    updateStatusChipsFade();
+    statusChipsEl.addEventListener('scroll', updateStatusChipsFade, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') { new ResizeObserver(updateStatusChipsFade).observe(statusChipsEl); }
+  }
+
+  function revealStatusChipNeighbour(chip) {
+    var pageBody = document.querySelector('.body');
+    if (!statusChipsEl || !pageBody || !pageBody.classList.contains('panel-open')) { return; }
+    var chips = Array.prototype.slice.call(statusChipsEl.querySelectorAll('.status-chip'));
+    var index = chips.indexOf(chip);
+    if (index === -1) { return; }
+    var stripRect = statusChipsEl.getBoundingClientRect();
+    var chipRect = chip.getBoundingClientRect();
+    var target = chip;
+    var nextScrollLeft;
+    if (chipRect.right > stripRect.right + 1) {
+      target = chips[index + 1] || chip;
+      nextScrollLeft = target.offsetLeft + target.offsetWidth - statusChipsEl.clientWidth + 16;
+    } else if (chipRect.left < stripRect.left - 1) {
+      target = chips[index - 1] || chip;
+      nextScrollLeft = target.offsetLeft - 16;
+    } else { return; }
+    statusChipsEl.scrollTo({ left: Math.max(0, nextScrollLeft), behavior: 'smooth' });
+  }
+
+  // Chip sotto-navigazione Aperti ora/Programmati/Passati: evidenziazione + switch della
+  // tabella corrispondente (.drop-table[data-status-panel]). Stesso principio della logica
+  // Panoramica/Elenco a livello di tab superiore, applicato qui a un secondo livello (9/9
+  // per il pattern generale sulle tab, esteso qui il 15/9/2026 per le 3 sotto-viste di Drop).
+  document.querySelectorAll('.status-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.status-chip').forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      var target = chip.getAttribute('data-status');
+      document.querySelectorAll('.drop-table[data-status-panel]').forEach(function (panel) {
+        panel.hidden = panel.getAttribute('data-status-panel') !== target;
+      });
+      var paginationRange = document.getElementById('dropPaginationRange');
+      if (paginationRange) { paginationRange.textContent = chip.getAttribute('data-pagination-range'); }
+      revealStatusChipNeighbour(chip);
+    });
+  });
+
+  // Azioni della toolbar dell'Elenco drop: stessi comportamenti di base del pattern
+  // tabellare Prodotti. Ricerca e filtri espandono il relativo controllo; l'ordinamento
+  // segnala la selezione in attesa dell'ordinamento dati reale.
+  var dropSortBtn = document.getElementById('dropSortBtn');
+  if (dropSortBtn) {
+    dropSortBtn.addEventListener('click', function () {
+      dropSortBtn.classList.toggle('active');
+    });
+  }
+
+  var dropToolbarActions = document.getElementById('dropToolbarActions');
+  var dropSearchBox = document.getElementById('dropSearchBox');
+  var dropSearchToggleBtn = document.getElementById('dropSearchToggleBtn');
+  var dropSearchInput = document.getElementById('dropSearchInput');
+  var dropSearchCloseBtn = document.getElementById('dropSearchCloseBtn');
+  if (dropToolbarActions && dropSearchBox && dropSearchToggleBtn && dropSearchInput && dropSearchCloseBtn) {
+    dropSearchToggleBtn.addEventListener('click', function () {
+      dropSearchBox.classList.add('open');
+      dropToolbarActions.classList.add('search-active');
+      dropSearchInput.tabIndex = 0;
+      dropSearchInput.focus({ preventScroll: true });
+    });
+    dropSearchCloseBtn.addEventListener('click', function () {
+      dropSearchBox.classList.remove('open');
+      dropToolbarActions.classList.remove('search-active');
+      dropSearchInput.value = '';
+      dropSearchInput.tabIndex = -1;
+      dropSearchInput.blur();
+    });
+  }
+
+  var dropToggleFiltersBtn = document.getElementById('dropToggleFiltersBtn');
+  var dropFiltersCollapse = document.getElementById('dropFiltersCollapse');
+  if (dropToggleFiltersBtn && dropFiltersCollapse) {
+    dropToggleFiltersBtn.setAttribute('aria-expanded', 'false');
+    dropToggleFiltersBtn.addEventListener('click', function () {
+      dropFiltersCollapse.classList.toggle('open');
+      var filtersOpen = dropFiltersCollapse.classList.contains('open');
+      dropToggleFiltersBtn.classList.toggle('active', filtersOpen);
+      dropToggleFiltersBtn.setAttribute('aria-expanded', String(filtersOpen));
+    });
+  }
+
+  // Switch Elenco / Calendario: la vista calendario mostra tutti gli eventi datati del mese;
+  // tornando all'elenco viene ripristinata la sotto-tab di stato selezionata dall'utente.
+  var dropPanel = document.querySelector('.products-panel');
+  var dropCalendarView = document.getElementById('dropCalendarView');
+  var dropViewButtons = document.querySelectorAll('[data-drop-view]');
+  function setDropView(view) {
+    var showCalendar = view === 'calendario';
+    if (dropPanel) { dropPanel.classList.toggle('calendar-view', showCalendar); }
+    if (dropCalendarView) { dropCalendarView.hidden = !showCalendar; }
+    dropViewButtons.forEach(function (button) {
+      var active = button.getAttribute('data-drop-view') === view;
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    var activeStatus = document.querySelector('.status-chip.active');
+    var activeStatusName = activeStatus ? activeStatus.getAttribute('data-status') : 'aperti';
+    document.querySelectorAll('.drop-table[data-status-panel]').forEach(function (table) {
+      table.hidden = showCalendar || table.getAttribute('data-status-panel') !== activeStatusName;
+    });
+  }
+  dropViewButtons.forEach(function (button) {
+    button.addEventListener('click', function () { setDropView(button.getAttribute('data-drop-view')); });
+  });
+  setDropView(requestedView.get('view') === 'calendario' ? 'calendario' : 'elenco');
+
+  // Chevron varianti (righe con più varianti nel drop): stessa logica di espandi/collassa
+  // di Elenco prodotti (prodotti.html) — riusata identica su richiesta di Ruggi 15/9.
+  document.querySelectorAll('.product-row-chevron:not(.placeholder)').forEach(function (chevron) {
+    chevron.addEventListener('click', function (event) {
+      event.stopPropagation();
+      var row = chevron.closest('.drop-row');
+      if (row) { row.classList.toggle('expanded'); }
+    });
+  });
+</script>
+<script src="../page-search.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

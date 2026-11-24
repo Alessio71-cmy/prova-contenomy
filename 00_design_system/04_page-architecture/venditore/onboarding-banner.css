@@ -1,0 +1,113 @@
+/* =====================================================================
+   BANNER DI COMPLETAMENTO ACCOUNT (Dati fiscali · La tua bottega · Pagamenti con Stripe) — 16/10/2026
+   COPIA di 01-Cruscotto/cruscotto-onboarding.css (righe .todo-progress, .status-dot, .ring-*, .tag, .onb-*), senza i toast, per riusare lo stesso componente
+   nella pagina Bottega (06-bacheca/bottega-onboarding). Il Cruscotto continua a usare il proprio CSS: quando il componente verrà promosso,
+   questo file diventerà la fonte unica e il Cruscotto lo importerà. Nessuna nuova variabile.
+   ===================================================================== */
+
+.todo-progress { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-14); color: var(--text-muted); }
+.status-dot {
+  width: var(--spacing-5); height: var(--spacing-5); border-radius: var(--radius-full); border: var(--border-width-moderate) solid var(--border); flex: none;
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+}
+.status-dot.done { background: var(--success); border-color: var(--success); color: var(--color-text-inverse); } /* DEC-039: era var(--dark)/accent su uno stato completato — decisione Ruggi 11/9 */
+.ring-track { stroke: var(--border); } /* era hardcoded #ececec, non allineato a --border (#f0f0f0) — corretto 11/9 */
+.ring-fill { stroke: var(--success); } /* DEC-039: era hardcoded #111/accent — decisione Ruggi 11/9 */
+.tag {
+  display: inline-block; margin-bottom: var(--space-4);
+  font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text); background: var(--item-active-bg);
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill);
+} /* 12/9: allineato al trattamento badge (12px/600), decisione Ruggi — .tag era 14px/400. */
+.onb-banner {
+  background: var(--color-background-selected-accent);
+  border: var(--border-width-hairline) solid var(--color-lilla-200);
+  border-radius: var(--card-card-border_radius);
+  padding: var(--space-6);
+  margin-bottom: var(--space-8);
+  --hover-bg: var(--item-hover-bg);
+}
+.onb-banner-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-6); margin-bottom: var(--space-5); }
+.onb-banner-title { margin: 0; } /* 12/10/2026, richiesta Ruggi: tipografia da .card-title.title-lg (card.css) */
+.onb-banner-sub { font-size: var(--font-size-14); line-height: var(--font-lineHeight-20); color: var(--text-muted); margin: var(--space-2) 0 0; max-width: 46rem; }
+.onb-banner .todo-progress { flex: none; padding-top: var(--space-1); }
+
+.onb-steps { list-style: none; margin: 0; padding: 0; display: flex; align-items: stretch; gap: var(--space-4); }
+
+.onb-step {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-4); /* 12/10/2026, richiesta Ruggi: CTA sempre in fondo (space-between) */
+  min-height: 15rem;
+  background: var(--color-background-default);
+  border: var(--border-width-hairline) solid var(--color-neutral-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  transition: border-color var(--motion-duration-150) var(--motion-easing-ease), background-color var(--motion-duration-150) var(--motion-easing-ease), box-shadow var(--motion-duration-150) var(--motion-easing-ease);
+}
+.onb-step.is-next { border-color: var(--color-lilla-500); background: var(--color-background-default); }
+.onb-step:not(.done):has(.onb-step-action:not([hidden])) { box-shadow: var(--elevation-subtle); }
+
+/* 12/10/2026, richiesta Ruggi: numero sopra; titolo e descrizione nello stesso div (.onb-step-text), senza gap, descrizione con margin-top space-2 e stile di .onb-banner-sub */
+.onb-step-main { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); }
+.onb-step-marker-row { display: flex; align-items: center; gap: var(--space-2); }
+.onb-step .status-dot { width: var(--spacing-7); height: var(--spacing-7); font-size: var(--font-size-14); } /* 12/10/2026: stesse dimensioni di .phase-step-marker (drop-statico.css: spacing-7, font 14) */
+.onb-step-text { margin-top: var(--space-2); }
+.onb-step-title { margin: 0; color: var(--text); font-size: var(--font-size-16); font-weight: var(--font-weight-regular); }
+.onb-step-main .tag { margin: 0; background: var(--color-lilla-100); color: var(--color-lilla-700); }
+.onb-step-desc { font-size: var(--font-size-14); line-height: var(--font-lineHeight-20); color: var(--text-muted); margin: var(--space-2) 0 0; }
+.onb-step .status-dot:not(.done) { background: var(--color-neutral-25); } /* 12/10/2026, richiesta Ruggi: marker degli step non attivi su neutral-25 */
+.onb-step.is-next .status-dot:not(.done) { background: var(--color-lilla-500); border-color: var(--color-lilla-500); color: var(--color-text-inverse); } /* step consigliato: pieno lilla, numero bianco */
+
+.onb-step-meta, .onb-step-unlock { font-size: var(--font-size-14); line-height: var(--font-lineHeight-20); color: var(--text-muted); margin: 0; }
+.onb-step-unlock strong { font-weight: var(--font-weight-semibold); color: var(--text); }
+.onb-step-action { display: flex; }
+.onb-step-action .onb-cta { width: auto; justify-content: center; }
+.onb-cta:focus-visible { outline: 2px solid var(--color-lilla-700); outline-offset: 3px; }
+
+
+/* Completato: mantiene dimensioni e struttura della card; cambia solo il marker e compare un badge di stato. */
+.onb-step.done .onb-step-done-label {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--status-success-bg);
+  color: var(--status-success-fg);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-semibold);
+}
+.onb-step.done .onb-step-desc { color: var(--text-muted); }
+.onb-step-done-label { font-size: var(--font-size-12); }
+
+@media (max-width: 64rem) {
+  .onb-steps { flex-direction: column; }
+  .onb-step { min-height: 0; gap: var(--space-5); }
+}
+
+@media (max-width: 40rem) {
+  .onb-banner-head { flex-direction: column; gap: var(--space-3); }
+  .onb-step { padding: var(--space-4); }
+  .onb-step-action { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onb-step { transition: none; }
+}
+
+/* 16/10/2026 — banner COMPRIMIBILE (unico componente per tutte le pagine). Nessuna nuova variabile. */
+.onb-banner { padding: var(--space-6); }
+.onb-head { display: flex; flex-direction: column; gap: var(--space-1); }
+.onb-toggle { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); width: 100%; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; cursor: pointer; border-radius: var(--radius-sm); }
+.onb-toggle-meta { flex: none; display: flex; align-items: center; gap: var(--space-3); color: var(--text-muted); }
+.onb-toggle-meta .todo-progress { padding: 0; }
+.onb-chev { transition: transform var(--motion-duration-150) var(--motion-easing-ease); }
+.onb-banner.is-open .onb-chev { transform: rotate(180deg); }
+.onb-toggle:hover .onb-toggle-meta { color: var(--text); }
+.onb-next-desc { max-width: 40rem; margin: var(--space-1) 0 0; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); color: var(--text-muted); }
+.onb-next-title { margin: 0; }
+.onb-next-cta { align-self: flex-start; margin-top: var(--space-5); }
+.onb-panel { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows var(--motion-duration-280) var(--motion-easing-ease), visibility 0s linear var(--motion-duration-280); }
+.onb-banner.is-open .onb-panel { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
+.onb-panel-inner { min-height: 0; overflow: hidden; }
+.onb-panel-inner::before { content: ''; display: block; margin: var(--space-12) 0; border-top: var(--border-width-hairline) solid var(--color-neutral-100); } /* divider tra CTA e card, visibile solo da aperto */
+@media (prefers-reduced-motion: reduce) { .onb-panel, .onb-chev { transition: none; } }

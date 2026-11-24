@@ -1,0 +1,226 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.products-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.products-panel, .table-row-divider, .product-row-head {
+  --table-border-color: var(--color-neutral-100);
+}
+
+
+.product-row, .product-row-head { padding: var(--space-4) var(--space-2); }
+
+.product-row-head {
+  font-size: var(--font-size-12);
+  color: var(--text-muted);
+  border-bottom: var(--border-width-hairline) solid var(--table-border-color);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.product-row {
+  position: relative;
+  /* Le azioni sono sovrapposte all'ultima cella: questa riserva e' basata
+     sulla geometria reale dei due controlli, non su percentuali della tabella. */
+  --row-actions-width: calc(28px + 28px + var(--space-0-5));
+  --row-actions-reserve: calc(var(--row-actions-width) + var(--space-2));
+  --row-actions-fade-start: calc(var(--row-actions-reserve) + var(--space-8));
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.product-row:hover {
+  background: var(--item-hover-bg);
+}
+
+.product-row.selected {
+  background: var(--color-lilla-50);
+}
+
+.product-row-textblock {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.product-row-title-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.product-row-chevron {
+  width: var(--spacing-5);
+  height: var(--spacing-5);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.product-row-chevron svg {
+  transition: transform .2s var(--motion-easing-ease);
+}
+
+.product-row.expanded .product-row-chevron svg {
+  transform: rotate(90deg);
+}
+
+.product-row-chevron.placeholder {
+  cursor: default;
+}
+
+.product-row-name {
+  font-size: var(--font-size-16);
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 2/11/2026 (Ruggi): il nome dentro una sotto-riga (.product-variant-row) e' 14px come prezzo, quantita' e le altre celle della sotto-riga; la riga padre resta 16px. */
+.product-variant-row .product-row-name {
+  font-size: var(--font-size-14);
+}
+
+.product-row-variant-count {
+  font-size: var(--font-size-14);
+  color: var(--text-muted);
+}
+
+.product-variants {
+  display: grid;
+  grid-template-rows: minmax(0, 0fr);
+  overflow: hidden;
+  transition: grid-template-rows var(--motion-duration-280) var(--motion-easing-ease);
+}
+
+.product-row.expanded + .product-variants {
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.product-variants-inner {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  transition: padding var(--motion-duration-280) var(--motion-easing-ease), margin var(--motion-duration-280) var(--motion-easing-ease);
+}
+
+.product-row.expanded + .product-variants .product-variants-inner {
+  padding: var(--space-2) 0;
+  margin: var(--space-0-5) 0;
+}
+
+.product-variant-head {
+  font-size: var(--font-size-12);
+  color: var(--color-neutral-600);
+  background: var(--color-lilla-100);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.product-variant-head > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-variant-divider {
+  height: 1px;
+  background: var(--border);
+  margin: var(--space-1) 0 var(--space-1) var(--space-8);
+}
+
+.product-variant-head > div:first-child,
+.product-variant-name {
+  padding-left: var(--space-8);
+}
+
+.product-variant-price {
+  font-size: var(--font-size-14);
+  color: var(--text);
+}
+
+.product-variant-stat {
+  font-size: var(--font-size-14);
+  color: var(--text);
+}
+
+.product-variant-stat strong {
+  color: var(--text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.product-variant-row:hover {
+  background: var(--item-hover-bg);
+}
+
+.product-row-date {
+  font-size: var(--font-size-14);
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.product-row:hover .product-row-date {
+  mask-image: linear-gradient(to right, black calc(100% - var(--row-actions-fade-start)), transparent calc(100% - var(--row-actions-reserve)));
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--row-actions-fade-start)), transparent calc(100% - var(--row-actions-reserve)));
+}
+
+.product-row-stat {
+  font-size: var(--font-size-16);
+  color: var(--text);
+}
+
+.product-row-stat strong {
+  color: var(--text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.product-row-price {
+  font-size: var(--font-size-16);
+  color: var(--text);
+}
+
+.row-actions .row-menu-btn {
+  position: static;
+  opacity: 1;
+  transform: none;
+}
+
+.row-goto-btn svg, .row-menu-btn svg {
+  display: block;
+}
+
+.row-menu-btn {
+  position: absolute;
+  right: var(--space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--spacing-7);
+  height: var(--spacing-7);
+  border-radius: var(--radius-pill);
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color var(--motion-duration-150) var(--motion-easing-ease);
+  opacity: 0;
+}
+
+.row-menu-btn:hover {
+  color: var(--text);
+}

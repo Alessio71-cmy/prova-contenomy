@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drop — Pannello chiuso, interrotto (demo statica)</title>
+<link rel="stylesheet" href="drop-statico-chiuso.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<!-- Stato di lavoro: sidebar compatta, Elenco drop attivo, pannello destro aperto su un drop CHIUSO (demo: interrotto).
+     La pagina e volutamente statica: serve a progettare il contenuto del dettaglio. Fork di drop-statico.html (stato live):
+     qui il pannello mostra lo stato "chiuso" richiesto da Ruggi il 22/9/2026 (vedi commenti sotto per le scelte aperte). -->
+<div class="shell sidebar-collapsed">
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" data-tooltip="Espandi menu" aria-label="Espandi menu"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Negozio</div>
+          <nav class="sidebar-nav">
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+            <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+          </nav>
+        </div>
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Account</div>
+          <nav class="sidebar-nav">
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+            <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+          </nav>
+        </div>
+        <div class="sidebar-footer"><div class="sidebar-footer-content"><div class="avatar"></div><div class="sidebar-footer-text"><span class="sidebar-footer-name">Ruggi</span><span class="sidebar-footer-role">Venditore</span></div><div class="chev"></div></div></div>
+      </div>
+    </aside>
+
+    <div class="body panel-open">
+      <main class="workspace">
+        <div class="workspace-inner">
+          <div class="page-header">
+            <div><h1 class="page-title">Drop</h1><p class="page-sub">Gestisci le vendite a tiratura limitata</p></div>
+            <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo drop</button>
+          </div>
+          <nav class="tabs"><div class="tab">Panoramica</div><div class="tab active">Elenco drop</div><span class="tab-active-line" aria-hidden="true"></span></nav>
+
+          <div class="products-panel">
+            <div class="card-header"><div class="card-header-titles"><div class="card-title title-lg">Elenco drop</div><div class="card-sub">Tutti i drop: aperti, programmati, bozze e passati</div></div><div class="table-pagination"><span class="table-pagination-range">1 – 1</span><button class="pagination-arrow" disabled aria-label="Precedenti">‹</button><button class="pagination-arrow" disabled aria-label="Successivi">›</button></div></div>
+            <div class="card-divider"></div>
+            <div class="table-toolbar">
+              <div class="status-chips"><button class="status-chip">Aperti ora<span class="count">1</span></button><span class="status-chip-divider"></span><button class="status-chip">Programmati<span class="count">2</span></button><span class="status-chip-divider"></span><button class="status-chip">Bozze<span class="count">2</span></button><span class="status-chip-divider"></span><button class="status-chip active">Passati<span class="count">3</span></button></div>
+              <div class="table-toolbar-actions" id="dropToolbarActions">
+                <div class="toolbar-icons-group">
+                  <div class="view-switch" role="group" aria-label="Vista elenco drop">
+                    <button class="view-switch-btn active" type="button" data-tooltip="Vista elenco" aria-label="Vista elenco" aria-pressed="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                    <button class="view-switch-btn" type="button" data-tooltip="Vista calendario" aria-label="Vista calendario" aria-pressed="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></button>
+                  </div>
+                  <button class="icon-btn" type="button" data-tooltip="Filtri" aria-label="Mostra filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></button>
+                  <button class="icon-btn" type="button" data-tooltip="Ordina" aria-label="Ordina elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></button>
+                </div>
+                <div class="search-box" id="dropSearchBox">
+                  <button class="icon-btn search-toggle" id="dropSearchToggleBtn" type="button" data-tooltip="Cerca" aria-label="Cerca drop"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></button>
+                  <input type="text" class="search-input" id="dropSearchInput" placeholder="Cerca" tabindex="-1" aria-label="Cerca drop">
+                  <button class="search-close-btn" id="dropSearchCloseBtn" type="button" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <!-- 22/9/2026 (Ruggi): il drop interrotto vive in Passati, non in Aperti ora — tabella convertita da data-status-panel="aperti" (8 colonne)
+                 a "passati" (5 colonne: Prodotto · Stato · Venduti · Inizio drop · Fine drop, stesso schema di drop.html; grid-template-columns ereditato
+                 da drop.css). Riga "Tazza in ceramica" (drop live/quorum, apparteneva solo alla vista Aperti) rimossa: non pertinente sotto Passati, in
+                 questa pagina isolata non ha altrove dove andare. Stato "Interrotto" = .status-pill.archiviato (NON .pausa/warning come nella prima
+                 stesura dello stepper qui sotto: corretto ora, stesso file — vedi commento sullo stepper per il perche). Freccia "vai al prodotto"
+                 La primary row espone le due azioni standard: vai al prodotto e menu contestuale.
+                 22/9/2026, seguito (Ruggi): il prodotto ha varianti — chevron, testo "N varianti" e sotto-righe restano, stesso meccanismo della
+                 tabella Aperti (.drop-row.expanded + .product-variants, chevron dentro .drop-row-main perche qui non c'e una colonna Timer separata:
+                 stesso schema di .product-row-main in Prodotti). Mostrata gia espansa (classe "expanded"): questa pagina non ha JS, quindi senza
+                 espanderla staticamente le sotto-righe non sarebbero mai visibili. Nessuna regola di allineamento .product-variant-head/-row esisteva
+                 per data-status-panel="passati" in drop.css (solo aperti/programmati/bozze ce l'hanno) — aggiunta qui SOLO in questo file (vedi CSS):
+                 se in futuro serve anche in drop.html/drop-statico.html (un vero drop passato con varianti), va promossa li, non duplicata per-pagina.
+                 Sotto-riga: Variante · Stato · Venduti (si allineano da sole alle prime 3 colonne della riga madre, stesso ordine, nessun grid-column
+                 esplicito necessario); Inizio drop/Fine drop restano vuote (non pertinenti alla singola variante, stesso principio gia usato per
+                 Stadio/Avvisami/Quorum nelle sotto-righe di Aperti). "Prezzo" (presente nella sotto-riga di Aperti) qui OMESSO — mia scelta, non
+                 richiesta esplicitamente: Passati non ha una colonna Prezzo a livello di riga madre e non c'era una colonna libera pertinente. -->
+            <div class="drop-table" data-status-panel="passati">
+              <div class="drop-row-head"><div>Prodotto</div><div>Stato</div><div>Venduti</div><div>Inizio drop</div><div>Fine drop</div></div>
+              <div class="drop-row selected expanded" data-has-variants="true">
+                <div class="drop-row-main">
+                  <span class="product-row-chevron" data-tooltip="Mostra varianti" aria-label="Mostra varianti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+                  <div class="drop-row-textblock">
+                    <span class="drop-row-name" data-tooltip="Maglione oversize" aria-label="Maglione oversize">Maglione oversize</span>
+                    <span class="drop-row-variant-count">3 varianti nel drop</span>
+                  </div>
+                </div>
+                <span class="status-pill archiviato"><i class="dot"></i>Interrotto</span>
+                <div class="drop-row-stat"><strong>38</strong> di <strong>80</strong></div>
+                <div class="product-row-date">15 Set 2026</div>
+                <div class="product-row-date" data-tooltip="Fine drop 18 Set 2026 (interrotto)" aria-label="Fine drop 18 Set 2026 (interrotto)">18 Set 2026</div>
+                <div class="row-actions"><a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a><div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div></div>
+              </div>
+              <div class="product-variants">
+               <div class="product-variants-inner">
+                <div class="product-variant-head">
+                  <div>Variante</div>
+                  <div>Stato</div>
+                  <div>Venduti</div>
+                </div>
+                <div class="product-variant-row">
+                  <div class="product-variant-name">Nero</div>
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                  <div class="product-variant-stat"><strong>18</strong> di <strong>30</strong></div>
+                  <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html?variant=Nero" data-tooltip="Vai alla variante Nero nella pagina prodotto" aria-label="Vai alla variante Nero nella pagina prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                </div>
+                <div class="product-variant-divider"></div>
+                <div class="product-variant-row">
+                  <div class="product-variant-name">Blu</div>
+                  <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+                  <div class="product-variant-stat"><strong>20</strong> di <strong>20</strong></div>
+                  <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html?variant=Blu" data-tooltip="Vai alla variante Blu nella pagina prodotto" aria-label="Vai alla variante Blu nella pagina prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                </div>
+                <div class="product-variant-divider"></div>
+                <div class="product-variant-row">
+                  <div class="product-variant-name">Rosso</div>
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                  <div class="product-variant-stat"><strong>0</strong> di <strong>30</strong></div>
+                  <a class="row-goto-btn" href="../02-Prodotti/prodotto-detail.html?variant=Rosso" data-tooltip="Vai alla variante Rosso nella pagina prodotto" aria-label="Vai alla variante Rosso nella pagina prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                </div>
+               </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <aside class="drop-detail-panel" aria-label="Dettaglio drop Maglione oversize">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <!-- 22/9/2026 (Ruggi): .panel-goto-btn (freccia "Apri prodotto") rimosso dall'header — richiesta esplicita. -->
+            <!-- 22/9/2026 (Ruggi): .panel-header-divider rimosso subito dopo, stessa richiesta ("tutti i pannelli destri aperti di tutte le pagine") — qui non separava piu nulla a sinistra (il goto-btn che divideva era gia stato tolto sopra), restava solo fra il pulsante di chiusura e i nav prev/next. -->
+            <!-- 22/9/2026 (Ruggi), seguito: X in un div proprio (qui senza freccia, gia rimossa sopra), precedente/successivo in un altro div —
+                 il gap di 16px fra i due gruppi (vedi CSS) resta comunque, anche con un solo elemento nel primo div: nessun caso speciale
+                 necessario, e' semplicemente lo spazio fra due div fratelli, non uno spazio riservato alla freccia assente. -->
+            <div class="panel-header-group">
+              <button class="panel-close-btn" aria-label="Chiudi pannello">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </button>
+            </div>
+            <div class="panel-header-group">
+              <button class="panel-nav-btn" aria-label="Drop precedente">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              </button>
+              <button class="panel-nav-btn" aria-label="Drop successivo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="panel-header-right">
+            <button class="btn-pill-dark sm secondary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.2M8.4 13.3l7.2 4.2"/></svg>Condividi</button>
+            <button class="panel-menu-btn" aria-label="Altre azioni"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+          </div>
+        </div>
+
+        <!-- Menu "···" (header invariato, identico a Prodotti): sulla pagina LIVE (drop-statico.html) contiene "Interrompi drop" (motivazione
+             obbligatoria, IA_Venditore §4.3) e "Vai al prodotto"; nessun "Modifica" nel body: su un drop live non c'e proroga ne aggiunta stock
+             (il CTA "Gestisci drop" apre la pagina di gestione, non un editor). Su QUESTA pagina (drop chiuso, 22/9/2026) "Interrompi drop" non ha
+             senso — un drop gia interrotto non si interrompe di nuovo: il menu, se disegnato, conterrebbe solo "Vai al prodotto". Menu non disegnato
+             in questa demo statica, ne qui ne nel live. -->
+        <div class="panel-body drop-panel-body">
+
+          <!-- 1 + 2. Riepilogo: stato/tempo del drop (protagonista) e prodotto associato (identita).
+               Il countdown conta verso la PROSSIMA TRANSIZIONE (IA_Venditore §4.1): etichetta
+               "Fase termina tra" nelle fasi 1-2, "Il drop termina tra" solo nell'ultima.
+               Barra 100/100/55 = stessi valori di Cruscotto, Prodotti e riga selezionata in tabella (dato corretto, Ruggi 21/9/2026). Il segmento a 55% (il terzo) corrisponde alla fase corrente (la "prima" fase); lettura completa dei segmenti da confermare. -->
+          <div class="panel-summary-block">
+            <section class="drop-state is-closed" aria-label="Stato del drop">
+              <!-- STATO CHIUSO — IMPLEMENTATO 22/9/2026 (richiesta Ruggi). Demo scelta: drop INTERROTTO (non concluso), per continuita con i dati
+                   gia presenti nella pagina (barra ferma a 100/100/55%, fase corrente "Accesso prioritario" al momento dello stop).
+                   Riga 1: pill unica "Drop chiuso" (.status-pill.archiviato) per entrambi i sotto-stati concluso/interrotto — il "come" e finito lo dice
+                   solo la riga sotto. Periodo a destra: resta sempre presente, mostra il periodo EFFETTIVO (qui la fine e la data/ora dell'interruzione,
+                   non quella prevista in origine, "22 Set 2026, 18:00"). Data/ora di interruzione demo, NON confermata da Ruggi: 18 Set 2026, 14:30.
+                   Riga 2 (classe .is-closed su .drop-state, vedi CSS): il testo grande diventa "Concluso"/"Interrotto" in colore muted (var(--text-muted),
+                   stessa dimensione 28px per non spostare la barra); nello slot della fase, l'orario di chiusura effettiva. Badge Edizione limitata invariato.
+                   Barra: nessuna modifica CSS necessaria — .drop-fill usa gia var(--progress-segmented-fill) (= --text-muted, gia grigio/muted, non un
+                   colore di avanzamento acceso) sia per "concluso" (tre segmenti pieni) sia per "interrotto" (fermo al punto raggiunto): qui i valori
+                   100/100/55% sono gia quelli del demo esistente, invariati; rimossa solo la classe "active" dal terzo segmento (stato live, senza
+                   effetto CSS proprio ma semanticamente non pertinente qui). -->
+              <div class="panel-status-date-row">
+                <span class="status-pill archiviato"><i class="dot"></i>Drop chiuso</span>
+                <span class="panel-product-date" data-tooltip="Inizio teaser 15 Set 2026 · interrotto il 18 Set 2026, 14:30 (fine prevista 22 Set 2026, 18:00)" aria-label="Inizio teaser 15 Set 2026 · interrotto il 18 Set 2026, 14:30 (fine prevista 22 Set 2026, 18:00)">15 Set – 18 Set 2026</span>
+              </div>
+              <div class="drop-state-time">
+                <div class="drop-countdown-info">
+                  <div class="drop-countdown">Interrotto</div>
+                  <div class="drop-phase">18 Set, 14:30</div>
+                </div>
+                <span class="tag">Edizione limitata</span>
+              </div>
+              <div class="drop-progress" aria-hidden="true">
+                <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+                <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+                <div class="drop-seg"><div class="drop-fill" style="width:55%"></div></div>
+              </div>
+            </section>
+
+            <!-- 2. Prodotto associato: stessa componente .drop-product-row di Cruscotto (thumb + nome · prezzo + pezzi rimasti + chevron). -->
+            <div class="drop-product-row">
+              <div class="thumb" aria-hidden="true"></div>
+              <div class="drop-product-col">
+                <div class="drop-product-name-line">
+                  <span class="drop-product-name">Maglione oversize</span>
+                  <span class="drop-product-sep">·</span>
+                  <span class="drop-product-price">€ 49–52</span>
+                </div>
+                <!-- Accanto ai pezzi rimasti: icona di avviso se almeno una variante è esaurita (qui Blu, 1 su 3);
+                     se è esaurito TUTTO il prodotto l'icona è sostituita da <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span> (con "0 pezzi rimasti"). -->
+                <div class="drop-substat-row">
+                  <span class="drop-substat"><strong>42</strong> pezzi rimasti</span>
+                  <span class="variant-esaurito-warning" role="img" aria-label="1 variante esaurita su 3" data-tooltip="1 variante esaurita su 3"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span>
+                </div>
+              </div>
+              <div class="chev"></div>
+            </div>
+
+            <!-- 3. Risposta del pubblico: nessun titolo, gestita come metrica (.submetrics-row.span-12 di Prodotti) con 3 .submetric.
+                 Solo per drop `esperienza` con `quorum_attivo` (visibile solo al venditore) si aggiunge una quarta .submetric:
+                 <div class="submetric"><span class="submetric-value">6<span class="unit">/15</span></span><span class="submetric-label">Quorum</span></div> -->
+            <section class="panel-section drop-metrics-section" aria-label="Risposta del pubblico">
+              <div class="submetrics-row span-12">
+                <div class="submetric">
+                  <span class="submetric-value">38<span class="unit">/80</span></span>
+                  <span class="submetric-label">Venduti</span>
+                </div>
+                <div class="submetric">
+                  <span class="submetric-value">64</span>
+                  <span class="submetric-label">Like</span>
+                </div>
+                <div class="submetric">
+                  <span class="submetric-value">112</span>
+                  <span class="submetric-label">Avvisami</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- STEPPER A DROP CHIUSO — IMPLEMENTATO 22/9/2026 (richiesta Ruggi). Regola di fondo: il lilla (marker, linea, grassetto titolo) esiste
+                 solo mentre il drop e vivo o programmato; qui (classe .is-closed su .phase-stepper) marker e linee diventano muted/neutral, mai lilla —
+                 vedi override in CSS (".phase-stepper.is-closed ..."), che vale sia per un drop "concluso" (i 3 step tutti is-done) sia, come in questa
+                 demo, per un drop "interrotto" (mix di is-done / is-interrupted / is-unreached): la scelta fra i due sotto-stati e solo nel markup, il CSS
+                 e lo stesso. Concluso (non demoed in questo file, per continuita coi dati esistenti si mostra interrotto): tutti e 3 gli step is-done, ✓
+                 muted, pill "Concluso". Interrotto (demo qui): step gia passati is-done (✓ muted, pill "Concluso" muted, NON piu lilla); lo step in cui il
+                 drop si e fermato is-interrupted (marker ad anello muted, pill "Interrotto"); gli step successivi non raggiunti is-unreached (marker di
+                 default, gia neutro senza bisogno di override; pill "Non raggiunto" — riuso di .status-pill.bozza/neutro, stesso ruolo gia usato per gli
+                 step futuri quando il drop e live; nessuna finestra "Apre/Chiude": quelle date non sono piu vere, .phase-step-side-dates rimossa da qui).
+                 CORREZIONE 22/9/2026: la pill "Interrotto" era .status-pill.pausa/warning (scelta mia, non confermata) — cambiata in .archiviato dopo aver
+                 trovato in drop.css (~riga 1253, commento sopra ".drop-empty-substate") una decisione gia scritta nel codice per lo Stato finale di Passati:
+                 "concluso/archiviato/interrotto sono nuovi solo nel testo, non in un nuovo colore". Coerente anche con la pill di riga 1 ("Drop chiuso" =
+                 un solo colore per entrambi i sotto-stati, il testo fa la differenza): ora "Concluso" e "Interrotto" nello stepper condividono lo stesso
+                 trattamento .archiviato, distinti solo dal testo e dalla posizione. -->
+            <section class="panel-section drop-steps-section" aria-label="Percorso del drop">
+              <ol class="phase-stepper is-closed">
+                <li class="phase-step is-done">
+                  <span class="phase-step-marker" aria-hidden="true">✓</span>
+                  <div class="phase-step-text">
+                    <div class="phase-step-title">Anteprima pubblica</div>
+                    <span class="phase-step-desc">Acquisti non ancora disponibili</span>
+                  </div>
+                  <div class="phase-step-side"><span class="status-pill archiviato"><i class="dot"></i>Concluso</span></div>
+                </li>
+                <li class="phase-step is-interrupted">
+                  <span class="phase-step-marker" aria-hidden="true"></span>
+                  <div class="phase-step-text">
+                    <div class="phase-step-title">Accesso prioritario</div>
+                    <span class="phase-step-desc">Acquisti riservati ai sostenitori</span>
+                  </div>
+                  <div class="phase-step-side"><span class="status-pill archiviato"><i class="dot"></i>Interrotto</span></div>
+                </li>
+                <li class="phase-step is-unreached">
+                  <span class="phase-step-marker" aria-hidden="true"></span>
+                  <div class="phase-step-text">
+                    <div class="phase-step-title">Apertura al pubblico</div>
+                    <span class="phase-step-desc">Acquisti disponibili per tutti</span>
+                  </div>
+                  <div class="phase-step-side"><span class="status-pill bozza"><i class="dot"></i>Non raggiunto</span></div>
+                </li>
+              </ol>
+            </section>
+
+            <!-- Pulsante sticky in basso (21/9/2026): resta ancorato al fondo del pannello finche la sua posizione naturale (sotto lo stepper) e fuori schermo; quando ci arriva lo scroll segue il flusso. -->
+            <!-- 6. Azione di gestione: dentro il blocco riepilogo, sotto lo stepper, allineata a destra, senza icona (come "Gestisci prodotto" in Prodotti).
+                 22/9/2026 (Ruggi): "Interrompi drop" (.btn-ghost) rimosso — un drop gia interrotto non si puo interrompere di nuovo. "Gestisci Drop" →
+                 "Duplica drop" (stessa forma: .btn-pill-dark primary, senza icona; id rinominato in panelDuplicateDropBtn) — l'unica azione utile qui e
+                 ripartire da un drop nuovo con gli stessi dati. Il divider e l'<hr class="drop-panel-divider"> sotto il blocco. -->
+            <div class="drop-panel-actions">
+              <button class="btn-pill-dark primary" id="panelDuplicateDropBtn">Duplica drop</button>
+            </div>
+          </div>
+          <hr class="drop-panel-divider">
+
+          <!-- 5. Varianti: ultima sezione. Con almeno un'immagine variante -> miniatura + etichetta + stato
+               (qui). Varianti solo testuali (es. taglie) -> chip .panel-subvariant-chip, non ancora
+               portati in questo file perche nessuna variante demo li usa. -->
+          <!-- Ogni tile e un link alla pagina prodotto con ?variant=<nome>, che rende attiva la tab della variante (stessa convenzione delle frecce di riga in Prodotti/Drop tabella). -->
+          <section class="panel-section drop-variants-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Varianti prodotto</div>
+                <button class="btn-pill-dark sm secondary" id="panelManageVariantsBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Gestisci prodotto</button>
+              </div>
+              <span class="panel-variant-section-desc">Gestisci le varianti del prodotto</span>
+            </div>
+            <div class="drop-variant-grid">
+              <a class="drop-variant-tile" href="../02-Prodotti/prodotto-detail.html?variant=Nero" data-tooltip="Vai alla variante Nero nella pagina prodotto" aria-label="Vai alla variante Nero nella pagina prodotto">
+                <div class="panel-image-thumb" aria-hidden="true"></div>
+                <div class="drop-variant-info">
+                  <div class="drop-variant-meta"><span>Nero</span><small>18 / 30</small></div>
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                </div>
+              </a>
+              <a class="drop-variant-tile" href="../02-Prodotti/prodotto-detail.html?variant=Blu" data-tooltip="Vai alla variante Blu nella pagina prodotto" aria-label="Vai alla variante Blu nella pagina prodotto">
+                <div class="panel-image-thumb" aria-hidden="true"></div>
+                <div class="drop-variant-info">
+                  <div class="drop-variant-meta"><span>Blu</span><small>20 / 20</small></div>
+                  <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+                </div>
+              </a>
+              <a class="drop-variant-tile" href="../02-Prodotti/prodotto-detail.html?variant=Rosso" data-tooltip="Vai alla variante Rosso nella pagina prodotto" aria-label="Vai alla variante Rosso nella pagina prodotto">
+                <div class="panel-image-thumb" aria-hidden="true"></div>
+                <div class="drop-variant-info">
+                  <div class="drop-variant-meta"><span>Rosso</span><small>0 / 30</small></div>
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                </div>
+              </a>
+            </div>
+          </section>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<script>
+  // Eccezione JS di questo file statico (richiesta esplicita di Ruggi 23/9/2026): stessa
+  // funzione "cerca in pagina" gia' presente in drop.html (la versione dinamica) — apri/chiudi
+  // della search box della toolbar. Nessuna logica di filtro reale sulle righe (drop.html non
+  // ce l'ha nemmeno lui): solo apertura/chiusura della casella di ricerca, identica ovunque.
+  (function () {
+    var dropToolbarActions = document.getElementById("dropToolbarActions");
+    var dropSearchBox = document.getElementById("dropSearchBox");
+    var dropSearchToggleBtn = document.getElementById("dropSearchToggleBtn");
+    var dropSearchInput = document.getElementById("dropSearchInput");
+    var dropSearchCloseBtn = document.getElementById("dropSearchCloseBtn");
+    if (!dropToolbarActions || !dropSearchBox || !dropSearchToggleBtn || !dropSearchInput || !dropSearchCloseBtn) return;
+    dropSearchToggleBtn.addEventListener("click", function () {
+      dropSearchBox.classList.add("open");
+      dropToolbarActions.classList.add("search-active");
+      dropSearchInput.tabIndex = 0;
+      dropSearchInput.focus({ preventScroll: true });
+    });
+    dropSearchCloseBtn.addEventListener("click", function () {
+      dropSearchBox.classList.remove("open");
+      dropToolbarActions.classList.remove("search-active");
+      dropSearchInput.value = "";
+      dropSearchInput.tabIndex = -1;
+      dropSearchInput.blur();
+    });
+  })();
+
+  // Seconda eccezione JS di questo file statico (23/9/2026, richiesta esplicita di Ruggi):
+  // overflow orizzontale della barra tab a pannello aperto — stessa logica di
+  // updateTabsFade/click su .tab già presente in prodotti.html (9/9, estesa oggi con
+  // l'avanzamento su penultima/seconda tab visibile). Con .tab a larghezza fissa (flex:none,
+  // vedi shell-lists.css) le tab che non entrano nello spazio disponibile non vanno mai a capo
+  // su una seconda riga — restano mascherate dal mask-image laterale (--fade-l/--fade-r,
+  // aggiornate qui in base alla posizione di scroll) e raggiungibili scrollando lateralmente
+  // .tabs (overflow-x:auto, scrollbar nativa nascosta via CSS, mai visibile). Il click porta
+  // sempre la tab cliccata interamente in vista; se era già del tutto visibile ed è la
+  // penultima (o la seconda) tra quelle visibili, la barra avanza/arretra di una tab in più per
+  // rivelarne un'altra ancora mascherata, verso il fondo o verso l'inizio a seconda del verso.
+  // Su questa pagina le tab sono solo due (Panoramica, Elenco drop) quindi oggi non scatta mai,
+  // ma il comportamento resta coerente con le altre pagine se in futuro le tab aumentano.
+  (function () {
+    var tabsEl = document.querySelector(".tabs");
+    if (!tabsEl) return;
+
+    function updateTabsFade() {
+      var maxScroll = tabsEl.scrollWidth - tabsEl.clientWidth;
+      var fadeL = tabsEl.scrollLeft > 1 ? "28px" : "0px";
+      var fadeR = tabsEl.scrollLeft < maxScroll - 1 ? "28px" : "0px";
+      tabsEl.style.setProperty("--fade-l", fadeL);
+      tabsEl.style.setProperty("--fade-r", fadeR);
+    }
+
+    updateTabsFade();
+    tabsEl.addEventListener("scroll", updateTabsFade, { passive: true });
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(updateTabsFade).observe(tabsEl);
+    }
+
+    tabsEl.addEventListener("click", function (event) {
+      var tab = event.target.closest(".tab");
+      if (!tab || !tabsEl.contains(tab)) return;
+      var allTabs = Array.prototype.slice.call(tabsEl.querySelectorAll(".tab"));
+      var containerRect = tabsEl.getBoundingClientRect();
+      var visibleTabs = allTabs.filter(function (t) {
+        var r = t.getBoundingClientRect();
+        return r.left >= containerRect.left - 0.5 && r.right <= containerRect.right + 0.5;
+      });
+      var isSecondToLastVisible = visibleTabs.length > 1 &&
+        visibleTabs[visibleTabs.length - 2] === tab &&
+        visibleTabs[visibleTabs.length - 1] !== allTabs[allTabs.length - 1];
+      var isSecondVisible = visibleTabs.length > 1 &&
+        visibleTabs[1] === tab &&
+        visibleTabs[0] !== allTabs[0];
+      var scrollTarget = tab;
+      var inlineAlign = "nearest";
+      if (isSecondToLastVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[visibleTabs.length - 1]) + 1];
+        inlineAlign = "end";
+      } else if (isSecondVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[0]) - 1];
+        inlineAlign = "start";
+      }
+      if (scrollTarget) { scrollTarget.scrollIntoView({ inline: inlineAlign, block: "nearest", behavior: "smooth" }); }
+      setTimeout(updateTabsFade, 300);
+    });
+  })();
+</script>
+<script src="../page-search.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

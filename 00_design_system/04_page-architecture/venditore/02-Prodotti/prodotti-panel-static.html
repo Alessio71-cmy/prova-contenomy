@@ -1,0 +1,1482 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>Prodotti — Pannello (demo statica) — Protocollo 04</title>
+<link rel="stylesheet" href="prodotti-panel-static.css">
+<link rel="stylesheet" href="../workspace-fit.css"> <!-- 13/10/2026: regola workspace corto/lungo, tutte le pagine -->
+</head>
+<body>
+
+<div class="shell sidebar-collapsed">
+
+  <!-- ===================== TOPBAR (larghezza piena, sopra sidebar+workspace) ===================== -->
+  <!-- 16/9/2026 (2° cambio della giornata), su richiesta esplicita di Ruggi, SOLO in questo file
+       (prodotti-panel-static.*, non ancora propagato a cruscotto/prodotti/drop): questa stessa
+       giornata la topbar era stata resa "confinata a .body" e icona-toggle+logo erano stati spostati
+       dentro .sidebar-header (vedi versioni precedenti di questo commento). Ora torna full-width,
+       sibling diretto di .shell-body (sidebar+workspace) invece che dentro .body — icona toggle
+       sidebar + logo Contenomy tornano qui dentro .topbar-left (via .sidebar-header rimosso). Non
+       propagare finché Ruggi non conferma la stessa cosa sugli altri file: qui diverge di proposito
+       da cruscotto.css/prodotti.css, che restano con la topbar confinata. -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="icon-btn" id="sidebarToggle"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+      <span class="sidebar-logo-text">Contenomy</span>
+    </div>
+    <div class="topbar-right">
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+      <a class="icon-btn" href="../03-Drop/drop.html?tab=elenco&amp;view=calendario" data-tooltip="Calendario drop" aria-label="Apri calendario drop"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></a>
+      <div class="icon-btn"><svg class="svg-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 13 6 9Z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg></div>
+    </div>
+  </header>
+
+  <div class="shell-body">
+
+  <!-- ===================== SIDEBAR (piena altezza dell'area sotto la topbar) — identica a Cruscotto tranne la topbar full-width sopra ===================== -->
+  <aside class="sidebar" id="sidebarV2">
+    <div class="sidebar-inner">
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Negozio</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Cruscotto</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Bottega</span></div>
+          <div class="sidebar-item active"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Prodotti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Drop</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Ordini</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Clienti</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Conti</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-group">
+        <div class="sidebar-group-label">Account</div>
+        <nav class="sidebar-nav">
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Generale</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Notifiche</span></div>
+          <div class="sidebar-item"><span class="sidebar-item-icon"></span><span class="sidebar-item-label">Sicurezza</span></div>
+        </nav>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <div class="avatar"></div>
+          <div class="sidebar-footer-text">
+            <span class="sidebar-footer-name">Ruggi</span>
+            <span class="sidebar-footer-role">Venditore</span>
+          </div>
+          <div class="chev"></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <div class="body panel-open">
+
+    <!-- ===================== WORKSPACE ===================== -->
+    <main class="workspace">
+      <div class="workspace-inner">
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Prodotti</h1>
+          <p class="page-sub">Gestisci il catalogo della tua bottega</p>
+        </div>
+        <div class="page-header-actions">
+          <!-- CTA fissa, sempre visibile, non è una tab (IA_Venditore §2) -->
+          <button class="btn-pill-dark primary"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuovo prodotto</button>
+        </div>
+      </div>
+
+      <!-- TAB BAR — pagina unica "Prodotti" (IA_Venditore §2 + convenzione Panoramica 9/9) -->
+      <nav class="tabs">
+        <div class="tab" data-tab="panoramica" data-label="Panoramica">Panoramica</div>
+        <div class="tab active" data-tab="elenco" data-label="Elenco prodotti">Elenco prodotti</div>
+        <div class="tab" data-label="Modelli di garanzia">Modelli di garanzia</div>
+        <div class="tab" data-label="Recensioni">Recensioni</div>
+        <div class="tab" data-label="Prezzi da rivedere">Prezzi da rivedere</div>
+      </nav>
+
+      <!-- PANORAMICA — tab di default (convenzione IA 9/9) -->
+      <div class="overview" data-panel="panoramica" hidden>
+
+        <div class="submetrics-row span-12">
+          <div class="submetric">
+            <span class="submetric-value">€ 41<span class="unit">,50</span></span>
+            <div class="submetric-label-row">
+              <span class="submetric-label">Prezzo medio catalogo</span>
+              <span class="submetric-trend up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 12 9l6 6"/></svg>3,2%</span>
+            </div>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">30<span class="unit unit-text">pezzi · più venduto</span></span>
+            <span class="submetric-label">Felpa logo</span>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">101<span class="unit unit-text">prodotti venduti</span></span>
+            <div class="submetric-label-row">
+              <span class="submetric-label">Mese corrente</span>
+              <span class="submetric-trend up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15 12 9l6 6"/></svg>12%</span>
+            </div>
+          </div>
+          <div class="submetric">
+            <span class="submetric-value">€ 2.190<span class="unit unit-text">tiratura limitata</span></span>
+            <span class="submetric-label" data-tooltip="Prezzo × pezzi non ancora venduti, sommato su tutti i prodotti a tiratura limitata ancora attivi (pubblicati o in pausa)" aria-label="Prezzo × pezzi non ancora venduti, sommato su tutti i prodotti a tiratura limitata ancora attivi (pubblicati o in pausa)">Valore pezzi invenduti</span>
+          </div>
+        </div>
+
+        <div class="card span-12">
+          <div class="chart-header">
+            <div class="card-header-titles">
+              <div class="card-title title-lg">Andamento vendite</div>
+              <div class="card-sub">Pezzi venduti per settimana</div>
+            </div>
+            <div class="filter-row">
+              <button class="filter-pill active">1 settimana</button>
+              <button class="filter-pill">3 mesi</button>
+              <button class="filter-pill">6 mesi</button>
+              <button class="filter-pill">1 anno</button>
+            </div>
+          </div>
+
+          <svg class="chart-svg" viewBox="0 0 640 160" preserveAspectRatio="none" role="img" aria-label="Andamento pezzi venduti nelle ultime 8 settimane, da 14 a 26">
+            <line class="chart-baseline" x1="8" y1="134" x2="632" y2="134" />
+            <path class="chart-line" d="M 8.0 119.0 L 97.1 89.0 L 186.3 134.0 L 275.4 74.0 L 364.6 36.5 L 453.7 59.0 L 542.9 14.0 L 632.0 29.0" />
+            <circle class="chart-dot" cx="8.0" cy="119.0" r="4"><title>6 Lug — 14 pezzi</title></circle>
+            <circle class="chart-dot" cx="97.1" cy="89.0" r="4"><title>13 Lug — 18 pezzi</title></circle>
+            <circle class="chart-dot" cx="186.3" cy="134.0" r="4"><title>20 Lug — 12 pezzi</title></circle>
+            <circle class="chart-dot" cx="275.4" cy="74.0" r="4"><title>27 Lug — 20 pezzi</title></circle>
+            <circle class="chart-dot" cx="364.6" cy="36.5" r="4"><title>3 Ago — 25 pezzi</title></circle>
+            <circle class="chart-dot" cx="453.7" cy="59.0" r="4"><title>10 Ago — 22 pezzi</title></circle>
+            <circle class="chart-dot" cx="542.9" cy="14.0" r="4"><title>17 Ago — 28 pezzi</title></circle>
+            <circle class="chart-dot" cx="632.0" cy="29.0" r="4"><title>24 Ago — 26 pezzi</title></circle>
+            <text class="chart-end-label" x="600" y="8" text-anchor="end">26</text>
+            <text class="chart-axis-label" x="8" y="150">6 Lug</text>
+            <text class="chart-axis-label" x="632" y="150" text-anchor="end">24 Ago</text>
+          </svg>
+        </div>
+
+        <div class="card span-6">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Vendite per categoria</div>
+            <div class="card-sub">Pezzi venduti, totale prodotto</div>
+          </div>
+          <div class="rank-bars">
+            <div class="rank-bar">
+              <span class="rank-bar-label">Moda</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 100%;"></span></span>
+              <span class="rank-bar-value">48</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Casa</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 19%;"></span></span>
+              <span class="rank-bar-value">9</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card span-6">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Top prodotti venduti</div>
+            <div class="card-sub">Pezzi venduti, totale prodotto</div>
+          </div>
+          <div class="rank-bars">
+            <div class="rank-bar">
+              <span class="rank-bar-label">Felpa logo</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 100%;"></span></span>
+              <span class="rank-bar-value">30</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Maglione oversize</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 60%;"></span></span>
+              <span class="rank-bar-value">18</span>
+            </div>
+            <div class="rank-bar">
+              <span class="rank-bar-label">Tazza in ceramica</span>
+              <span class="rank-bar-track"><span class="rank-bar-fill" style="width: 30%;"></span></span>
+              <span class="rank-bar-value">9</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ELENCO PRODOTTI — nascosto di default (Panoramica è la tab attiva) -->
+      <div class="tab-panel-hidden" data-panel="elenco">
+
+      <!-- ELENCO PRODOTTI — variante badge A (sola icona), confermata. -->
+      <div class="grid">
+      <div class="products-panel span-12">
+
+        <div class="products-sticky-head">
+        <div class="card-header">
+          <div class="card-header-titles">
+            <div class="card-title title-lg">Elenco prodotti</div>
+            <div class="card-sub">Tutti i prodotti del tuo catalogo</div>
+          </div>
+          <div class="table-pagination">
+            <span class="table-pagination-range">1 – 4</span>
+            <button class="pagination-arrow" disabled data-tooltip="Precedenti" aria-label="Precedenti"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l-6 6 6 6"/></svg></button>
+            <button class="pagination-arrow" disabled data-tooltip="Successivi" aria-label="Successivi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <div class="table-toolbar">
+          <div class="status-chips">
+            <button class="status-chip active" data-status="tutti">Tutti<span class="count">4</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="pubblicato">Pubblicati<span class="count">1</span></button>
+            <span class="status-chip-divider"></span>
+            <button class="status-chip" data-status="bozza">Bozze<span class="count">1</span></button>
+          </div>
+          <div class="table-toolbar-actions" id="toolbarActions">
+            <div class="toolbar-icons-group" id="toolbarIconsGroup">
+              <div class="view-switch" id="viewSwitch">
+                <button class="view-switch-btn active" data-tooltip="Vista elenco" aria-label="Vista elenco"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg></button>
+                <button class="view-switch-btn" data-tooltip="Vista griglia" aria-label="Vista griglia"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></button>
+              </div>
+              <div class="icon-btn" id="toggleFiltersBtn" data-tooltip="Filtri" aria-label="Filtri"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V18l-3 1.5v-7z"/></svg></div>
+              <div class="icon-btn" id="sortBtn" data-tooltip="Ordina" aria-label="Ordina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16V4M8 4 5 7M8 4l3 3"/><path d="M16 8v12M16 20l-3-3M16 20l3-3"/></svg></div>
+            </div>
+            <div class="search-box" id="searchBox">
+              <div class="icon-btn search-toggle" id="searchToggleBtn" data-tooltip="Cerca" aria-label="Cerca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.2" y2="16.2"/></svg></div>
+              <input type="text" class="search-input" id="searchInput" placeholder="Cerca" tabindex="-1">
+              <div class="search-close-btn" id="searchCloseBtn" aria-label="Chiudi ricerca"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-collapse" id="filtersCollapse">
+          <div class="filters-collapse-inner">
+            <div class="filters-row" id="filtersRow">
+              <button class="filter-chip">Stato<span class="chev"></span></button>
+              <button class="filter-chip">Categoria<span class="chev"></span></button>
+              <button class="filter-chip">Data pubblicazione<span class="chev"></span></button>
+              <button class="filter-chip">Prezzo<span class="chev"></span></button>
+              <button class="filter-chip">Più venduti<span class="chev"></span></button>
+              <button class="filter-chip">Pezzi rimanenti<span class="chev"></span></button>
+            </div>
+            <div class="card-divider" id="filtersDivider"></div>
+          </div>
+        </div>
+        </div>
+
+      <div class="products-table">
+            <div class="product-row-head">
+              <div>Prodotto</div>
+              <div>Prezzo</div>
+              <div>Venduti</div>
+              <div>Stato</div>
+              <div class="product-row-head-cat">Categoria</div>
+              <div>Badge</div>
+              <div>Data</div>
+            </div>
+            <div class="product-row selected expanded" data-has-variants="true" data-panel-source="true" tabindex="0">
+              <div class="product-row-main">
+                <span class="product-row-chevron" data-tooltip="Varianti mostrate" aria-label="Varianti mostrate"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <div class="product-row-textblock">
+                  <span class="product-row-title-line">
+                    <span class="product-row-name">Maglione oversize</span>
+                    <span class="variant-esaurito-warning" data-tooltip="1 di 3 varianti esaurita" aria-label="1 di 3 varianti esaurita"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span>
+                  </span>
+                  <span class="product-row-variant-count">3 varianti</span>
+                </div>
+              </div>
+              <div class="product-row-price">€ 49–52</div>
+              <div class="product-row-stat"><strong>38</strong> di <strong>80</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-moda">Moda</span>
+              <div class="badge-cluster"><span class="badge-icon drop clickable" data-tooltip="In un drop attivo" aria-label="In un drop attivo"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span><span class="badge-icon clickable" data-tooltip="Prezzo da rivedere" aria-label="Prezzo da rivedere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg></span><span class="badge-icon" data-tooltip="Prodotto personalizzato" aria-label="Prodotto personalizzato"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></span><span class="badge-icon" data-tooltip="In vetrina" aria-label="In vetrina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span><span class="badge-icon clickable" data-tooltip="Verifica idoneità Curation — 2 di 3" aria-label="Verifica idoneità Curation — 2 di 3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/></svg></span></div>
+              <div class="product-row-date">3 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="product-variants">
+             <div class="product-variants-inner">
+              <div class="product-variant-head">
+                <div>Variante</div>
+                <div>Prezzo</div>
+                <div>Venduti</div>
+                <div>Stato</div>
+                <div class="product-variant-cat-slot"></div>
+              </div>
+              <div class="product-variant-row">
+                <div class="product-variant-name"><span>Nero</span><span class="variant-esaurito-warning" data-tooltip="Esaurita la taglia M" aria-label="Esaurita la taglia M"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span></div>
+                <div class="product-variant-price">€ 49</div>
+                <div class="product-variant-stat"><strong>8</strong> di <strong>20</strong></div>
+                <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                <div class="product-variant-cat-slot"></div>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+              <div class="product-variant-divider"></div>
+              <div class="product-variant-row">
+                <div class="product-variant-name"><span>Blu</span><span class="variant-esaurito-dot" data-tooltip="Esaurito: tutte le taglie" aria-label="Esaurito: tutte le taglie"><svg width="14" height="14" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></div>
+                <div class="product-variant-price">€ 49</div>
+                <div class="product-variant-stat"><strong>20</strong> di <strong>20</strong></div>
+                <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+                <div class="product-variant-cat-slot"></div>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+              <div class="product-variant-divider"></div>
+              <div class="product-variant-row">
+                <div class="product-variant-name">Rosso</div>
+                <div class="product-variant-price">€ 52</div>
+                <div class="product-variant-stat"><strong>10</strong> di <strong>40</strong></div>
+                <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                <div class="product-variant-cat-slot"></div>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+             </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Borsa in tela</span>
+              </div>
+              <div class="product-row-price">€ 32</div>
+              <div class="product-row-stat">—</div>
+              <span class="status-pill bozza"><i class="dot"></i>Bozza</span>
+              <span class="product-row-category cat-accessori">Accessori</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">—</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Felpa logo</span>
+              </div>
+              <div class="product-row-price">€ 55</div>
+              <div class="product-row-stat"><strong>30</strong> di <strong>30</strong></div>
+              <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+              <span class="product-row-category cat-moda">Moda</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon clickable" data-tooltip="Prezzo da rivedere" aria-label="Prezzo da rivedere"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H7"/></svg></span><span class="badge-icon" data-tooltip="Prodotto personalizzato" aria-label="Prodotto personalizzato"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">28 Ago 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Tazza in ceramica</span>
+              </div>
+              <div class="product-row-price">€ 18</div>
+              <div class="product-row-stat"><strong>9</strong> di <strong>9</strong></div>
+              <span class="status-pill archiviato"><i class="dot"></i>Archiviato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon clickable" data-tooltip="Idoneo per la vetrina editoriale" aria-label="Idoneo per la vetrina editoriale"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
+              <div class="product-row-date">12 Lug 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+      <!-- 28/9/2026: RIGHE DI TEST TEMPORANEE (dati finti) aggiunte su richiesta di Ruggi
+           per verificare visivamente il fix dello scroll del pannello Elenco prodotti —
+           DA RIMUOVERE dopo la verifica, non fanno parte del catalogo reale. -->
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Berretto lana</span>
+              </div>
+              <div class="product-row-price">&euro; 15</div>
+              <div class="product-row-stat"><strong>0</strong> di <strong>5</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Zaino tela</span>
+              </div>
+              <div class="product-row-price">&euro; 18</div>
+              <div class="product-row-stat"><strong>7</strong> di <strong>12</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Candela soia</span>
+              </div>
+              <div class="product-row-price">&euro; 21</div>
+              <div class="product-row-stat"><strong>14</strong> di <strong>19</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Porta chiavi cuoio</span>
+              </div>
+              <div class="product-row-price">&euro; 24</div>
+              <div class="product-row-stat"><strong>21</strong> di <strong>26</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Poster A3</span>
+              </div>
+              <div class="product-row-price">&euro; 27</div>
+              <div class="product-row-stat"><strong>28</strong> di <strong>33</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Calzini a righe</span>
+              </div>
+              <div class="product-row-price">&euro; 30</div>
+              <div class="product-row-stat"><strong>35</strong> di <strong>40</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Quaderno lino</span>
+              </div>
+              <div class="product-row-price">&euro; 33</div>
+              <div class="product-row-stat"><strong>2</strong> di <strong>7</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Sciarpa merino</span>
+              </div>
+              <div class="product-row-price">&euro; 36</div>
+              <div class="product-row-stat"><strong>9</strong> di <strong>14</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Sapone artigianale</span>
+              </div>
+              <div class="product-row-price">&euro; 39</div>
+              <div class="product-row-stat"><strong>16</strong> di <strong>21</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Tovaglioli lino</span>
+              </div>
+              <div class="product-row-price">&euro; 42</div>
+              <div class="product-row-stat"><strong>23</strong> di <strong>28</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Vaso ceramica</span>
+              </div>
+              <div class="product-row-price">&euro; 45</div>
+              <div class="product-row-stat"><strong>30</strong> di <strong>35</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Bracciale intrecciato</span>
+              </div>
+              <div class="product-row-price">&euro; 48</div>
+              <div class="product-row-stat"><strong>37</strong> di <strong>42</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Portafoglio slim</span>
+              </div>
+              <div class="product-row-price">&euro; 51</div>
+              <div class="product-row-stat"><strong>4</strong> di <strong>9</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Cesto vimini</span>
+              </div>
+              <div class="product-row-price">&euro; 54</div>
+              <div class="product-row-stat"><strong>11</strong> di <strong>16</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+            <div class="table-row-divider"></div>
+            <div class="product-row">
+              <div class="product-row-main">
+                <span class="product-row-chevron placeholder product-row-gutter" aria-hidden="true"></span>
+                <span class="product-row-thumb" aria-hidden="true"></span>
+                <span class="product-row-name">Set matite</span>
+              </div>
+              <div class="product-row-price">&euro; 57</div>
+              <div class="product-row-stat"><strong>18</strong> di <strong>23</strong></div>
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="product-row-category cat-casa">Casa</span>
+              <div class="badge-cluster"><span class="badge-icon empty" data-tooltip="Non in un drop" aria-label="Non in un drop"></span><span class="badge-icon empty" data-tooltip="Prezzo allineato" aria-label="Prezzo allineato"></span><span class="badge-icon empty" data-tooltip="Prodotto non personalizzabile" aria-label="Prodotto non personalizzabile"></span><span class="badge-icon empty" data-tooltip="Non in vetrina" aria-label="Non in vetrina"></span><span class="badge-icon empty" data-tooltip="Non idoneo per la vetrina editoriale" aria-label="Non idoneo per la vetrina editoriale"></span></div>
+              <div class="product-row-date">1 Set 2026</div>
+              <div class="row-actions">
+                <a class="row-goto-btn" href="#" data-tooltip="Vai alla pagina del prodotto" aria-label="Vai alla pagina del prodotto"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg></a>
+                <div class="row-menu-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></div>
+              </div>
+            </div>
+      </div>
+      </div>
+      </div>
+      </div>
+
+      </div>
+    </main>
+
+      <!-- Pannello dettaglio prodotto (click riga): affiancato, non overlay (9/9) -->
+      <aside class="product-detail-panel" id="productDetailPanel">
+
+        <!-- Intestazione: niente titolo/riga separata — chiusura in alto a sinistra insieme
+             a avanti/indietro (naviga riga precedente/successiva della tabella); Condividi
+             in alto a destra (posizione provvisoria, da confermare — Ruggi 10/9) -->
+        <!-- 28/9/2026 (Ruggi): toolbar (.panel-header) + blocco nome/categoria raggruppati
+             in .panel-header-sticky e resi fixed (position: sticky) rispetto allo scroll
+             del pannello (che scorre su .product-detail-panel, vedi CSS) — restano visibili
+             mentre .panel-body scorre sotto. Divider rimosso su richiesta di Ruggi. -->
+        <div class="panel-header-sticky">
+        <div class="panel-header">
+          <div class="panel-header-left">
+            <!-- 22/9/2026 (Ruggi): X e freccia raggruppate in un div, precedente/successivo in un altro — gap di 16px fra i due gruppi (vedi CSS). -->
+            <div class="panel-header-group">
+              <!-- 28/9/2026 (Ruggi): rimossa .panel-goto-btn (icona "vai alla pagina del prodotto") -->
+              <div class="panel-close-btn" id="panelCloseBtn" data-tooltip="Chiudi pannello" aria-label="Chiudi pannello">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+              </div>
+            </div>
+            <div class="panel-header-group">
+              <div class="panel-nav-btn" id="panelPrevBtn" data-tooltip="Prodotto precedente" aria-label="Prodotto precedente">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+              </div>
+              <div class="panel-nav-btn" id="panelNextBtn" data-tooltip="Prodotto successivo" aria-label="Prodotto successivo">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="panel-header-right">
+            <!-- 28/9/2026 (Ruggi): Condividi diventa icon-only, riuso diretto di .panel-menu-btn -->
+            <div class="btn-pill-dark sm secondary panel-share-btn" id="panelShareBtn" aria-label="Condividi"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="19" r="2.6"/><path d="M8.4 10.7l7.2-4.2M8.4 13.3l7.2 4.2"/></svg>Condividi</div>
+            <div class="panel-menu-btn" data-tooltip="Altre azioni" aria-label="Altre azioni">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 28/9/2026 (Ruggi, seconda passata): .panel-header-title-row spostato — non e'
+             piu' qui, vive dentro .panel-body appena sopra .panel-stock-summary (scrolla
+             via col resto del contenuto invece di restare fisso). Vedi li' per il blocco. -->
+
+        <!-- 28/9/2026 (Ruggi): tab identiche a .panel-tabs (riuso diretto, stesso componente
+             delle tab varianti più sotto) — 3 voci: Disponibilità, Scheda prodotto, Interazioni.
+             Fa parte del blocco fixed (.panel-header-sticky). -->
+        <!-- 30/9/2026 (Ruggi): tab "Scheda prodotto" costruita. Badge numerico rosso
+             (.panel-tab-count-badge, riuso diretto della classe già usata per le tab variante in
+             prodotti.html) = numero di problemi (warning/danger) presenti nella tab. Conta SOLO le righe warning/danger (Prezzo da rivedere), non quelle
+             informative (Curation). Va in pagina solo se il numero è > 0. ARIA minima aggiunta (role tablist/tab,
+             aria-selected/controls) perché la tab ora cambia davvero contenuto; "Interazioni" ha ora il
+             suo pannello (#panelTabInterazioni, 30/9/2026 seconda passata). -->
+        <nav class="panel-tabs" id="panelMainTabs" role="tablist" aria-label="Sezioni del prodotto">
+          <div class="panel-tab active" id="panelTabBtnDisponibilita" role="tab" tabindex="0" aria-selected="true" aria-controls="panelTabDisponibilita" data-panel="panelTabDisponibilita" data-label="Disponibilità"><span class="panel-tab-inner">Disponibilità</span></div>
+          <div class="panel-tab" id="panelTabBtnScheda" role="tab" tabindex="0" aria-selected="false" aria-controls="panelTabScheda" data-panel="panelTabScheda" data-label="Scheda prodotto"><span class="panel-tab-inner"><span class="panel-tab-label" data-label="Scheda prodotto">Scheda prodotto</span><span class="panel-tab-count-badge" data-tooltip="1 cosa da verificare" aria-label="1 cosa da verificare">1</span></span></div>
+          <div class="panel-tab" id="panelTabBtnInterazioni" role="tab" tabindex="0" aria-selected="false" aria-controls="panelTabInterazioni" data-panel="panelTabInterazioni" data-label="Interazioni"><span class="panel-tab-inner">Interazioni</span></div>
+          <span class="panel-tab-active-line" aria-hidden="true"></span>
+        </nav>
+        </div>
+
+        <div class="panel-body" id="panelProductBody">
+
+        <!-- 30/9/2026 (Ruggi): tutto il contenuto che c'era in .panel-body fino a oggi è la tab
+             "Disponibilità" — racchiuso in questo pannello SENZA modifiche al markup interno. -->
+        <div class="panel-tabpanel" id="panelTabDisponibilita" role="tabpanel" aria-labelledby="panelTabBtnDisponibilita">
+
+          <!-- 3/11/2026 (Ruggi): il banner warning «Verifica disponibilità» e' stato TOLTO (la criticita' di disponibilita' e' gia' segnalata da .panel-attention-row «Disponibilità da gestire» sotto il riepilogo). Al suo posto, SOLO per un prodotto pubblicato senza tiratura: banner info «Nessuna tiratura» (stesso del pannello prodotto di bottega-editor). «Non mostrare più» e' sempre il primo link; per-prodotto. NB: l'esempio di questa pagina ha una tiratura (80); il banner e' qui per mostrarne posizione e stile. -->
+          <div class="panel-alert-banner info">
+            <div class="panel-alert-icon" aria-hidden="true">i</div>
+            <div class="panel-alert-body">
+              <div class="panel-alert-title">Nessuna tiratura</div>
+              <span class="panel-alert-text">Non ti avvisiamo quando sta per esaurirsi: tieni d'occhio le scorte.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss">Non mostrare più</button>
+                <button type="button" class="panel-alert-action">Gestisci tiratura</button>
+              </div>
+            </div>
+            <button type="button" class="panel-alert-close" aria-label="Chiudi avviso">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Blocco riepilogo prodotto: sempre presente. Immagine di copertina (verticale)
+               a sinistra + colonna info a destra: stato, titolo (.card-title.title-lg,
+               riuso diretto), descrizione breve (.card-sub, riuso diretto), poi prezzo
+               (16px), venduti, categoria — in quest'ordine di importanza (Ruggi 10/9) -->
+          <div class="panel-summary-block">
+          <!-- 28/9/2026 (Ruggi, seconda passata): .panel-header-title-row spostato qui da
+             .panel-header-sticky (era fisso, ora scrolla via con .panel-body) — richiesta
+             esplicita di Ruggi, posizionato sopra .panel-stock-summary. -->
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg" id="panelHeaderProductTitle">Maglione oversize</div>
+                <span class="badge-icon" data-tooltip="In vetrina" aria-label="In vetrina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span>
+              </div>
+              <span class="panel-product-date">3 Set 2026</span>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="panel-header-title-meta-divider" aria-hidden="true"></span>
+              <span class="panel-product-category cat-moda">Moda</span>
+              <span class="tag">Edizione limitata</span>
+            </div>
+          </div>
+
+          <!-- 28/9/2026 (Ruggi): rimosso il vecchio .panel-product-summary (immagine +
+               stato/titolo/descrizione/categoria/prezzo/venduti/recensioni) — stato, titolo
+               e categoria sono ora nel blocco fisso in header, non piu' duplicati qui.
+               Al suo posto: blocco "disponibilita'" ispirato a .dp2-stock-summary
+               (detail-panel-v2/panels.css) — numero grande con token --type-display-lg
+               (non hardcoded come nel riferimento), NESSUNA immagine/icona (tolta su
+               richiesta di Ruggi), "38 di 80" con i numeri in <strong>, stesso pattern
+               gia' usato in .panel-product-sold. -->
+          <div class="panel-stock-summary">
+            <div class="panel-stock-number">42<span>pezzi rimanenti<span class="variant-esaurito-warning" role="img" aria-label="1 variante esaurita • 1 variante con taglie esaurite" data-tooltip="1 variante esaurita • 1 variante con taglie esaurite"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M10.3 3.9 2.7 17.5A1.8 1.8 0 0 0 4.3 20h15.4a1.8 1.8 0 0 0 1.6-2.5L13.7 3.9a1.8 1.8 0 0 0-3.4 0Z"/><circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/></svg></span></span><span class="panel-stock-lot">Lotto N. 2</span></div><!-- 1/10/2026 (Ruggi): icona di avviso accanto al numero, SOLO se almeno una variante/taglia e' esaurita (il totale aggrega e nasconderebbe l'esaurito); stesso simbolo di .variant-esaurito-warning. In questa pagina statica e' sempre presente perche' l'esempio ha varianti esaurite. -->
+            <div class="panel-stock-meta">
+              <span class="panel-product-price">€ 49–52</span>
+              <span class="panel-meta-sep">•</span>
+              <span class="product-row-stat"><strong>38</strong> di <strong>80</strong> venduti</span>
+            </div>
+            <progress class="panel-stock-progress" value="38" max="80" aria-label="38 pezzi venduti su 80">38 / 80</progress>
+          </div>
+
+          <!-- 28/9/2026 (Ruggi): riga "avviso disponibilità da gestire", adattata da
+               .dp2-attention (detail-panel-v2/panels.css) — riga cliccabile con icona
+               warning, titolo bold + testo muted, chevron a destra. Diversa dal banner
+               .panel-alert-banner sopra (dismissibile/informativo generico); questa è un
+               collegamento diretto alla gestione delle varianti con criticità. Pattern non
+               ancora promosso a shared/alias — classi locali .panel-attention-*. -->
+          <button type="button" class="panel-attention-row" data-action="attention" aria-label="Vedi criticità di disponibilità">
+            <span class="panel-attention-symbol" aria-hidden="true">!</span>
+            <span class="panel-attention-body">
+              <strong class="panel-attention-title">Disponibilità da gestire</strong>
+              <span class="panel-attention-text">Revisiona la disponibilità dei tuoi prodotti</span>
+            </span>
+            <span class="panel-attention-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+          </button>
+
+          <!-- 28/9/2026 (Ruggi): rimosso .panel-badge-col (le 4 icone badge) -->
+
+          <!-- Badge di prodotto + info drop: div a due colonne. Aggiornamento 17/9/2026
+               (richiesta Ruggi): contenuto delle colonne scambiato — panel-drop-col ora è
+               la prima colonna ed eredita posizione E box-model fissi (224px) che aveva
+               panel-badge-col; la seconda colonna (panel-tag-col, flex:1) ospita solo il
+               tag "tiratura limitata", allineato in fondo. panel-badge-col (le 4 icone) si
+               è spostato fuori da questa riga, al posto della sezione "Informazioni
+               aggiuntive" rimossa (vedi sotto), stessa larghezza 224px di prima. -->
+          <div class="panel-badge-row">
+            <div class="panel-drop-col">
+              <span class="panel-drop-title">Drop collegato</span>
+              <div class="drop-countdown-row">
+                <div class="drop-countdown-info">
+                  <div class="drop-countdown">2h 26m</div>
+                  <div class="drop-phase">Primi sostenitori</div>
+                </div>
+                <a class="drop-goto-btn" href="#" data-tooltip="Vai al drop" aria-label="Vai al drop">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9 7h8v8"/></svg>
+                </a>
+              </div>
+              <div class="drop-progress">
+                <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+                <div class="drop-seg"><div class="drop-fill" style="width:100%"></div></div>
+                <div class="drop-seg active"><div class="drop-fill" style="width:55%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 28/9/2026 (Ruggi): divider sotto panel-drop-col, riusa .card-divider con margin locale -->
+          <div class="card-divider panel-drop-divider"></div>
+
+          </div>
+
+          <!-- 28/9/2026 (Ruggi): rimossi il box metriche Salvato/Avviso (.submetrics-row
+               span-12) e l'accordion Recensioni (.panel-accordion / .panel-accordion-header
+               id="panelReviewsAccordionBtn") — vedi script sotto per la rimozione dello
+               script di toggle associato, ormai orfano. -->
+
+          <!-- 28/9/2026 (Ruggi): sostituite le tab per variante (#panelVariantTabs) con
+               una card per variante, impilate — ragionamento fatto insieme: le tab in cima
+               al pannello (#panelMainTabs) e la selezione a tab delle varianti creavano lo
+               stesso pattern "selezione singola" a due livelli, confuso. Ogni variante e'
+               ora sempre visibile (niente stato attivo/selezionato) con i dati primari a
+               vista (stato, vendite/salvati/avvisi, taglie) e i dati secondari (lotto,
+               immagini, azioni) dietro un disclosure nativo <details> — riuso del pattern
+               gia' deciso per .panel-accordion (Recensioni, rimosso sopra ma le classi
+               restano), non un quarto pattern nuovo. Contenuto per-variante invariato
+               (stessi campi di "Dati variante"/"Immagini variante"/"Vendite" di prima),
+               solo riorganizzato. -->
+          <div class="panel-variant-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Varianti prodotto <span class="panel-variant-section-count">(3)</span></div>
+                <button class="btn-pill-dark sm secondary" id="panelNewVariantBtn"><svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nuova variante</button>
+              </div>
+              <span class="panel-variant-section-desc">Gestisci le varianti del prodotto</span>
+            </div>
+          </div>
+
+          <div class="panel-variant-list">
+
+            <article class="variant-card">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                  <a class="link" href="#" aria-label="Gestisci variante Nero">Gestisci variante <span class="chev inline"></span></a>
+                </div>
+                <div class="variant-card-header-left">
+                  <div class="variant-card-title">Variante Nero</div>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-price">€ 49</span>
+                </div>
+              </div>
+              <div class="variant-card-stats">
+                <span class="product-row-stat"><strong>8</strong>/<strong>20</strong> venduti</span>
+                <span class="product-row-stat"><strong>12</strong> salvati</span>
+                <span class="product-row-stat" data-tooltip="Attivabile solo se la variante è esaurita del tutto — Nero non lo è (solo la taglia M)" aria-label="Attivabile solo se la variante è esaurita del tutto — Nero non lo è (solo la taglia M)"><strong>0</strong> avvisi</span>
+              </div>
+              <div class="panel-field-row stacked variant-card-sizes">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip">S</span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia M esaurita" aria-label="Taglia M esaurita">M<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip">L</span>
+                  <span class="panel-subvariant-chip">XL</span>
+                </div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 2</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">20 pezzi</span></div>
+                  <div class="panel-image-grid">
+                    <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                      <span class="panel-image-thumb-add-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                    </div>
+                    <div class="panel-image-thumb"></div>
+                    <div class="panel-image-thumb"></div>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button class="panel-action-btn">Archivia variante</button>
+                    <button class="btn-pill-dark sm secondary">Gestisci variante</button>
+                  </div>
+                </div>
+              </details>
+            </article>
+
+            <article class="variant-card">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <span class="status-pill esaurito"><i class="dot"></i>Esaurito</span>
+                  <a class="link" href="#" aria-label="Gestisci variante Blu">Gestisci variante <span class="chev inline"></span></a>
+                </div>
+                <div class="variant-card-header-left">
+                  <div class="variant-card-title">Variante Blu</div>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-price">€ 49</span>
+                </div>
+              </div>
+              <div class="variant-card-stats">
+                <span class="product-row-stat"><strong>20</strong>/<strong>20</strong> venduti</span>
+                <span class="product-row-stat"><strong>6</strong> salvati</span>
+                <span class="product-row-stat" data-tooltip="Clienti che hanno chiesto di essere avvisati alla riapertura di Blu" aria-label="Clienti che hanno chiesto di essere avvisati alla riapertura di Blu"><strong>4</strong> avvisi</span>
+              </div>
+              <div class="panel-field-row stacked variant-card-sizes">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia S esaurita" aria-label="Taglia S esaurita">S<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia M esaurita" aria-label="Taglia M esaurita">M<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia L esaurita" aria-label="Taglia L esaurita">L<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                  <span class="panel-subvariant-chip esaurito" data-tooltip="Taglia XL esaurita" aria-label="Taglia XL esaurita">XL<span class="variant-esaurito-dot"><svg width="10" height="10" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/></svg></span></span>
+                </div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 2</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">20 pezzi</span></div>
+                  <div class="panel-image-grid">
+                    <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                      <span class="panel-image-thumb-add-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                    </div>
+                    <div class="panel-image-thumb"></div>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button class="panel-action-btn">Ripubblica variante</button>
+                    <button class="btn-pill-dark sm secondary">Gestisci variante</button>
+                  </div>
+                </div>
+              </details>
+            </article>
+
+            <article class="variant-card">
+              <div class="variant-card-header">
+                <div class="variant-card-header-row">
+                  <span class="status-pill pubblicato"><i class="dot"></i>Disponibile</span>
+                  <a class="link" href="#" aria-label="Gestisci variante Rosso">Gestisci variante <span class="chev inline"></span></a>
+                </div>
+                <div class="variant-card-header-left">
+                  <div class="variant-card-title">Variante Rosso</div>
+                  <span class="panel-meta-sep">•</span>
+                  <span class="product-row-price">€ 52</span>
+                </div>
+              </div>
+              <div class="variant-card-stats">
+                <span class="product-row-stat"><strong>10</strong>/<strong>40</strong> venduti</span>
+                <span class="product-row-stat"><strong>3</strong> salvati</span>
+                <span class="product-row-stat"><strong>0</strong> avvisi</span>
+              </div>
+              <div class="panel-field-row stacked variant-card-sizes">
+                <span class="panel-field-label">Taglie</span>
+                <div class="panel-subvariant-chips">
+                  <span class="panel-subvariant-chip">S</span>
+                  <span class="panel-subvariant-chip">M</span>
+                  <span class="panel-subvariant-chip">L</span>
+                  <span class="panel-subvariant-chip">XL</span>
+                </div>
+              </div>
+              <details class="panel-accordion variant-card-disclosure">
+                <summary class="panel-accordion-header">
+                  <span class="panel-accordion-header-label">Dettagli e gestione</span>
+                  <span class="panel-accordion-toggle" aria-hidden="true"></span>
+                </summary>
+                <div class="panel-accordion-body">
+                  <div class="panel-field-row"><span class="panel-field-label">Lotto</span><span class="panel-field-value">N. 1</span></div>
+                  <div class="panel-field-row"><span class="panel-field-label">Tiratura totale</span><span class="panel-field-value">40 pezzi</span></div>
+                  <div class="panel-image-grid">
+                    <div class="panel-image-thumb panel-image-thumb-add" data-tooltip="Aggiungi immagine" aria-label="Aggiungi immagine">
+                      <span class="panel-image-thumb-add-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+                    </div>
+                    <div class="panel-image-thumb"></div>
+                  </div>
+                  <div class="panel-actions-row">
+                    <button class="panel-action-btn">Archivia variante</button>
+                    <button class="btn-pill-dark sm secondary">Gestisci variante</button>
+                  </div>
+                </div>
+              </details>
+            </article>
+
+          </div>
+
+          <!-- Prodotto SENZA varianti (es. Borsa in tela): niente tab, solo le informazioni
+               di gestione prodotto sotto il riepilogo. Contenuto non ancora definito nel
+               dettaglio (Ruggi 10/9: "saranno sicuramente informazioni di gestione prodotto")
+               — placeholder da sostituire, tenuto fuori dal flusso (display:none) in questa
+               demo perché la riga mostrata (Maglione oversize) ha varianti. -->
+          <div class="panel-noVariant-content" id="panelNoVariantContent" hidden>
+            <div class="panel-section">
+              <div class="panel-card-title">Gestione prodotto</div>
+              <p class="panel-placeholder-note">Contenuto da definire — badge, stato, contenuto editoriale (storia_breve, blocchi_contenuto).</p>
+            </div>
+          </div>
+
+        </div><!-- /#panelTabDisponibilita -->
+
+        <!-- 30/9/2026 (Ruggi): TAB "SCHEDA PRODOTTO". Tre sezioni, in quest'ordine:
+             1) riepilogo prodotto (immagine + stato/titolo/descrizione/categoria/prezzo/venduti/
+                recensioni) — è il vecchio .panel-product-summary di prima del 28/9, stesso markup e
+                stesse classi; il bottone "Gestisci prodotto" NON c'è (il CTA resta solo nel footer
+                fisso del pannello, .panel-footer-sticky, comune a tutte le tab);
+             2) "Identità prodotto" — badge PRESENTI sul prodotto, su due colonne: icona (stessa
+                .badge-icon e stessa svg della tabella) + nome del badge + riga di spiegazione. I badge
+                non presenti non compaiono (a differenza della tabella, qui non serve lo slot vuoto);
+             3) righe "da verificare" (.panel-attention-row, stessa classe di "Disponibilità da
+                gestire"): una per ogni problema presente — Prezzo da rivedere, Idoneità Curation.
+                Nessun problema → nessuna riga e nessuna sezione, e niente badge sulla tab.
+             Hidden di default: la tab attiva all'apertura è Disponibilità. -->
+        <div class="panel-tabpanel" id="panelTabScheda" role="tabpanel" aria-labelledby="panelTabBtnScheda" hidden>
+
+          <!-- 30/9/2026 (Ruggi, seconda passata): TAB "SCHEDA PRODOTTO", ordine:
+               0) banner informativo azzurro (.panel-alert-banner.info) — SOLO se l'idoneità Curation
+                  è incompleta: invito a migliorare, non un errore; azione + "Non mostrare più"
+                  (come il banner di Disponibilità, pulsanti non collegati). La riga Curation qui sotto
+                  resta comunque visibile anche dopo aver chiuso il banner.
+               1) riepilogo prodotto (vecchio .panel-product-summary, senza bottone "Gestisci");
+               2) righe "da verificare" (.panel-attention-row) SUBITO sotto il riepilogo: una per
+                  problema presente, colore/icona per gravità — Prezzo da rivedere = warning "!",
+                  Idoneità Curation = info "i". Nessun problema → nessuna riga;
+               3) "Identità prodotto": solo i badge che descrivono il prodotto (drop, personalizzato,
+                  in vetrina) — icona + titolo + riga breve. Prezzo e Curation NON sono qui: sono
+                  stati del dato, già nelle righe sopra.
+               Il badge rosso numerico sulla tab conta solo le righe warning/danger (qui: 1), non
+               quelle informative. -->
+          <div class="panel-alert-banner info">
+            <div class="panel-alert-icon" aria-hidden="true">i</div>
+            <div class="panel-alert-body">
+              <div class="panel-alert-title">Completa l'idoneità Curation</div>
+              <span class="panel-alert-text">Ti manca 1 requisito su 3 per candidare il prodotto alla vetrina editoriale.</span>
+              <div class="panel-alert-actions">
+                <button type="button" class="panel-alert-dismiss">Non mostrare più</button>
+                <button type="button" class="panel-alert-action">Verifica i requisiti</button>
+              </div>
+            </div>
+            <button type="button" class="panel-alert-close" aria-label="Chiudi avviso">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div class="panel-product-summary panel-scheda-summary">
+            <div class="panel-product-image"></div>
+            <div class="panel-product-info">
+              <div class="panel-info-stack">
+                <div class="panel-info-block panel-info-block-head">
+                  <div class="panel-status-date-row">
+                    <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+                    <span class="panel-product-date">3 Set 2026</span>
+                  </div>
+                  <div class="card-title title-lg" id="panelSchedaProductTitle">Maglione oversize</div>
+                  <span class="card-sub">Maglione morbido in misto lana, vestibilità oversize.</span>
+                </div>
+                <div class="panel-category-row">
+                  <span class="panel-category-label">Categoria:</span>
+                  <div class="panel-product-category cat-moda">Moda</div>
+                </div>
+                <div class="panel-info-block panel-info-block-stats">
+                  <div class="panel-product-pricesold"><span class="panel-product-price">€ 49–52</span><span class="panel-meta-sep">•</span><span class="panel-product-sold"><strong>38</strong> di <strong>80</strong> venduti</span></div>
+                  <div class="product-card-reviews"><svg class="product-card-reviews-icon" width="15" height="15" viewBox="0 0 52 65" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M26,50C26,50,26,50,26,50c-0.3,0-0.6-0.2-0.8-0.4l-23-34c-0.2-0.3-0.2-0.7-0.1-1C2.3,14.2,2.6,14,3,14h46c0.4,0,0.7,0.2,0.9,0.5s0.2,0.7-0.1,1l-23,34C26.6,49.8,26.3,50,26,50z M4.9,16L26,47.2L47.1,16H4.9z"/><path d="M26,50L26,50c-0.5,0-0.9-0.3-1-0.8l-8-34c-0.1-0.3,0-0.6,0.2-0.9c0.2-0.2,0.5-0.4,0.8-0.4h16c0.3,0,0.6,0.1,0.8,0.4c0.2,0.2,0.3,0.6,0.2,0.8l-8,34C26.9,49.7,26.5,50,26,50z M19.3,16L26,44.6L32.7,16H19.3z"/><path d="M49,16H3c-0.4,0-0.7-0.2-0.9-0.6c-0.2-0.4-0.1-0.8,0.1-1.1l10-12C12.4,2.1,12.7,2,13,2h26c0.3,0,0.6,0.1,0.8,0.4l10,12c0.2,0.3,0.3,0.7,0.1,1.1C49.7,15.8,49.4,16,49,16z M5.1,14h41.7L38.5,4H13.5L5.1,14z"/><path d="M18,16c-0.4,0-0.8-0.2-0.9-0.6l-5-12c-0.2-0.5,0-1.1,0.5-1.3c0.5-0.2,1.1,0,1.3,0.5l5,12c0.2,0.5,0,1.1-0.5,1.3C18.3,16,18.1,16,18,16z"/><path d="M34,16c-0.1,0-0.3,0-0.4-0.1c-0.5-0.2-0.8-0.8-0.5-1.3l5-12c0.2-0.5,0.8-0.8,1.3-0.5c0.5,0.2,0.8,0.8,0.5,1.3l-5,12C34.8,15.8,34.4,16,34,16z"/><path d="M34.2,16c-0.3,0-0.6-0.1-0.8-0.4L26,5.4l-7.4,10.1c-0.3,0.4-1,0.5-1.4,0.2c-0.4-0.3-0.5-1-0.2-1.4l8.2-11.2c0.4-0.5,1.2-0.5,1.6,0L35,14.4c0.3,0.4,0.2,1.1-0.2,1.4C34.7,15.9,34.4,16,34.2,16z"/></svg>94% recensioni positive</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section class="panel-scheda-attention" aria-label="Da verificare">
+            <button type="button" class="panel-attention-row" data-action="attention-price" aria-label="Vedi dettaglio: prezzo da rivedere">
+              <span class="panel-attention-symbol" aria-hidden="true">!</span>
+              <span class="panel-attention-body">
+                <strong class="panel-attention-title">Prezzo da rivedere</strong>
+                <span class="panel-attention-text">Le commissioni sono cambiate: valuta il prezzo suggerito</span>
+              </span>
+              <span class="panel-attention-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+            </button>
+            <button type="button" class="panel-attention-row" data-action="attention-curation" aria-label="Vedi dettaglio: idoneità Curation incompleta">
+              <span class="panel-attention-symbol info" aria-hidden="true">i</span>
+              <span class="panel-attention-body">
+                <strong class="panel-attention-title">Idoneità Curation incompleta</strong>
+                <span class="panel-attention-text">2 requisiti su 3 soddisfatti</span>
+              </span>
+              <span class="panel-attention-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+            </button>
+          </section>
+
+          <div class="panel-variant-section">
+            <div class="panel-variant-section-heading">
+              <div class="panel-variant-section-head">
+                <div class="panel-variant-section-title">Identità prodotto</div>
+              </div>
+              <span class="panel-variant-section-desc">Come viene proposto il prodotto</span>
+            </div>
+            <div class="panel-identity-grid">
+              <div class="panel-identity-item">
+                <span class="badge-icon drop" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+                <div class="panel-identity-text">
+                  <span class="panel-identity-title">In un drop attivo</span>
+                  <span class="panel-identity-desc">Vendita a tempo</span>
+                </div>
+              </div>
+              <div class="panel-identity-item">
+                <span class="badge-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></span>
+                <div class="panel-identity-text">
+                  <span class="panel-identity-title">Personalizzato</span>
+                  <span class="panel-identity-desc">Fatto su misura</span>
+                </div>
+              </div>
+              <div class="panel-identity-item">
+                <span class="badge-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span>
+                <div class="panel-identity-text">
+                  <span class="panel-identity-title">In vetrina</span>
+                  <span class="panel-identity-desc">Visibilità attiva</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /#panelTabScheda -->
+
+        <!-- 30/9/2026 (Ruggi): TAB "INTERAZIONI". Ordine: card gradimento (percentuale + 2-3 domande
+             fattuali sì/no + apprezzamento) → box Salvati/Avvisami → riga Recensioni (accordion).
+             Decisioni: REC-1 (conferme sì/no, obbligatorie) + nuovo campo `apprezzamento` (1-5,
+             facoltativo; Deluso, Contrariato, Convinto, Colpito, Conquistato) — NON ancora applicato
+             ai documenti del modello dati, vedi lista modifiche in sospeso. Percentuale sempre
+             visibile; sotto soglia (10-15) diventerebbe la frazione "2 su 3" (stato non disegnato).
+             Dati qui = esempio statico di un prodotto FISICO (3 domande; digitale/esperienza ne
+             hanno 2, servizio 2-3). Nessun JS nuovo: la riga Recensioni usa <details> nativo. -->
+        <div class="panel-tabpanel" id="panelTabInterazioni" role="tabpanel" aria-labelledby="panelTabBtnInterazioni" hidden>
+
+          <!-- 5/10/2026 (Ruggi): .panel-header-title-row identica a quella della tab Disponibilita' (stesso markup, stesse classi; senza l'id panelHeaderProductTitle, gia' usato nella prima tab: il titolo a 28px bold e' dato da #panelTabInterazioni .panel-header-title-row .card-title in CSS). -->
+          <div class="panel-header-title-row">
+            <div class="panel-header-title-line">
+              <div class="panel-header-title-group">
+                <div class="card-title title-lg">Maglione oversize</div>
+                <span class="badge-icon" data-tooltip="In vetrina" aria-label="In vetrina"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.5 5.5L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.5-.5L12 3z"/></svg></span>
+              </div>
+              <span class="panel-product-date">3 Set 2026</span>
+            </div>
+            <div class="panel-header-title-meta-row">
+              <span class="status-pill pubblicato"><i class="dot"></i>Pubblicato</span>
+              <span class="panel-header-title-meta-divider" aria-hidden="true"></span>
+              <span class="panel-product-category cat-moda">Moda</span>
+              <span class="tag">Edizione limitata</span>
+            </div>
+          </div>
+
+          <!-- 5/10/2026 (Ruggi): divider sotto l'header della tab Interazioni (.card-divider.panel-drop-divider, margin space-12 come negli altri punti del pannello). -->
+          <div class="card-divider panel-drop-divider"></div>
+
+          <!-- Card 1: Gradimento (titolo stile .panel-drop-title, percentuale, "su N" a capo, 3 domande
+               sì/no: barra con traccia neutra, riempimento lilla-500 da sinistra (sì) e lilla-300 da
+               destra (no), conteggi ai lati, nome della domanda sotto). Lilla su dati = eccezione
+               richiesta da Ruggi a DEC-039 (accent riservato ad azione/selezione): variabili locali
+               --answer-yes-fill/--answer-no-fill, revertibili in un punto solo. -->
+          <section class="card panel-gradimento" aria-label="Gradimento">
+            <h3 class="panel-card-title">Gradimento</h3>
+            <div class="panel-gradimento-summary">
+              <span class="submetric-value">94%<span class="unit unit-text">positivo</span></span>
+              <span class="panel-gradimento-note">su 32 recensioni</span>
+            </div>
+            <div class="card-divider"></div>
+            <div class="panel-answer-list">
+              <div class="panel-answer">
+                <span class="panel-answer-label">È come descritto</span>
+                <div class="panel-answer-row">
+                  <span class="panel-answer-count">Sì <b>31</b></span>
+                  <div class="panel-answer-bar" role="img" aria-label="È come descritto: 31 sì, 1 no">
+                    <span class="panel-answer-fill yes" style="--n: 31"></span>
+                    <span class="panel-answer-fill no" style="--n: 1"></span>
+                  </div>
+                  <span class="panel-answer-count">No <b>1</b></span>
+                </div>
+              </div>
+              <div class="panel-answer">
+                <span class="panel-answer-label">Arrivato nei tempi previsti</span>
+                <div class="panel-answer-row">
+                  <span class="panel-answer-count">Sì <b>30</b></span>
+                  <div class="panel-answer-bar" role="img" aria-label="Arrivato nei tempi previsti: 30 sì, 2 no">
+                    <span class="panel-answer-fill yes" style="--n: 30"></span>
+                    <span class="panel-answer-fill no" style="--n: 2"></span>
+                  </div>
+                  <span class="panel-answer-count">No <b>2</b></span>
+                </div>
+              </div>
+              <div class="panel-answer">
+                <span class="panel-answer-label">Arrivato integro, non danneggiato</span>
+                <div class="panel-answer-row">
+                  <span class="panel-answer-count">Sì <b>29</b></span>
+                  <div class="panel-answer-bar" role="img" aria-label="Arrivato integro, non danneggiato: 29 sì, 3 no">
+                    <span class="panel-answer-fill yes" style="--n: 29"></span>
+                    <span class="panel-answer-fill no" style="--n: 3"></span>
+                  </div>
+                  <span class="panel-answer-count">No <b>3</b></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Card 2: Apprezzamento (facoltativo, scala 1-5). Etichetta = mediana ("Opinioni divise" se
+               >=25% su 1-2 e >=25% su 4-5; nessuna etichetta sotto soglia). Chip neutro + scala a 5 step
+               che mostra la posizione (aria-hidden: l'informazione e' gia' nel testo del chip).
+               Soglie provvisorie. -->
+          <section class="card panel-apprezzamento" aria-label="Apprezzamento">
+            <h3 class="panel-card-title">Apprezzamento</h3>
+            <div class="panel-apprezzamento-head">
+              <span class="panel-apprezzamento-chip">Mi ha colpito</span>
+              <span class="panel-gradimento-note">su 19 valutazioni</span>
+            </div>
+            <div class="panel-scale" aria-hidden="true">
+              <span class="panel-scale-step"></span><span class="panel-scale-step"></span><span class="panel-scale-step"></span><span class="panel-scale-step on"></span><span class="panel-scale-step"></span>
+            </div>
+            <div class="panel-scale-ends" aria-hidden="true"><span>Deluso</span><span>Conquistato</span></div>
+          </section>
+
+          <!-- Card 3: Interesse. Salvati = livello prodotto (wishlist, entita' Salvato). Avvisami = totale
+               + dettaglio per variante: l'Avviso si attiva solo su una variante ESAURITA, quindi si
+               elencano solo le varianti esaurite (qui Blu, 4; Nero e Rosso disponibili → non elencate). -->
+          <section class="card panel-interesse" aria-label="Interesse clienti">
+            <h3 class="panel-card-title">Interesse</h3>
+            <div class="submetrics-row span-12">
+              <div class="submetric">
+                <span class="submetric-value">21</span>
+                <span class="submetric-label" data-tooltip="Clienti che hanno salvato questo prodotto" aria-label="Clienti che hanno salvato questo prodotto">Salvati</span>
+              </div>
+              <div class="submetric">
+                <span class="submetric-value">4</span>
+                <span class="submetric-label" data-tooltip="Clienti che hanno chiesto di essere avvisati alla riapertura di una variante esaurita" aria-label="Clienti che hanno chiesto di essere avvisati alla riapertura di una variante esaurita">Avvisami</span>
+              </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="panel-avvisi">
+              <span class="panel-avvisi-title">Avvisami per variante</span>
+              <!-- riga variante = .panel-attention-row (icona campanella .info, titolo = nome variante,
+                   sotto "n avvisi", chevron a destra → apre la variante; non collegata, wireframe) -->
+              <button type="button" class="panel-attention-row" data-action="variant-avvisi" aria-label="Variante Blu: 4 avvisi, vedi variante">
+                <span class="panel-attention-symbol info" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span>
+                <span class="panel-attention-body">
+                  <strong class="panel-attention-title">Variante Blu</strong>
+                  <span class="panel-attention-text"><strong class="panel-avvisi-number">4</strong> avvisi</span>
+                </span>
+                <span class="panel-attention-chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Riga Recensioni: proporzioni di .panel-attention-row (hairline sopra/sotto, padding
+               space-3) senza icona, toggle "+/−" dell'accordion (stesso <details> nativo delle card
+               variante, nessun JS). Il (14) conta le recensioni CON TESTO, cioè quelle elencate nel
+               corpo; il "su 32 recensioni" della card conta tutte. Corpo da definire (prossimo passo). -->
+          <details class="panel-accordion panel-reviews-disclosure">
+            <summary class="panel-accordion-header">
+              <span class="panel-accordion-header-label">Recensioni <span class="panel-accordion-count">(14)</span></span>
+              <span class="panel-accordion-toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="panel-accordion-body"></div>
+          </details>
+
+        </div><!-- /#panelTabInterazioni -->
+
+        </div>
+
+        <!-- 28/9/2026 (Ruggi): footer fisso in fondo al pannello, sempre visibile in tutte
+             le tab (sibling di .panel-body, sticky bottom:0 — stesso trattamento di
+             .panel-header-sticky ma ancorato in fondo). Bottone spostato qui da dentro
+             .panel-summary-block (era .panel-edit-btn). Primary, non sm: stesso peso
+             visivo del CTA principale della pagina (Nuovo prodotto), coerente col ruolo di
+             unica azione persistente del pannello. -->
+        <div class="panel-footer-sticky">
+          <button class="btn-pill-dark primary panel-edit-btn" id="panelEditProductBtn">Gestisci prodotto <span class="panel-action-count">1</span></button>
+        </div>
+      </aside>
+  </div>
+
+  </div><!-- /.shell-body -->
+</div>
+
+<script>
+  // 28/9/2026 (Ruggi): rimossa la prima eccezione JS (toggle accordion Recensioni) —
+  // l'accordion e' stato tolto dall'HTML sopra, script ormai orfano.
+
+  // 28/9/2026 (Ruggi): rimossa anche la "seconda eccezione JS" (linea della tab variante
+  // attiva, #panelVariantTabs) — le tab per variante sono state sostituite da una card per
+  // variante (vedi .panel-variant-list in prodotti-panel-static.html/.css), niente piu'
+  // .panel-tab-active-line da muovere qui.
+
+  // 28/9/2026, richiesta Ruggi: rimossa la "terza eccezione JS" (ResizeObserver che scriveva
+  // --sticky-offset su .product-row-head) — non serve piu' con il nuovo fix dell'intero
+  // .products-panel sticky (vedi commento esteso su .products-panel in
+  // prodotti-panel-static.css): .product-row-head si aggancia ora con top:0 fisso dentro
+  // .products-table, che e' diventato lui stesso il contenitore di scroll — nessuna altezza
+  // dinamica da calcolare piu'.
+
+  // Quarta eccezione JS di questo file statico (23/9/2026, richiesta esplicita di Ruggi):
+  // stessa funzione "cerca in pagina" gia' presente in prodotti.html (la versione dinamica) —
+  // apri/chiudi della search box della toolbar. Il markup con gli id era gia' presente ma senza
+  // alcun comportamento agganciato: qui si aggiunge solo l'apertura/chiusura, identica ovunque,
+  // nessuna logica di filtro reale sulle righe (prodotti.html non ce l'ha nemmeno lei).
+  (function () {
+    var toolbarActions = document.getElementById("toolbarActions");
+    var searchBox = document.getElementById("searchBox");
+    var searchToggleBtn = document.getElementById("searchToggleBtn");
+    var searchInput = document.getElementById("searchInput");
+    var searchCloseBtn = document.getElementById("searchCloseBtn");
+    if (!toolbarActions || !searchBox || !searchToggleBtn || !searchInput || !searchCloseBtn) return;
+    searchToggleBtn.addEventListener("click", function () {
+      searchBox.classList.add("open");
+      toolbarActions.classList.add("search-active");
+      searchInput.tabIndex = 0;
+      searchInput.focus({ preventScroll: true });
+    });
+    searchCloseBtn.addEventListener("click", function () {
+      searchBox.classList.remove("open");
+      toolbarActions.classList.remove("search-active");
+      searchInput.value = "";
+      searchInput.tabIndex = -1;
+      searchInput.blur();
+    });
+  })();
+
+  // Quinta eccezione JS di questo file statico (23/9/2026, richiesta esplicita di Ruggi):
+  // overflow orizzontale della barra tab a pannello aperto — stessa logica di
+  // updateTabsFade/click su .tab già presente in prodotti.html (9/9, estesa oggi con
+  // l'avanzamento su penultima/seconda tab visibile). Con .tab a larghezza fissa (flex:none,
+  // vedi shell-lists.css) le tab che non entrano nello spazio disponibile non vanno mai a capo
+  // su una seconda riga — restano mascherate dal mask-image laterale (--fade-l/--fade-r,
+  // aggiornate qui in base alla posizione di scroll) e raggiungibili scrollando lateralmente
+  // .tabs (overflow-x:auto, scrollbar nativa nascosta via CSS, mai visibile). Il click porta
+  // sempre la tab cliccata interamente in vista; se era già del tutto visibile ed è la
+  // penultima (o la seconda) tra quelle visibili, la barra avanza/arretra di una tab in più per
+  // rivelarne un'altra ancora mascherata, verso il fondo o verso l'inizio a seconda del verso.
+  (function () {
+    var tabsEl = document.querySelector(".tabs");
+    if (!tabsEl) return;
+
+    function updateTabsFade() {
+      var maxScroll = tabsEl.scrollWidth - tabsEl.clientWidth;
+      var fadeL = tabsEl.scrollLeft > 1 ? "28px" : "0px";
+      var fadeR = tabsEl.scrollLeft < maxScroll - 1 ? "28px" : "0px";
+      tabsEl.style.setProperty("--fade-l", fadeL);
+      tabsEl.style.setProperty("--fade-r", fadeR);
+    }
+
+    updateTabsFade();
+    tabsEl.addEventListener("scroll", updateTabsFade, { passive: true });
+    if (typeof ResizeObserver !== "undefined") {
+      new ResizeObserver(updateTabsFade).observe(tabsEl);
+    }
+
+    tabsEl.addEventListener("click", function (event) {
+      var tab = event.target.closest(".tab");
+      if (!tab || !tabsEl.contains(tab)) return;
+      var allTabs = Array.prototype.slice.call(tabsEl.querySelectorAll(".tab"));
+      var containerRect = tabsEl.getBoundingClientRect();
+      var visibleTabs = allTabs.filter(function (t) {
+        var r = t.getBoundingClientRect();
+        return r.left >= containerRect.left - 0.5 && r.right <= containerRect.right + 0.5;
+      });
+      var isSecondToLastVisible = visibleTabs.length > 1 &&
+        visibleTabs[visibleTabs.length - 2] === tab &&
+        visibleTabs[visibleTabs.length - 1] !== allTabs[allTabs.length - 1];
+      var isSecondVisible = visibleTabs.length > 1 &&
+        visibleTabs[1] === tab &&
+        visibleTabs[0] !== allTabs[0];
+      var scrollTarget = tab;
+      var inlineAlign = "nearest";
+      if (isSecondToLastVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[visibleTabs.length - 1]) + 1];
+        inlineAlign = "end";
+      } else if (isSecondVisible) {
+        scrollTarget = allTabs[allTabs.indexOf(visibleTabs[0]) - 1];
+        inlineAlign = "start";
+      }
+      if (scrollTarget) { scrollTarget.scrollIntoView({ inline: inlineAlign, block: "nearest", behavior: "smooth" }); }
+      setTimeout(updateTabsFade, 300);
+    });
+  })();
+
+
+  // Sesta eccezione JS di questo file statico (30/9/2026, richiesta Ruggi: creazione della tab
+  // "Scheda prodotto"): cambio tab del pannello (#panelMainTabs). Senza questo la nuova tab non
+  // sarebbe raggiungibile. Solo toggle di .active/aria-selected sulla tab e dell'attributo hidden
+  // sul pannello collegato (data-panel = id del pannello). "Interazioni" ora ha il suo pannello
+  // (#panelTabInterazioni): nessuna modifica allo script, funziona via data-panel. Nessuna animazione di transizione (non decisa).
+  (function () {
+    var nav = document.getElementById("panelMainTabs");
+    var body = document.getElementById("panelProductBody");
+    var line = nav ? nav.querySelector(".panel-tab-active-line") : null;
+    if (!nav) return;
+    // 30/9/2026 (Ruggi): la linea della tab attiva scorre verso la tab selezionata come
+    // .tab-active-line di prodotti.html (un solo elemento, translateX + width, transition già
+    // definita da .panel-tab-active-line: 280ms ease) invece del bordo che cambiava di scatto.
+    // Posizione iniziale senza animazione; ricalcolata al resize e a font caricato.
+    function moveLine(tab, animate) {
+      if (!line || !tab) return;
+      var tr = tab.getBoundingClientRect(), nr = nav.getBoundingClientRect();
+      if (!animate) line.style.transition = "none";
+      line.style.width = tr.width + "px";
+      line.style.transform = "translateX(" + (tr.left - nr.left) + "px)";
+      if (!animate) { line.offsetHeight; line.style.transition = ""; }
+    }
+    function select(tab) {
+      if (!tab.getAttribute("data-panel")) return;
+      Array.prototype.forEach.call(nav.querySelectorAll(".panel-tab[data-panel]"), function (t) {
+        var on = t === tab;
+        t.classList.toggle("active", on);
+        t.setAttribute("aria-selected", on ? "true" : "false");
+        var p = document.getElementById(t.getAttribute("data-panel"));
+        if (p) p.hidden = !on;
+      });
+      if (body) body.scrollTop = 0;
+      moveLine(tab, true);
+    }
+    nav.addEventListener("click", function (e) {
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) select(t);
+    });
+    nav.addEventListener("keydown", function (e) {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      var t = e.target.closest(".panel-tab");
+      if (t && nav.contains(t)) { e.preventDefault(); select(t); }
+    });
+    function refreshLine() { moveLine(nav.querySelector(".panel-tab.active"), false); }
+    refreshLine();
+    if (typeof ResizeObserver !== "undefined") new ResizeObserver(refreshLine).observe(nav);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refreshLine);
+  })();
+
+</script>
+<script>
+  // Sesta eccezione JS di questo file statico (7/11/2026, richiesta esplicita di Ruggi): il pannello destro si chiude
+  // con la X (#panelCloseBtn) e si riapre dalla prima riga (Maglione oversize), l'unica collegata alle info del pannello.
+  // Alterna .panel-open su .body: colonne, workspace e pannello reagiscono gia' via CSS (280ms ease). La riga e' .selected solo a pannello aperto.
+  (function () {
+    var body = document.querySelector(".body");
+    var closeBtn = document.getElementById("panelCloseBtn");
+    var src = document.querySelector(".product-row[data-panel-source]");
+    if (!body || !closeBtn || !src) return;
+    function setOpen(on) { body.classList.toggle("panel-open", on); src.classList.toggle("selected", on); }
+    closeBtn.addEventListener("click", function () { setOpen(false); });
+    src.addEventListener("click", function (e) { if (e.target.closest("a, .row-actions, .product-row-chevron")) return; setOpen(true); });
+    src.addEventListener("keydown", function (e) { if (e.target !== src) return; if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen(true); } });
+  })();
+</script>
+<script src="../page-search.js"></script>
+<script src="../workspace-fit.js"></script>
+<script src="../../../../design-system/components/tooltip.js"></script>
+</body>
+</html>

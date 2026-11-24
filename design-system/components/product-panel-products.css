@@ -1,0 +1,595 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.product-detail-panel {
+  position: fixed;
+  top: calc(var(--header-h) + var(--space-4)); /* 12/10/2026: distacco superiore uguale a quello inferiore del workspace */
+  right: var(--space-4);
+  bottom: var(--space-4);
+  width: var(--panel-w);
+  background: var(--bg);
+  /* 28/9/2026, correzione Ruggi: il pannello destro NON deve avere bordo (rimosso il border-neutral-200 aggiunto in precedenza; resta solo il box-shadow). */
+  border-radius: var(--radius-lg); /* 30/9/2026 (Ruggi): era radius-xl, uniformato a rounded-lg su tutti i pannelli laterali destri */
+  box-shadow: -4px 8px 24px color-mix(in srgb, var(--dark) 9%, transparent);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: 30;
+  padding: 0 var(--space-6) var(--space-6);
+  transform: translateX(calc(100% + var(--space-4)));
+  transition: transform var(--motion-duration-280) var(--motion-easing-ease);
+  pointer-events: none;
+}
+
+.product-detail-panel::-webkit-scrollbar { display: none; }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg);
+  padding: var(--space-4) 0; /* 5/10/2026 (Ruggi): .panel-header in tutte le pagine = padding var(--space-4) solo sopra e sotto, nessun padding laterale */
+  margin-bottom: var(--space-8);
+  border-bottom: var(--border-width-hairline) solid var(--border);
+}
+
+.panel-header-left, .panel-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.panel-summary-block {
+  padding-bottom: var(--space-6);
+  margin-bottom: var(--space-6);
+  border-bottom: var(--border-width-hairline) solid var(--border);
+}
+
+.panel-product-summary {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.panel-product-image {
+  width: 224px;
+  aspect-ratio: 3 / 4;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background: var(--item-active-bg);
+}
+
+.panel-product-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-4);
+}
+
+.panel-info-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.panel-info-block-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.panel-info-block-head .card-sub {
+  margin-top: 0;
+}
+
+.panel-status-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.panel-product-date {
+  font-size: var(--font-size-12);
+  color: var(--text-muted);
+}
+
+.panel-category-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.panel-category-label {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  color: var(--text);
+}
+
+.panel-info-block-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.panel-edit-btn {
+  width: 100%;
+  justify-content: center;
+}
+
+.panel-product-pricesold {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.panel-product-price {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+}
+
+.panel-product-sold {
+  font-size: var(--font-size-14);
+  color: var(--text);
+}
+
+.panel-product-sold strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+.panel-info-block-stats .product-card-reviews {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-14);
+  color: var(--text-muted);
+}
+
+.panel-info-block-stats .product-card-reviews-icon {
+  flex: none;
+}
+
+.panel-variant-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.panel-variant-section-title {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-regular);
+  color: var(--text);
+}
+
+.panel-variant-section-count {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+}
+
+.panel-variant-section-desc {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+  margin-bottom: var(--space-8);
+  display: block;
+}
+/* 5/10/2026 (Ruggi): .panel-variant-section-heading = wrapper flex in colonna di .panel-variant-section-head + .panel-variant-section-desc, con un piccolo gap fra titolo e sottotitolo (prima i due erano fratelli senza distanza). Usato ovunque compaia la coppia head+desc. */
+.panel-variant-section-heading { display: flex; flex-direction: column; gap: var(--space-1); }
+
+.panel-tabs {
+  position: var(--tabs-panel_tabs-position);
+  display: var(--tabs-panel_tabs-display);
+  gap: var(--tabs-panel_tabs-gap);
+  border-bottom: var(--tabs-panel_tabs-border_bottom);
+  margin-bottom: var(--tabs-panel_tabs-margin_bottom);
+}
+
+.panel-tab {
+  position: var(--tabs-panel_tab-position);
+  font-size: var(--tabs-panel_tab-font_size);
+  color: var(--tabs-panel_tab-color);
+  padding: var(--tabs-panel_tab-padding);
+  cursor: var(--tabs-panel_tab-cursor);
+  border-bottom: var(--tabs-panel_tab-border_bottom);
+  margin-bottom: var(--tabs-panel_tab-margin_bottom);
+  white-space: var(--tabs-panel_tab-white_space);
+  transition: var(--tabs-panel_tab-transition);
+}
+
+.panel-tab::after {
+  content: attr(data-label);
+  display: var(--tabs-panel_tab_after-display);
+  height: var(--tabs-panel_tab_after-height);
+  visibility: var(--tabs-panel_tab_after-visibility);
+  overflow: var(--tabs-panel_tab_after-overflow);
+  font-weight: var(--tabs-panel_tab_after-font_weight);
+}
+
+.panel-tab-inner {
+  display: var(--tabs-panel_tab_inner-display);
+  align-items: var(--tabs-panel_tab_inner-align_items);
+  gap: var(--tabs-panel_tab_inner-gap);
+}
+
+.panel-tab:hover {
+  color: var(--tabs-panel_tab_hover-color);
+}
+
+.panel-tab.active {
+  color: var(--tabs-panel_tab_active-color);
+  font-weight: var(--tabs-panel_tab_active-font_weight);
+}
+
+.panel-tab-active-line {
+  position: var(--tabs-panel_tab_active_line-position);
+  left: var(--tabs-panel_tab_active_line-left);
+  bottom: var(--tabs-panel_tab_active_line-bottom);
+  height: var(--tabs-panel_tab_active_line-height);
+  width: var(--tabs-panel_tab_active_line-width);
+  background: var(--tabs-panel_tab_active_line-background);
+  transform: var(--tabs-panel_tab_active_line-transform);
+  transition: var(--tabs-panel_tab_active_line-transition);
+  pointer-events: var(--tabs-panel_tab_active_line-pointer_events);
+}
+
+.panel-tab-dot {
+  width: var(--tabs-panel_tab_dot-width);
+  height: var(--tabs-panel_tab_dot-height);
+  border-radius: var(--tabs-panel_tab_dot-border_radius);
+  display: var(--tabs-panel_tab_dot-display);
+  background: var(--tabs-panel_tab_dot-background);
+  flex: var(--tabs-panel_tab_dot-flex);
+}
+
+.panel-section {
+  margin-bottom: var(--space-6);
+}
+
+.panel-section:last-child {
+  margin-bottom: 0;
+}
+
+.panel-section-title {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+  margin-bottom: var(--space-3);
+}
+
+.panel-field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+  border-bottom: var(--border-width-hairline) solid var(--border);
+}
+
+.panel-field-row:last-child {
+  border-bottom: none;
+}
+
+.panel-field-label {
+  font-size: var(--font-size-12);
+  color: var(--text-muted);
+}
+
+/* 29/10/2026 (Ruggi): label AFFIANCATA al value (riga non .stacked) = 14px muted, perché 12px accanto a un value da 14px è troppo piccolo; label sopra al campo (.stacked / form) resta 12px */
+.panel-field-row:not(.stacked) .panel-field-label {
+  font-size: var(--font-size-14);
+}
+
+.panel-field-value {
+  font-size: var(--font-size-14);
+  color: var(--text);
+}
+
+.panel-field-value strong {
+  font-weight: var(--font-weight-bold);
+}
+
+.panel-field-row.stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.panel-subvariant-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.panel-subvariant-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--spacing-8);
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-hairline) solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-12);
+  color: var(--text);
+  background: transparent;
+}
+
+.panel-subvariant-chip.esaurito {
+  color: var(--text-faint);
+  border-color: var(--border);
+  background: var(--item-active-bg);
+}
+
+.panel-subvariant-chip .variant-esaurito-dot {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: var(--spacing-3);
+  height: var(--spacing-3);
+  background: var(--bg);
+  border-radius: var(--radius-full);
+}
+
+.panel-subvariant-chip .variant-esaurito-dot svg {
+  width: 10px;
+  height: 10px;
+}
+
+.panel-action-count {
+  color: inherit;
+  opacity: .75;
+  font-weight: var(--font-weight-regular);
+  margin-left: var(--space-0-5);
+}
+
+.panel-image-grid {
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.panel-image-thumb {
+  flex: 0 0 calc((100% - (2 * var(--space-2))) / 3);
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  background: var(--item-active-bg);
+}
+
+.panel-image-thumb-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: var(--border-width-hairline) dashed var(--border);
+  cursor: pointer;
+  transition: background-color var(--motion-duration-150) var(--motion-easing-ease), border-color var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.panel-image-thumb-add:hover {
+  background: var(--item-hover-bg);
+  border-color: var(--border);
+}
+
+.panel-image-thumb-add-icon {
+  width: var(--spacing-7);
+  height: var(--spacing-7);
+  border-radius: var(--radius-full);
+  border: var(--border-width-hairline) solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+.panel-section-actions {
+  padding-top: var(--space-4);
+}
+
+.panel-actions-row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.panel-actions-row > * {
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+.panel-action-btn {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
+  border: var(--border-width-hairline) solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.panel-action-btn:hover {
+  background: var(--item-hover-bg);
+}
+
+.panel-action-btn.danger {
+  color: var(--status-danger-fg);
+  border-color: var(--status-danger-fg);
+}
+
+.panel-action-btn.danger:hover {
+  background: #fbeaea;
+}
+
+.panel-placeholder-note {
+  font-size: var(--font-size-14);
+  color: var(--text-muted);
+}
+
+.panel-alert-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  background: #fbeaea;
+  color: var(--status-danger-fg);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.panel-alert-banner svg {
+  flex: none;
+}
+
+.panel-alert-text {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-regular);
+  flex: 1;
+}
+
+.panel-alert-dismiss {
+  background: none;
+  border: none;
+  color: var(--status-danger-fg);
+  font-size: var(--font-size-12);
+  text-decoration: underline;
+  cursor: pointer;
+  flex: none;
+  padding: 0;
+  transition: opacity var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+.panel-alert-dismiss:hover {
+  opacity: 0.8;
+}
+
+.panel-drop-col .drop-countdown {
+  font-size: var(--font-size-20);
+  font-weight: var(--font-weight-bold);
+  color: var(--text);
+  line-height: var(--font-lineHeight-tight);
+}
+
+.panel-drop-col .drop-progress {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.panel-drop-col .drop-fill {
+  height: 100%;
+  background: var(--text-muted);
+  border-radius: inherit;
+}
+
+.panel-badge-col .badge-icon {
+  width: var(--spacing-9);
+  height: var(--spacing-9);
+}
+
+.panel-accordion {
+  margin-bottom: var(--space-10);
+  border-bottom: var(--border-width-hairline) solid var(--border);
+}
+
+.panel-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0 var(--space-3);
+  color: var(--text);
+}
+
+.panel-accordion-header-label {
+  font-size: var(--font-size-16);
+  font-weight: var(--font-weight-regular);
+  color: var(--text);
+}
+
+.panel-accordion-count {
+  font-size: var(--font-size-14);
+  color: var(--text-muted);
+}
+
+.panel-accordion-toggle {
+  flex: none;
+  font-size: var(--font-size-18);
+  line-height: var(--font-lineHeight-tight);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-muted);
+}
+
+.panel-accordion-body {
+  padding: 0 0 var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.panel-review-item {
+  padding-top: var(--space-3);
+  border-top: var(--border-width-hairline) solid var(--border);
+}
+
+.panel-review-item:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.panel-review-item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-1);
+}
+
+.panel-review-item-author {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text);
+}
+
+.panel-review-item-date {
+  font-size: var(--font-size-12);
+  color: var(--text-muted);
+}
+
+.panel-review-item-text {
+  font-size: var(--font-size-14);
+  color: var(--text);
+}
+
+.variant-esaurito-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  color: var(--status-danger-fg);
+}
+
+.variant-esaurito-dot svg circle {
+  fill: currentColor;
+}
+
+/* 5/11/2026 (Ruggi): hover dei link dei banner alert = stesso verso degli altri link/icone: dal tono 500 al tono 600 della stessa famiglia (più scuro), non più opacity .8 (che schiariva). */
+.panel-alert-banner :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-red-600); }
+.panel-alert-banner.info :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-blue-600); }
+.panel-alert-banner.success :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-green-600); }
+.panel-alert-banner.warning :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-orange-600); }

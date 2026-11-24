@@ -1,0 +1,1076 @@
+/* =====================================================================
+   BOTTEGA EDITOR — 22/10/2026 (Ruggi)
+   Pagina separata da bottega-creazione (decisione 16/10). Base = bottega-creazione.css (import: token, shell, campi del pannello, pill di stato).
+   Shell DEDICATA, eccezione dichiarata alle regole di workspace (margini 16px, sfondo bianco con bordo, sidebar, pannello fluttuante): vale SOLO per questa pagina.
+   - nessuna sidebar; topbar della piattaforma + toolbar dell'editor sotto (più alta, con padding verticale, senza sfondo né bordi);
+   - workspace (canvas) e pannello destro sono due blocchi arrotondati, staccati dai bordi della pagina, dalla toolbar e fra loro da space-4 (rev. 106, 22/10);
+   - il canvas ha il tema a tutta la sua larghezza in un iframe a larghezza reale (niente scala); Mobile = colonna da 390px centrata;
+   - pannello destro stretto, richiudibile (chiuso: sparisce anche lo spazio che lo separava dal canvas).
+   Nessuna nuova variabile Foundation/alias: solo --editor-* locali (CANDIDATE) che puntano a variabili esistenti.
+   ===================================================================== */
+@import url("bottega-creazione.css");
+/* 2/11/2026: elenco prodotti nell'editor = stessi componenti della pagina Prodotti (toolbar, chip, ricerca, tabella a righe) */
+@import url("../../../../design-system/components/navigation-lists.css");
+@import url("../../../../design-system/components/forms-and-filters-lists.css");
+@import url("../../../../design-system/components/product-table-lists.css");
+
+:root {
+    --editor-gap: var(--space-4);                   /* distanza fra toolbar, canvas, pannello e bordi della pagina */
+  --editor-panel-w: 360px;                        /* più stretto dei 528px del pannello standard (decisione 22/10: pannello stretto) */
+  --editor-mobile-w: 390px;
+}
+
+.editor-shell { height: 100vh; overflow: hidden; }
+.editor-shell .body { min-width: 0; }
+
+/* ---------- toolbar ---------- */
+.editor-toolbar {
+  --hover-bg: var(--item-active-hover-bg);        /* sfondo come la shell (neutral-25), hover #E5E3E6 (regola hover contestuale) */
+  position: relative; flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4);
+  margin-right: var(--editor-gap); padding: var(--space-3) var(--space-6); box-sizing: border-box;   /* 22/10, richiesta Ruggi: padding laterale 24px (--space-6) su entrambi i lati, margin-right --editor-gap (la toolbar si ferma al bordo del pannello, il contenuto sta 24px dentro); padding verticale: altezza = strumenti (40px) + 2 × space-3 */
+  background: var(--app_shell-shell_body-background); border: 0;
+  border-top: var(--border-width-hairline) solid var(--color-neutral-100); border-bottom: var(--border-width-hairline) solid var(--color-neutral-100);   /* 22/10, richiesta Ruggi: sfondo come la shell (--app_shell-shell_body-background = neutral-25) + bordo sopra e sotto neutral-200 */
+}
+.editor-tb-group { display: flex; align-items: center; gap: var(--space-1); }
+/* 2/11/2026 (Ruggi): divider verticale nella toolbar, allineato in x al divider della topbar (.breadcrumb::before = --bc-x - space-4 - hairline); le azioni dopo il divider partono da --bc-x (inizio breadcrumb). Struttura e «+» stanno in un contenitore a larghezza fissa (fino al divider): se uno o entrambi sono nascosti l'allineamento non cambia. Larghezza sidebar chiusa = token esistente. */
+.editor-tb-lead {
+  position: relative; flex: none; display: flex; align-items: center; gap: var(--space-1);
+  width: calc(var(--bc-x) - var(--space-4) - var(--border-width-hairline) - var(--sidebar-shell_sidebar_collapsed_sidebar-width) - var(--space-6));
+  margin-right: calc(var(--space-4) + var(--border-width-hairline) - var(--space-1));
+}
+.editor-tb-sep { position: absolute; left: 100%; top: 50%; transform: translateY(-50%); width: var(--border-width-hairline); height: var(--spacing-4); background: var(--color-neutral-100); }
+.editor-tb-group.is-right { gap: var(--space-2); }
+.editor-device-switch { display: flex; align-items: center; gap: var(--space-1); }
+
+.editor-tool {
+  flex: none; width: var(--button-icon_btn-width); height: var(--button-icon_btn-height); padding: 0; border: 0; border-radius: var(--radius-pill);
+  display: flex; align-items: center; justify-content: center; background: transparent; color: var(--text); cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+.editor-tool:hover { background: var(--hover-bg); }
+.editor-tool:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.editor-tool.is-active { background: var(--color-neutral-200); }
+.editor-tool.is-primary { background: var(--btn-primary-bg); color: var(--bg); }
+.editor-tool.is-primary:hover { background: var(--btn-primary-bg); opacity: .88; }
+.editor-tool[aria-disabled="true"] { opacity: .4; cursor: not-allowed; }
+.editor-tool[aria-disabled="true"]:hover { background: transparent; opacity: .4; }
+.editor-tool.is-primary[aria-disabled="true"]:hover { background: var(--btn-primary-bg); }
+
+.editor-tb-title {
+  position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: var(--space-3);
+  max-width: 36%; min-width: 0; pointer-events: none;
+}
+.editor-tb-title.editor-browser { pointer-events: auto; gap: var(--space-2); min-width: 0; width: 360px; max-width: 36%; padding: var(--space-1) var(--space-2); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-sm); }
+.editor-browser-fav { flex: none; width: var(--spacing-6); height: var(--spacing-6); display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+.editor-browser-fav img { width: 16px; height: 16px; object-fit: contain; display: block; }
+.editor-browser-url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-14); color: var(--text); }
+
+.editor-publish { display: flex; align-items: center; gap: var(--space-2); margin-left: var(--space-2); }
+.editor-publish .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; pointer-events: none; }
+
+/* ---------- canvas ---------- */
+.editor-main { flex: 1; min-height: 0; display: flex; align-items: stretch; padding: var(--editor-gap) var(--editor-gap) 0; background: var(--app_shell-shell_body-background); }
+.editor-canvas {
+  flex: 1; min-width: 0; min-height: 0; display: flex; justify-content: center; overflow: hidden; background: var(--app_shell-shell_body-background);   /* 22/10: stesso sfondo della shell; l'anteprima (iframe/riquadro mobile) resta bianca */
+  border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-lg) var(--radius-lg) 0 0; border-bottom: 0;   /* regola workspace 13/10: contenuto che scorre = attaccato in basso, angoli inferiori piatti, niente margin-bottom */
+}
+.editor-device { width: 100%; height: 100%; background: #fff; transition: width var(--motion-duration-280) var(--motion-easing-ease); }
+.editor-device[data-view="mobile"] {
+  width: var(--editor-mobile-w); height: calc(100% - 2 * var(--space-4)); margin: var(--space-4) 0; background: #fff; box-sizing: border-box;
+  border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-lg); overflow: hidden;
+}
+/* l'iframe riempie il riquadro e scorre da sé: larghezza reale, nessuna scala (caret e selezione restano precisi) */
+.editor-device > .theme-frame { position: static; display: block; width: 100%; height: 100%; max-width: none; border: 0; transform: none; pointer-events: auto; background: #fff; }
+
+/* ---------- pannello destro (stretto, agganciato) ---------- */
+.editor-panel {
+  flex: none; width: var(--editor-panel-w); min-height: 0; overflow: hidden; display: flex; flex-direction: column; margin-left: var(--editor-gap); margin-bottom: var(--editor-gap);
+  background: var(--bg); border-radius: var(--radius-lg);                                     /* stesso aspetto del pannello destro delle altre pagine: arrotondato, senza bordo, con ombra */
+  box-shadow: -4px 8px 24px color-mix(in srgb, var(--dark) 9%, transparent);
+  transition: width var(--motion-duration-280) var(--motion-easing-ease), margin-left var(--motion-duration-280) var(--motion-easing-ease), box-shadow var(--motion-duration-280) var(--motion-easing-ease);
+}
+.editor-panel > * { min-width: var(--editor-panel-w); box-sizing: border-box; } /* il contenuto non si riflusso mentre il pannello si chiude */
+.editor-shell.panel-closed .editor-panel { width: 0; margin-left: 0; box-shadow: none; }
+/* 22/10/2026 (Ruggi): intestazione del pannello = X + frecce (solo tab Sezioni) + tab Pagina/Sezioni. Copia locale di .panel-close-btn/.panel-nav-btn/.panel-header-group di prodotti-panel-static.css (non importato qui). */
+.editor-panel-head { flex: none; background: var(--bg); padding: var(--space-4) var(--space-6) var(--space-6); } /* 22/10: padding-bottom come .panel-header-sticky delle altre pagine (space-6 sotto le tab) */
+.editor-panel-head .panel-header { display: flex; align-items: flex-start; justify-content: space-between; border-bottom: 0; margin-bottom: var(--space-4); }
+.editor-panel-head .panel-header-left { display: flex; align-items: center; gap: var(--space-4); }
+.editor-panel-head .panel-header-group { display: flex; align-items: center; gap: var(--space-1); }
+.editor-panel-head .panel-header-group[hidden] { display: none; }
+.editor-panel-head .panel-close-btn, .editor-panel-head .panel-nav-btn { width: var(--spacing-7); height: var(--spacing-7); padding: 0; border: 0; border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; background: transparent; }
+.editor-panel-head .panel-close-btn:hover, .editor-panel-head .panel-nav-btn:hover { background: var(--hover-bg); color: var(--text); }
+.editor-panel-head .panel-nav-btn[aria-disabled="true"] { opacity: .35; cursor: not-allowed; }
+.editor-panel-head .panel-nav-btn[aria-disabled="true"]:hover { background: transparent; color: var(--text-muted); }
+.editor-panel-head .panel-tabs { margin-bottom: 0; }
+/* 22/10/2026 (Ruggi): tab Pagina con il componente `.panel-accordion` del DS (copia locale delle regole di prodotti-panel-static.css per summary/+/−: nel file shared è un <button>). Righe = `.panel-field-row/-label/-value` shared. */
+.editor-accordion { margin-bottom: 0; border-bottom: none; }
+.editor-accordion > .panel-accordion-header { padding: var(--space-6) 0; border-top: var(--border-width-hairline) solid var(--border); cursor: pointer; list-style: none; }
+.editor-accordion > .panel-accordion-header::-webkit-details-marker { display: none; }
+.editor-accordion .panel-accordion-toggle::before { content: "+"; }
+.editor-accordion[open] .panel-accordion-toggle::before { content: "\2212"; }
+.editor-accordion[hidden] { display: none; }
+.editor-accordion .panel-accordion-body { padding-bottom: var(--space-6); }
+.editor-head-title { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-2) 0 var(--space-4); }
+.editor-head-title .card-title { margin: 0; }
+/* 2/11/2026 (Ruggi): stato di salvataggio nell'intestazione del pannello destro. Stessa tipografia dei testi di aiuto (12px, peso regolare). Salvato = cerchio pieno verde con tick bianco + label verde; Salvataggio… = spinner + label disabilitata (muted). Colori: stessi token del dot/testo della pill «Pubblicato». */
+.editor-save { display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--success); }   /* 2/11 (Ruggi): label in grassetto (e' uno stato, non un testo di aiuto) */
+/* icona = stessa resa di .status-dot.done del Cruscotto (cerchio --success, glifo ✓ color-text-inverse); la dimensione e' provvisoria (--spacing-4), da confermare. */
+.editor-save-ico { flex: none; width: var(--spacing-4); height: var(--spacing-4); border-radius: var(--radius-full); border: var(--border-width-moderate) solid var(--success); background: var(--success); color: var(--color-text-inverse); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: var(--font-weight-regular); line-height: 1; box-sizing: border-box; }
+.editor-save[data-state="saving"] { color: var(--text-muted); }
+.editor-save[data-state="saving"] .editor-save-ico { background: transparent; border: 2px solid var(--color-neutral-200); border-top-color: var(--text-muted); box-sizing: border-box; animation: editor-save-spin 800ms linear infinite; }
+.editor-save[data-state="saving"] .editor-save-ico { font-size: 0; }
+.editor-save[data-state="unsaved"] { color: var(--text-muted); }
+.editor-save[data-state="unsaved"] .editor-save-ico { display: none; }
+.editor-panel[data-mode="list"] .editor-save:not([data-state="pending"]):not([data-state="idle"]), .editor-panel[data-mode="fixed"] .editor-save:not([data-state="pending"]) { display: none; } /* lista Prodotti / Drop / Riepilogo: niente «Salvato», ma «Da pubblicare» si (2/11/2026) */
+@keyframes editor-save-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .editor-save[data-state="saving"] .editor-save-ico { animation-duration: 2400ms; } }
+.panel-product-date { font-size: var(--font-size-12); color: var(--text-muted); } /* copia locale della regola del DS (product-panel-products.css), come in bottega-onboarding.css */
+.panel-product-date:empty { display: none; }
+.editor-slug { display: flex; flex-direction: column; gap: var(--space-2); padding: 0 0 var(--space-6); }
+.editor-slug-row { display: flex; align-items: center; gap: var(--space-2); }
+.editor-slug-row .bottega-input-group { flex: 1; min-width: 0; }
+.editor-section-reset-zone { margin-top: var(--space-6); padding-top: var(--space-6); border-top: var(--border-width-hairline) solid var(--border); } /* 29/10/2026 (Ruggi): divider sopra Ripristina quando compare */
+.editor-section-reset-zone[hidden] { display: none; }
+.editor-section-reset { width: 100%; justify-content: center; text-align: center; }
+.editor-section-reset .panel-action-count { color: inherit; opacity: .75; font-weight: var(--font-weight-regular); margin-left: var(--space-0-5); } /* 30/10/2026: stessi valori di .panel-action-count (product-panel-products.css, non caricato qui) */
+.editor-font-row { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-2) 0; }
+.editor-font-row .editor-slug-row .bottega-input { flex: 1; min-width: 0; }
+.editor-color-group { margin: var(--space-6) 0 var(--space-4); } /* 29/10/2026 (Ruggi): titoli di gruppo colori piu' staccati, soprattutto sotto */
+.editor-color-list { display: flex; flex-direction: column; gap: var(--space-2); } /* righe separate: l'hover arrotondato non tocca le righe vicine, niente filetti */
+.editor-color-addbtn { position: relative; cursor: pointer; align-self: flex-start; margin-top: calc(var(--space-8) - var(--space-2)); } /* 29/10/2026 (Ruggi): in fondo, a sinistra; distanza dall'ultima riga = space-8 (il gap della lista, space-2, e' gia' contato) */
+.editor-color-addbtn:has(:focus-visible) { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.editor-color-addbtn svg { flex: none; }
+/* 29/10/2026 (Ruggi): riga colore = tutta cliccabile (apre il picker), si illumina in hover come gli item del pannello e mostra le azioni (sostituisci / ripristina / elimina) come le righe delle tabelle: pannello pieno col colore della riga che copre l'hex, hover icone neutro. Il padding orizzontale e il margine negativo (space-2) servono solo a dare respiro all'evidenziazione senza spostare il contenuto. */
+.editor-color-row { position: relative; gap: var(--space-3); justify-content: flex-start; cursor: pointer; padding: var(--space-2); margin-inline: 0; border-bottom: none; border-radius: var(--radius-md); --row-bg: var(--item-hover-bg); --row-icon-hover-bg: var(--item-active-hover-bg); transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-color-row:hover, .editor-color-row:has(:focus-visible) { background: var(--row-bg); }
+.editor-color-row.is-alias, .editor-color-row.is-alias .bottega-swatch { cursor: default; }
+.editor-color-meta { flex: none; align-self: stretch; display: flex; flex-direction: column; align-items: flex-end; }
+.editor-color-meta .editor-color-hex { margin-top: auto; }
+.editor-color-alias { font-size: var(--font-size-12); color: var(--sidebar-sidebar_item_active-color); } /* nome del colore che sostituisce: lilla come la voce attiva */
+.editor-color-alias:empty { display: none; }
+.editor-color-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: var(--space-0-5); padding: 0 var(--space-2) 0 var(--space-6); background: linear-gradient(to right, transparent, var(--row-bg) var(--space-5)); border-radius: 0 var(--radius-md) var(--radius-md) 0; opacity: 0; pointer-events: none; transition: opacity var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-color-actions:empty, .editor-color-actions:not(:has(.editor-color-act:not([hidden]))) { display: none; } /* niente maschera se la riga non ha azioni visibili (es. Sfondo non modificato) */
+.editor-color-row:hover .editor-color-actions, .editor-color-row:has(:focus-visible) .editor-color-actions { opacity: 1; pointer-events: auto; }
+.editor-color-act { flex: none; color: var(--text); background: none; border: 0; padding: 0; transition: color var(--motion-duration-150) var(--motion-easing-ease), background var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-color-act:hover, .editor-color-act:focus-visible { background: var(--row-icon-hover-bg); color: var(--text); }
+.editor-color-act[hidden] { display: none; }
+.editor-color-row:hover .editor-color-meta, .editor-color-row:has(:focus-visible) .editor-color-meta { visibility: hidden; } /* sotto la maschera l'hex non deve restare visibile a pezzi: in hover sparisce per intero (se la riga ha azioni) */
+.editor-color-row:not(:has(.editor-color-act:not([hidden]))) .editor-color-meta { visibility: visible; }
+/* scelta del colore di sostituzione (popover) + avviso con Annulla: locali/candidati, stessa forma del menu dropdown custom */
+.editor-color-pop { position: absolute; left: 0; right: 0; z-index: var(--zIndex-4); padding: var(--space-2); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent); }
+.editor-color-pop ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-0-5); max-height: 16rem; overflow-y: auto; }
+.editor-color-pop li { display: flex; align-items: center; gap: var(--sidebar-sidebar_item-gap); padding: var(--sidebar-sidebar_item-padding); border-radius: var(--sidebar-sidebar_item-border_radius); font-size: var(--sidebar-sidebar_item-font_size); color: var(--text); cursor: pointer; outline: none; }
+.editor-color-pop li:hover, .editor-color-pop li:focus-visible { background: var(--color-neutral-50); }
+.editor-color-pop li[aria-selected="true"], .editor-color-pop li[aria-selected="true"]:hover { background: var(--sidebar-sidebar_item_active-background); color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); }
+.editor-color-pop-sw { flex: none; width: var(--spacing-4); height: var(--spacing-4); border-radius: var(--radius-pill); border: var(--border-width-hairline) solid var(--border); background: var(--sw); box-sizing: border-box; }
+.editor-color-pop-name { flex: 1; min-width: 0; }
+/* 30/10/2026 (Ruggi): pannello "Nuovo colore" (stile modale, WIREFRAME): titolo + X, divider, Nome + Colore, footer con "Aggiungi". Proporzioni/padding come .editor-modal-*; la riga del colore va in hover come le righe colore. */
+.editor-color-new { position: fixed; left: auto; width: 19.5rem; z-index: var(--zIndex-30); padding: 0; overflow: visible; } /* 30/10/2026 (Ruggi): a sinistra del pannello dell'editor, sopra a tutto; 19.5rem = 312px = larghezza del contenuto del pannello (valore locale) */
+.editor-color-new-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-8); border-bottom: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-color-new-head .card-title { margin: 0; font: var(--type-title-sm); } /* 30/10/2026 (Ruggi): titolo piu' piccolo della modale (era 20px): 16px regular */
+.editor-color-new-body { display: grid; grid-template-columns: max-content 1fr; align-items: center; gap: var(--space-4); padding: var(--space-8); }
+.editor-color-new-body .panel-field-label { font-size: var(--font-size-14); }
+.editor-color-new-body .bottega-input { min-width: 0; width: 100%; }
+.editor-color-new-pick { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2); margin: calc(-1 * var(--space-2)) 0; border-radius: var(--radius-md); cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-color-new-pick:hover, .editor-color-new-pick:has(:focus-visible) { background: var(--item-hover-bg); }
+.editor-color-new-pick .bottega-swatch { flex: none; }
+.editor-color-new-pick:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.editor-color-new-anchor { position: fixed; width: 15rem; height: 0; padding: 0; border: 0; opacity: 0; pointer-events: none; } /* ancora invisibile del selettore nativo (a sinistra del cerchio) */
+.editor-color-new-foot { display: flex; justify-content: flex-end; gap: var(--space-2); padding: var(--space-8); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-toast { position: fixed; left: 50%; bottom: var(--space-6); transform: translateX(-50%); z-index: calc(var(--zIndex-50) + 1); display: flex; align-items: center; gap: var(--space-4); padding: var(--space-3) var(--space-4); background: var(--bg); color: var(--text); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent); font-size: var(--font-size-14); }
+.editor-toast-undo { background: none; border: 0; padding: 0; color: var(--text); font: inherit; font-weight: var(--font-weight-semibold, 600); text-decoration: underline; cursor: pointer; }
+.editor-color-row.is-last { border-bottom: none; }
+.editor-color-row .bottega-swatch { position: relative; flex: none; overflow: hidden; }
+.editor-color-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: 0; padding: 0; }
+.editor-color-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.editor-color-hex { flex: none; text-transform: uppercase; align-self: flex-end; } /* 29/10/2026 (Ruggi): l'hex sta in fondo alla riga, sulla stessa linea della descrizione (non centrato in verticale) */
+.editor-panel-body {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; -ms-overflow-style: none;
+  padding: var(--space-4) var(--space-6) var(--space-8); /* come .panel-body delle altre pagine: space-4 sopra (che con space-6 dello sticky fa 40px dalle tab), space-8 in fondo */
+}
+.editor-panel-body::-webkit-scrollbar { display: none; }
+.editor-panel-body .panel-alert-banner { margin-bottom: var(--space-4); }
+.editor-panel-body .bottega-social-list { margin-bottom: var(--space-2); }
+/* 22/10/2026 (Ruggi): banner con azione + "Non mostrare più" + X = struttura standard di .panel-alert-banner (copia locale da prodotti-panel-static.css, qui non importato; bottega-creazione.css ha solo la X). Nel DS l'azione è colorata solo per .info: per .warning il colore segue il titolo (status-warning-fg), stessa logica. */
+.panel-alert-actions { display: flex; align-items: center; gap: var(--space-4); margin-top: var(--space-6); }
+.panel-alert-action, .panel-alert-dismiss { background: none; border: none; padding: 0; cursor: pointer; text-decoration: none; transition: opacity var(--motion-duration-150) var(--motion-easing-ease); }
+.panel-alert-action { font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); }
+.panel-alert-dismiss { font-size: var(--font-size-12); }
+.panel-alert-action:hover, .panel-alert-dismiss:hover { opacity: 0.8; }
+.panel-alert-banner.warning .panel-alert-action, .panel-alert-banner.warning .panel-alert-dismiss { color: var(--status-warning-fg); }
+.panel-alert-banner.info .panel-alert-action, .panel-alert-banner.info .panel-alert-dismiss { color: var(--color-blue-500); }
+
+/* testo editabile nel tema: lo stile (EDIT_CSS) vive dentro l'iframe; qui niente */
+@media (max-width: 900px) { .editor-tb-title { display: none; } }
+
+/* 22/10/2026 — accordion Contatti: il select del tipo ha la larghezza del contenuto, il valore occupa il resto */
+
+
+/* 22/10/2026 (Ruggi) — pulsante "Pagine" + pannello di scelta della pagina del tema (stessa grafica del menu ⋮ delle card bozza: bg, bordo hairline neutral-100 (29/10: aggiunto anche al sottomenu Prodotto), radius-md, righe con hover) */
+.editor-pages { position: relative; display: inline-flex; }
+.editor-pages-menu { position: absolute; top: calc(100% + var(--space-2)); left: 0; z-index: 20; min-width: 280px; padding: var(--space-2); display: flex; flex-direction: column; gap: var(--space-0-5); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); box-shadow: -4px 8px 24px color-mix(in srgb, var(--dark) 9%, transparent); }
+.editor-pages-menu[hidden] { display: none; }
+.editor-pages-menu::before { content: ""; position: absolute; left: 0; right: 0; top: calc(var(--space-2) * -1); height: var(--space-2); } /* ponte invisibile: il menu non si chiude passando dal pulsante al menu */
+#pagesBtn[aria-expanded="true"] { background: var(--hover-bg); }
+.editor-pages-title { margin: 0; padding: var(--space-2) var(--sidebar-sidebar_item-padding); font-size: var(--font-size-12); color: var(--text-muted); font-weight: var(--font-weight-regular); }
+.editor-page-row { display: flex; align-items: center; gap: var(--sidebar-sidebar_item-gap); width: 100%; padding: var(--sidebar-sidebar_item-padding); border: 0; border-radius: var(--sidebar-sidebar_item-border_radius); background: none; color: var(--text); font: inherit; font-size: var(--font-size-14); text-align: left; cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-page-row:hover, .editor-page-row:focus-visible { background: var(--item-hover-bg); }
+.editor-page-row-text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+.editor-page-row-note { font-size: var(--font-size-12); color: var(--text-muted); }
+.editor-page-row-icon { flex: none; width: 16px; height: 16px; color: var(--text-muted); }
+.editor-page-row[aria-checked="true"] .editor-page-row-icon { color: inherit; }
+.editor-page-row-check { flex: none; width: 16px; height: 16px; color: var(--btn-primary-bg); }
+.editor-tool[aria-disabled="true"]:not(.is-primary) { opacity: .4; cursor: not-allowed; }
+
+/* livello "Prodotto" del pannello Pagine: indietro + anteprima generale + lista dei prodotti con stato */
+.editor-pages-back { display: flex; align-items: center; gap: var(--space-2); width: 100%; padding: var(--sidebar-sidebar_item-padding); border: 0; border-radius: var(--sidebar-sidebar_item-border_radius); background: none; color: var(--text-muted); font: inherit; font-size: var(--font-size-14); cursor: pointer; }
+.editor-pages-back:hover, .editor-pages-back:focus-visible { background: var(--item-hover-bg); color: var(--text); }
+.editor-page-row-chev { flex: none; width: 16px; height: 16px; color: var(--text-muted); }
+.editor-page-row .status-pill { flex: none; }
+
+/* "Modifica" prodotto (link-pulsante in toolbar): nessuna sottolineatura (regola del sito sui link di testo) */
+#editProductBtn { text-decoration: none; }
+
+/* 22/10/2026 — Pagine: voce selezionata = stile lilla dell'item selezionato (come la sidebar), niente spunta; menu secondario di Prodotto all'hover */
+.editor-page-row[aria-checked="true"] { background: var(--sidebar-sidebar_item_active-background); color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); }
+.editor-page-row[aria-checked="true"] .editor-page-row-note { color: inherit; opacity: .8; }
+.editor-page-sub { position: relative; }
+.editor-pages-sub { display: none; position: absolute; top: calc(var(--space-2) * -1); left: calc(100% + var(--space-2) - var(--space-1)); min-width: 280px; padding: var(--space-2); flex-direction: column; gap: var(--space-3); background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); box-shadow: -4px 8px 24px color-mix(in srgb, var(--dark) 9%, transparent); }
+.editor-pages-sub::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--space-3) * -1); width: var(--space-3); } /* ponte invisibile: il menu non si chiude passando dalla voce al sottomenu */
+.editor-page-sub:hover > .editor-pages-sub, .editor-page-sub:has(:focus-visible) > .editor-pages-sub { display: flex; }
+.editor-pages.is-pinned .editor-pages-sub { display: flex; } /* 29/10/2026 — ?pinpages: sottomenu Prodotto sempre aperto */
+
+/* 22/10/2026 (Ruggi) — Struttura della pagina (tab Sezioni). Fisse (Navbar, Identità, Prodotti, Footer) = solo testo lilla, non selezionabili; linee tratteggiate dove non si possono aggiungere blocchi (tra Navbar e Identità, sotto il Footer). Aggiuntive = maniglia + trascinamento (o frecce ↑/↓): al hover e mentre si trascinano hanno lo stile di item selezionato (lilla, come la sidebar), mai attenuate. Forma delle voci = .sidebar-item (--sidebar-sidebar_item-*). */
+.editor-struct { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-0-5); }
+.editor-struct-row { display: flex; align-items: center; gap: var(--sidebar-sidebar_item-gap); padding: var(--sidebar-sidebar_item-padding); border-radius: var(--sidebar-sidebar_item-border_radius); font-size: var(--sidebar-sidebar_item-font_size); color: var(--text); background: transparent; }
+.editor-struct-row { cursor: pointer; }
+.editor-struct-row.is-fixed { color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); }
+.editor-struct-row.is-movable { cursor: grab; }
+.editor-struct-row:hover, .editor-struct-row.is-dragging { background: var(--item-hover-bg); } /* hover normale, anche mentre si trascina */
+.editor-struct-row.is-selected, .editor-struct-row.is-selected:hover { background: var(--sidebar-sidebar_item_active-background); color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); } /* selezionata = item attivo, evidenziata anche nell'anteprima */
+.editor-struct-row.is-selected .editor-struct-grip { color: inherit; }
+.editor-struct-row.is-dragging { cursor: grabbing; }
+.editor-struct-row:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.editor-struct-grip { color: inherit; }
+.editor-struct-grip { flex: none; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; padding: 0; border: 0; background: none; color: var(--text-muted); cursor: inherit; }
+.editor-struct-grip:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; border-radius: var(--radius-xs); }
+.editor-struct-label { flex: 1 1 auto; min-width: 0; }
+.editor-struct-lock { flex: none; width: 16px; height: 16px; }
+.editor-struct-spacer { flex: none; width: 16px; }
+.editor-struct-block { height: 0; margin: var(--space-2) var(--sidebar-sidebar_item-padding); border-top: var(--border-width-hairline) dashed var(--color-neutral-400); list-style: none; } /* qui non si aggiungono blocchi */
+/* azione fissa in fondo al pannello (1/11/2026: lista prodotti e editor prodotto) */
+.editor-panel-foot { display: none; flex: none; padding: var(--space-4) var(--space-6); background: var(--bg); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-panel[data-foot="on"] .editor-panel-foot { display: flex; flex-direction: column; align-items: flex-end; gap: var(--space-2); } /* 1/11/2026: «Modifica pagina» (lista prodotti) / «Pubblica prodotto» (editor prodotto in Bozza) */
+.editor-panel-foot .bottega-hint { margin: 0; text-align: right; }
+.editor-panel-foot .btn-pill-dark { width: auto; } /* a destra, larghezza del testo */
+.editor-panel-foot .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; }
+.editor-panel-foot .btn-pill-dark[aria-disabled="true"] { opacity: .45; cursor: not-allowed; } /* 1/11/2026: disabilitato ma focalizzabile, col motivo in tooltip e in riga di testo */
+
+/* 22/10/2026 (Ruggi) — modale «Aggiungi una sezione» (LOCALE/CANDIDATA: nel design system non esiste una modale). Struttura: titolo + X, a sinistra le famiglie (voci con forma di .sidebar-item), a destra le varianti come schede e il colore, in fondo Annulla / Aggiungi. */
+.editor-modal { position: fixed; inset: 0; z-index: var(--zIndex-50); display: flex; align-items: center; justify-content: center; padding: var(--space-6); }
+.editor-modal[hidden] { display: none; }
+.editor-modal-backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--dark) 45%, transparent); }
+.editor-modal-box { position: relative; display: flex; flex-direction: column; width: min(64rem, 100%); height: min(42rem, 100%); outline: none; background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; }
+.editor-modal-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-8); }
+.editor-modal-close { width: var(--spacing-7); height: var(--spacing-7); padding: 0; border: 0; border-radius: var(--radius-pill); display: flex; align-items: center; justify-content: center; background: none; color: var(--text-muted); cursor: pointer; }
+.editor-modal-close:hover { background: var(--hover-bg); color: var(--text); }
+.editor-modal-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-modal-view { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-6); }
+.editor-modal-view[hidden] { display: none; }
+.editor-modal-grid { display: grid; align-items: start; grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); gap: var(--space-4); }
+.editor-modal-view > .bottega-input { flex: none; }
+.editor-modal-empty { margin: 0; color: var(--text-muted); font-size: var(--font-size-14); }
+.editor-modal-card, .editor-modal-variant { display: flex; flex-direction: column; gap: 0; padding: var(--space-2); border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-md); background: none; color: var(--text); font: inherit; font-size: var(--font-size-16); text-align: left; cursor: pointer; }
+.editor-modal-card:hover, .editor-modal-variant:hover { background: var(--hover-bg); }
+.editor-modal-variant[aria-checked="true"] { border-color: var(--sidebar-sidebar_item_active-color); box-shadow: inset 0 0 0 1px var(--sidebar-sidebar_item_active-color); }
+.editor-modal-variant-sw { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; border-radius: var(--radius-sm); background: var(--color-neutral-200); }
+.editor-modal-variant-frame { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; pointer-events: none; background: transparent; }
+/* 29/10/2026 (Ruggi): testo delle card = .product-card-name (16px, --text; copia locale di cruscotto.css). Card della griglia: padding space-4 e titolo a space-4 dall'immagine; card varianti interne: padding space-2 */
+.product-card-name { font-size: var(--font-size-16); color: var(--text); }
+.editor-modal-card { padding: var(--space-4); gap: var(--space-4); }
+.editor-modal-variant { padding: var(--space-2); gap: var(--space-4); }
+.editor-modal-card-text { display: flex; flex-direction: column; gap: var(--space-1); }
+.editor-modal-variant-text { display: block; }
+/* etichetta variante = type/title/xs (14/20 semibold, --text), stesso ruolo di .panel-section-title (product-panel-products.css:264) senza il suo margin-bottom (come .bottega-label) */
+.editor-modal-variant-name { font: var(--type-title-xs); color: var(--text); }
+.editor-modal-card-count { color: var(--text-muted); font-size: var(--font-size-14); }
+.editor-modal-detail { overflow: hidden; }
+.editor-modal-detail-body { flex: 1 1 auto; min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr); grid-template-columns: 1fr 20rem; gap: var(--space-6); }
+/* 29/10/2026 (Ruggi): nella riga colori della modale, "Nessun colore" = cerchio bianco con barra rossa; "Aggiungi colore" = cerchio tratteggiato con + (apre il selettore nativo). Le righe vanno a capo (.bottega-swatches è già flex-wrap) */
+.bottega-swatch.is-none { background: var(--color-white, #fff); background-image: linear-gradient(to top right, transparent calc(50% - 1px), var(--color-red-500) calc(50% - 1px), var(--color-red-500) calc(50% + 1px), transparent calc(50% + 1px)); }
+.bottega-swatch.is-add { position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; border-style: dashed; border-color: var(--color-neutral-400); background: none; color: var(--text-muted); font-size: var(--font-size-16); }
+.bottega-swatch.is-add::before { content: "+"; line-height: 1; }
+.bottega-swatch.is-add:has(:focus-visible) { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; overflow: visible; }
+.editor-modal-controls { min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-6); padding: var(--space-1); margin: calc(-1 * var(--space-1)); } /* 29/10/2026: padding+margin negativo = stessa posizione, ma l outline di focus/selezione dei cerchi (2px + offset 2px) non viene più tagliato dall overflow */
+.editor-modal-controls .editor-head-title { padding-top: 0; padding-bottom: 0; }
+.editor-modal-intro { display: flex; flex-direction: column; gap: var(--space-1); padding-bottom: var(--space-6); border-bottom: var(--border-width-hairline) solid var(--border); } /* divider come tra l'indirizzo (.editor-slug: padding-bottom space-6) e il primo accordion del pannello Generali (border-top hairline --border) */
+.editor-modal-desc { margin: 0; color: var(--text-muted); font-size: var(--font-size-14); }
+/* .panel-card-title: copia locale (come in prodotti-panel-static.css e ordini-statico.css) senza il margin-bottom del DS; il gap lo dà .editor-modal-block */
+.panel-card-title { margin: 0; font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+.editor-modal-block { display: flex; flex-direction: column; gap: var(--space-3); }
+.editor-modal-detail-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.editor-modal-detail-head .bottega-cancel-link { margin: 0; display: inline-flex; align-items: center; gap: var(--space-1); }
+.editor-modal-preview { position: relative; min-height: 0; height: 100%; overflow: hidden; border-radius: var(--radius-md); background: var(--color-neutral-200); }
+.editor-modal-preview .editor-modal-variant-frame { pointer-events: auto; }
+.editor-modal-variants { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.editor-modal-foot { flex: none; display: flex; justify-content: flex-end; gap: var(--space-2); padding: var(--space-8); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-modal-foot .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; }
+
+/* 29/10/2026 (Ruggi) — menu Pagine: niente bordo, solo l'ombra del pannello destro (stesso valore di product-panel-products.css). Sottomenu Prodotto = 2 gruppi (Anteprima+I tuoi prodotti | Recenti+prodotti): fra i gruppi space-3, fra le voci dentro il gruppo space-0-5. */
+.editor-pages-group { display: flex; flex-direction: column; gap: var(--space-0-5); }
+
+/* 29/10/2026 (Ruggi) — nota sotto l'indirizzo (#panelSlugHint): icona info in outline davanti al testo (stessa icona e stile degli altri outline 24/1.8, in currentColor via mask: il testo è riscritto da JS) e distanza maggiore dal campo sopra (gap space-2 + margin-top space-1 = 12px = space-3). */
+#panelSlugHint { display: flex; align-items: flex-start; gap: var(--space-1); margin-top: var(--space-1); color: var(--color-blue-500); } /* 30/10/2026 (Ruggi): messaggio info = icona E testo blu (come errore = icona e testo rossi); CANDIDATO, vedi rev. 218 */
+#panelSlugHint::before { content: ""; flex: none; width: 16px; height: 16px; margin-top: 2px; background: var(--color-blue-500); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5'/%3E%3Cpath d='M12 7.5h.01'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5'/%3E%3Cpath d='M12 7.5h.01'/%3E%3C/svg%3E") center / contain no-repeat; } /* 30/10/2026 (Ruggi): icona info BLU (CANDIDATO: feedback.info non esiste; blue-500 come i banner info di Prodotti), testo muted */
+
+/* 29/10/2026 (Ruggi) — dropdown custom (accordion Font). Stesso pattern del Corriere in 04-Ordini/ordini-statico.css (.order-select*): bottone con l'aspetto dell'input, pannello bianco con bordo hairline e ombra Foundation elevation, hover neutral-50 sulle voci, voce selezionata semibold. Altezza = .bottega-input (spacing-12); la freccia sta dentro il padding orizzontale dell'input (space-3). Candidato locale: da promuovere a componente condiviso con Ordini. */
+.editor-select { position: relative; flex: 1; min-width: 0; }
+.editor-select-btn { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); text-align: left; cursor: pointer; }
+.editor-select-btn svg { flex: none; color: var(--text-muted); }
+.editor-select-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editor-select-menu { position: absolute; top: calc(100% + var(--space-1)); left: 0; right: 0; z-index: var(--zIndex-4); margin: 0; padding: var(--space-2); list-style: none; background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent); }
+.editor-select-menu[hidden] { display: none; }
+.editor-select-menu { display: flex; flex-direction: column; gap: var(--space-0-5); }
+
+.editor-select-menu li { display: flex; align-items: center; gap: var(--sidebar-sidebar_item-gap); padding: var(--sidebar-sidebar_item-padding); border-radius: var(--sidebar-sidebar_item-border_radius); font-size: var(--sidebar-sidebar_item-font_size); color: var(--text); cursor: pointer; outline: none; } /* 29/10: voci = forma di .sidebar-item (sidebar aperta), come le righe del menu Pagine */
+.editor-select-menu li:hover, .editor-select-menu li:focus-visible { background: var(--color-neutral-50); }
+.editor-select-menu li[aria-selected="true"], .editor-select-menu li[aria-selected="true"]:hover { background: var(--sidebar-sidebar_item_active-background); color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); } /* 29/10: selezionata = item attivo (lilla), come sidebar e menu Pagine */
+
+/* 29/10/2026 (Ruggi) — chevron dei dropdown: ruota verso l'alto quando il pannello è aperto */
+.editor-select-btn svg { transition: transform var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-select-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+/* 29/10/2026 (Ruggi) — Contatti: etichetta del tipo sopra il campo (come le righe Font), campo a tutta larghezza, errore sotto; telefono = gruppo input con prefisso */
+.editor-contact { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-2) 0; }
+.editor-phone-prefix { flex: none; width: calc(var(--spacing-12) + var(--space-2)); background: var(--color-neutral-50); border-right: var(--border-width-hairline) solid var(--border) !important; color: var(--text-muted); text-align: center; padding-left: var(--space-2); padding-right: var(--space-2); }
+.editor-field-error { display: flex; align-items: flex-start; gap: var(--space-2); margin: 0; font-size: var(--font-size-12); line-height: var(--font-lineHeight-20); color: var(--status-danger-fg); }
+.editor-field-error::before { content: ""; flex: none; width: var(--spacing-4); height: var(--spacing-4); margin-top: var(--space-0-5); background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8v4M12 16h.01'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 8v4M12 16h.01'/%3E%3C/svg%3E") center / contain no-repeat; } /* 30/10/2026 (Ruggi): icona di errore davanti al messaggio (cerchio con !), colore = testo (danger); via mask cosi' sopravvive a textContent */
+.editor-field-error[hidden] { display: none; }
+.editor-contact .bottega-input[aria-invalid="true"] { border-color: var(--status-danger-fg); }
+.editor-contact .bottega-input-group:has([aria-invalid="true"]) { border-color: var(--status-danger-fg); }
+.editor-contact .bottega-input-group .bottega-input[aria-invalid="true"] { border-color: transparent; }
+.editor-contact .bottega-input-group .editor-phone-prefix[aria-invalid="true"] { border-color: transparent; border-right-color: var(--border) !important; }
+
+/* 29/10/2026 — pulsanti «Aggiungi» (secondary sm con icona +) e menu dei tipi */
+.editor-add-wrap { position: relative; align-self: flex-start; }
+.editor-add-menu { min-width: 200px; right: auto; }
+.bottega-add-link.btn-pill-dark { display: inline-flex; align-items: center; gap: var(--space-2); }
+
+/* 29/10/2026 — +/− degli accordion: nessuno sfondo all'hover, passa da text-muted a text (nero DS) */
+.editor-accordion > .panel-accordion-header:hover .panel-accordion-toggle { color: var(--text); }
+.editor-accordion .panel-accordion-toggle { transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+
+/* 29/10/2026 (Ruggi) — accordion Contatti e Link social: gap space-8 fra la lista e il pulsante «Aggiungi» (solo questi due body; gli altri accordion restano col gap del DS). Lista vuota = nessun gap in più. */
+.editor-accordion .panel-accordion-body.editor-accordion-add { gap: var(--space-8); }
+.editor-accordion-add .bottega-social-list:empty { display: none; }
+
+/* 29/10/2026 — il codice esadecimale accanto al nome del colore è info minore: resta 12px anche dentro la riga affiancata */
+.panel-field-row.editor-color-row .panel-field-label.editor-color-hex { font-size: var(--font-size-14); } /* 29/10/2026 (Ruggi): hex affiancato = 14px come le altre label affiancate (era 12px) */
+
+/* 30/10/2026 (Ruggi): colori della modale su gruppi con sottotitolo; x di eliminazione solo sui colori locali (hover/focus; sempre visibile su touch); "Nuovo colore" sopra la modale; casella "Aggiungi ai colori generali". */
+#addTones.bottega-swatches { flex-direction: column; flex-wrap: nowrap; gap: var(--space-4); }
+.editor-tone-group { display: flex; flex-direction: column; gap: var(--space-2); }
+.editor-tone-group-title { margin: 0; }
+.editor-tone-row { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.editor-tone-item { position: relative; display: inline-flex; }
+.editor-tone-del { position: absolute; top: calc(-1 * var(--space-1)); right: calc(-1 * var(--space-1)); width: var(--space-4); height: var(--space-4); display: grid; place-items: center; padding: 0; border: var(--border-width-hairline) solid var(--border); border-radius: 50%; background: var(--bg); color: var(--text); cursor: pointer; opacity: 0; }
+.editor-tone-item:hover .editor-tone-del, .editor-tone-item:has(:focus-visible) .editor-tone-del, .editor-tone-del:focus-visible { opacity: 1; }
+@media (hover: none) { .editor-tone-del { opacity: 1; } }
+.editor-color-new.is-over { z-index: calc(var(--zIndex-50) + 1); } /* valore locale: la modale e' a zIndex-50 */
+.editor-color-new-gen { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-14); color: var(--text); }
+.editor-color-new-gen label { display: flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+.editor-color-new-gen .editor-tone-info { color: var(--text-muted); } /* 30/10/2026: ⓘ con tooltip accanto alla casella (fuori dalla label: cliccarla non spunta) */
+.editor-color-new-gen input { margin: 0; accent-color: var(--btn-primary-bg); }
+
+/* 30/10/2026 (Ruggi): dropdown "Colori esistenti" e errore del nome nel pannello Nuovo colore. Il pannello e' .editor-color-pop: le regole di quel popover (ul/li) valgono anche per la lista del dropdown, quindi qui si riallinea alla lista dei select (.editor-select-menu). */
+.editor-color-new .editor-select-menu { padding: var(--space-2); max-height: 14rem; overflow-y: auto; }
+.editor-color-new .editor-select-menu li.editor-select-group { padding: var(--space-2) var(--sidebar-sidebar_item-padding); font-size: var(--font-size-12); color: var(--text-muted); cursor: default; pointer-events: none; background: none; }
+.editor-color-new .editor-select-menu li.editor-select-group:not(:first-child) { margin-top: var(--space-1); }
+.editor-select-placeholder { color: var(--text-muted); }
+.editor-select-picked { display: flex; align-items: center; gap: var(--space-2); }
+.editor-color-new-body .editor-color-new-err { grid-column: 1 / -1; margin-top: calc(-1 * var(--space-2)); } /* 30/10/2026 (Ruggi): errore a tutta larghezza del pannello, sotto al campo (parte dalla colonna dell'etichetta) */
+.editor-color-new-body .bottega-input[aria-invalid="true"] { border-color: var(--status-danger-fg); }
+.editor-color-new-body .editor-color-new-existing { grid-column: 1 / -1; padding: var(--space-6) 0 0; margin-top: calc(var(--space-6) - var(--space-4)); border-top: var(--border-width-hairline) solid var(--border); } /* 30/10/2026 (Ruggi): divider tra Nome/Colore e Colori esistenti; stessi valori di .editor-section-reset-zone (24px sopra e sotto la linea; il gap della griglia, 16px, e' gia' sopra) */ /* 30/10/2026: riga dropdown come .editor-font-row ma senza il suo padding verticale (il gap della griglia basta) */
+
+/* 30/10/2026 (Ruggi): icona "i" accanto a "Aggiuntivi locali" (tooltip: vivono solo nel componente). Icona via mask, colore = testo del titolo (muted). */
+.editor-tone-group-title { display: flex; align-items: center; gap: var(--space-1); }
+.editor-tone-info { width: 14px; height: 14px; flex: none; display: inline-block; cursor: help; background: var(--color-blue-500); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 8h.01'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5M12 8h.01'/%3E%3C/svg%3E") center / contain no-repeat; }
+.editor-tone-info:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; border-radius: 50%; }
+
+/* 30/10/2026 (Ruggi): il tooltip condiviso (zIndex-50) finiva dietro al pannello "Nuovo colore" aperto sopra la modale (zIndex-50 + 1): sta sopra a entrambi. Override locale alla pagina, il componente tooltip.css non si tocca. */
+.app-tooltip { z-index: calc(var(--zIndex-50) + 2); }
+
+/* 30/10/2026 (Ruggi): sotto-riga del colore di sistema sostituito: rientrata, cerchio piccolo (spacing-4), solo nome + esadecimale (niente descrizione ne' etichetta lilla), raccordo hairline neutral-200 che la lega al colore che la sostituisce. Il raccordo corre lungo il lato sinistro, a meta' del cerchio del colore genitore. */
+.editor-color-row.is-sub { margin-left: var(--space-8); padding-block: var(--space-2); } /* 30/10/2026 (Ruggi): padding sopra e sotto come le righe normali (space-2): l'hover delle icone (24px) non tocca i bordi della riga */
+.editor-color-row.is-sub .bottega-swatch { width: var(--spacing-4); height: var(--spacing-4); }
+.editor-color-row.is-sub .editor-color-use, .editor-color-row.is-sub .editor-color-alias { display: none; }
+.editor-color-row.is-sub .panel-field-value { font-size: var(--font-size-14); color: var(--text-muted); }
+.panel-field-row.editor-color-row.is-sub .panel-field-label.editor-color-hex { font-size: var(--font-size-12); }
+.editor-color-row.is-sub::before { content: ''; position: absolute; left: calc(-1 * var(--space-2)); top: calc(-1 * var(--space-2)); bottom: 0; border-left: var(--border-width-hairline) solid var(--color-neutral-200); pointer-events: none; }
+.editor-color-row.is-sub.is-sub-last::before { bottom: auto; height: calc(50% + var(--space-2)); }
+.editor-color-row.is-sub::after { content: ''; position: absolute; left: calc(-1 * var(--space-2)); top: 50%; width: var(--space-4); border-top: var(--border-width-hairline) solid var(--color-neutral-200); pointer-events: none; }
+/* 30/10/2026 (Ruggi): nelle sotto-righe (25px) l'hover delle icone (32px) usciva dallo sfondo della riga: pulsanti azione a spacing-6 (24px), l'altezza della sotto-riga resta quella decisa. */
+.editor-color-row.is-sub .editor-color-act { width: var(--spacing-6); height: var(--spacing-6); }
+
+/* 30/10/2026 (Ruggi): riepilogo della sostituzione con un colore esistente nel pannello "Sostituisci colore": box con bordo neutral-100, [colore sostituito] → [colore nuovo], ognuno in colonna (cerchio, nome 14px, esadecimale 12px). */
+.editor-color-new-body .editor-color-new-sum { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: var(--space-2); padding: var(--space-4); border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-md); }
+.editor-color-new-sum[hidden] { display: none; }
+.editor-color-new-sum-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); min-width: 0; text-align: center; }
+.editor-color-new-sum-item .bottega-swatch { cursor: default; flex: none; }
+.editor-color-new-sum-name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-14); color: var(--text); }
+.editor-color-new-sum-hex { font-size: var(--font-size-12); color: var(--text-muted); text-transform: uppercase; }
+.editor-color-new-sum-arrow { height: var(--spacing-8); display: flex; align-items: center; color: var(--text-muted); }
+
+/* ===== 1/11/2026 (Ruggi) — flusso prodotto nell'editor: menu Pagine, lista prodotti, pannello Sezioni a sinistra, testata prodotto ===== */
+.editor-tool[hidden] { display: none; }
+.editor-canvas { position: relative; }
+.editor-device[hidden] { display: none; }
+.editor-pages-divider { height: 0; margin: var(--space-1) var(--space-2); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+
+/* lista prodotti: sostituisce l'anteprima nel workspace. 2/11/2026: intestazione, griglia e card = COPIA LOCALE (candidato) di prodotti-panel-static.css: .page-header/.page-title/.page-sub, .grid/.span-12, .products-panel */
+.editor-products { position: absolute; inset: 0; overflow-y: auto; padding: var(--space-6); }   /* = padding di .workspace (space-6) */
+.editor-products[hidden] { display: none; }
+.editor-products-inner { max-width: 70rem; margin: 0 auto; padding: var(--space-12) var(--space-6) var(--space-8); }   /* = .workspace-inner di Prodotti: padding-top space-12, laterale space-6, sotto space-8 */
+.editor-products .page-header { margin-bottom: var(--space-12); display: flex; align-items: flex-start; justify-content: space-between; }
+.editor-products .page-title { margin: 0; font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); }
+.editor-products .page-sub { margin: var(--space-2) 0 0; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.editor-page-divider { border-bottom: var(--border-width-hairline) solid var(--border); margin-bottom: var(--space-8); } /* = linea delle tab di Prodotti, anche senza tab */
+.editor-products .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-6); }
+.editor-products .span-12 { grid-column: span 12; }
+.editor-products .products-panel { border-radius: var(--radius-md); border: var(--border-width-hairline) solid var(--color-neutral-100); padding: var(--space-6); background: transparent; }
+.editor-products .product-row-head, .editor-products .product-row { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); align-items: center; column-gap: var(--space-4); }
+.editor-products .product-row .status-pill { justify-self: start; }
+.editor-products .product-row-main { min-width: 0; display: flex; align-items: center; gap: var(--space-3); min-height: var(--spacing-9); }
+/* 7/11/2026 (PROVA, candidato locale): miniatura di copertina nella riga, dopo la chevron; stesse misure di .editor-ev-thumb (picker «Aggiungi prodotto»). Segnaposto neutro finche' non c'e' un'immagine reale. */
+.editor-products .product-row-thumb { flex: none; width: var(--spacing-12); aspect-ratio: 4 / 5; border-radius: var(--radius-sm); background: var(--color-neutral-100); }
+
+/* pannello Struttura: overlay MOBILE sopra l'anteprima (il canvas non si restringe). 2/11/2026 (Ruggi): si trascina dalla testata, entra/esce con dissolvenza + piccolo spostamento, ombra piu' marcata (stessa direzione e sfocatura dell'elevazione del DS, alpha piu' alto: valore locale), divider sotto il titolo, modalita' ridotta (~4 righe). */
+.editor-struct-panel { position: fixed; top: var(--space-2); left: var(--space-4); z-index: var(--zIndex-10); width: 280px; display: flex; flex-direction: column; overflow: hidden; background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md);
+  box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) 22%, transparent), calc(var(--elevation-x) / 2) calc(var(--elevation-y) / 2) var(--space-2) color-mix(in srgb, var(--dark) 12%, transparent);
+  opacity: 0; transform: translateY(calc(var(--space-2) * -1)); transform-origin: top left; pointer-events: none;
+  transition: opacity var(--motion-duration-150) var(--motion-easing-ease), transform var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-struct-panel.is-open { opacity: 1; transform: none; pointer-events: auto; transition-duration: var(--motion-duration-280); }
+.editor-struct-panel.is-moving { transition: none; user-select: none; }
+.editor-struct-panel[hidden] { display: none; }
+.editor-struct-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); padding: var(--space-4); border-bottom: var(--border-width-hairline) solid var(--color-neutral-100); cursor: grab; }
+.editor-struct-panel.is-moving .editor-struct-head { cursor: grabbing; }
+.editor-struct-head .card-title { margin: 0; font: var(--type-title-sm); } /* 2/11/2026: stesso titolo di «Nuovo colore» (16px regular) */
+.editor-struct-actions { display: flex; align-items: center; gap: var(--space-1); }
+.editor-struct-head .panel-close-btn { width: var(--spacing-7); height: var(--spacing-7); padding: 0; border: 0; border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; background: transparent; }
+.editor-struct-head .panel-close-btn:hover { background: var(--hover-bg); color: var(--text); }
+.editor-struct-body { flex: 1 1 auto; min-height: 0; box-sizing: border-box; overflow-y: auto; padding: var(--space-4); transition: max-height var(--motion-duration-280) var(--motion-easing-ease); } /* riduci / espandi animato */
+@media (prefers-reduced-motion: reduce) { .editor-struct-panel, .editor-struct-panel.is-open, .editor-struct-body { transition: none; } }
+
+/* pannello destro: testata fissa del prodotto */
+.editor-prod-head { display: flex; flex-direction: column; gap: var(--space-2); padding-bottom: var(--space-4); }
+.editor-prod-head[hidden] { display: none; }
+.editor-prod-head .editor-head-title { padding-bottom: var(--space-2); }
+.editor-prod-actions { padding-top: var(--space-2); }
+
+/* 2/11/2026 (Ruggi): tab Sezioni su Home: senza selezione il riquadro tratteggiato (.bottega-panel-placeholder) occupa tutta la larghezza e l'altezza disponibili dentro i padding del corpo */
+#secEmpty { display: flex; min-height: 14rem; flex: 1 1 auto; }
+#secEmpty[hidden] { display: none; }
+.editor-panel[data-empty="on"] .editor-panel-body { display: flex; flex-direction: column; }
+.editor-panel[data-empty="on"] #tabpanelSezioni { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+/* stato vuoto del pannello destro = riquadro tratteggiato a tutta altezza (lista prodotti / editor prodotto / pagine del tema) */
+#viewHint { display: flex; min-height: 14rem; flex: 1 1 auto; }
+#viewHint[hidden] { display: none; }
+
+/* ---------- 2/11/2026 (Ruggi): lista Prodotti — chevron varianti, colonna «Ultima modifica», freccia «Vai alla pagina del prodotto» con maschera all'hover ----------
+   Copie LOCALI (candidate) delle regole di prodotti-panel-static.css (.row-actions, .row-goto-btn, maschera con sfumatura 29/10) e delle sotto-righe variante: lì sono scoped alla pagina, non nei file condivisi. */
+.editor-products .product-variant-head, .editor-products .product-variant-row { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); align-items: center; column-gap: var(--space-4); padding: var(--space-2); }
+.editor-products .product-variant-head { padding-right: var(--space-2); }
+.editor-products .product-variant-row .status-pill { justify-self: start; }
+.editor-products .product-variant-name { display: flex; align-items: center; gap: var(--space-1); }
+.editor-products .product-row-date { font-size: var(--font-size-14); color: var(--text); }
+.editor-products .product-row { --row-bg: var(--item-hover-bg); --row-icon-hover-bg: var(--item-active-hover-bg); --row-actions-pad-left: var(--space-6); }
+.editor-products .product-row.selected { --row-bg: var(--color-lilla-50); --row-icon-hover-bg: var(--color-lilla-100); }
+.editor-products .row-actions {
+  position: absolute; top: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: var(--space-0-5);
+  padding: 0 var(--space-2) 0 var(--row-actions-pad-left); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: linear-gradient(to right, transparent, var(--row-bg) var(--space-5));
+  opacity: 0; transition: opacity var(--motion-duration-150) var(--motion-easing-ease);
+}
+.editor-products .product-row:hover .row-actions, .editor-products .product-row:focus-visible .row-actions, .editor-products .product-row:has(:focus-visible) .row-actions { opacity: 1; } /* 2/11/2026 (Ruggi): la freccia compare solo in hover (o con focus da tastiera); il click lascia il focus sulla riga: prima :focus-within la teneva sempre visibile */
+.editor-products .row-goto-btn {
+  width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer;
+  color: var(--text); text-decoration: none; transition: color var(--motion-duration-150) var(--motion-easing-ease), background var(--motion-duration-150) var(--motion-easing-ease);
+}
+.editor-products .row-goto-btn svg { display: block; }
+.editor-products .row-goto-btn:hover { background: var(--row-icon-hover-bg); color: var(--text); }
+.editor-products .row-goto-btn:focus-visible, .editor-products .product-row-chevron:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 1px; }
+
+/* 2/11/2026 (Ruggi): hover tabelle = #F3F1F4 (--item-hover-bg, gia' il valore ereditato qui); .view-switch ha la traccia gia' #F3F1F4: li' l'hover resta #E5E3E6 (altrimenti invisibile). */
+.editor-products .products-panel { --hover-bg: var(--item-hover-bg); }
+.editor-products .view-switch { --hover-bg: var(--item-active-hover-bg); }
+
+/* ===== 2/11/2026 (Ruggi) — rev. 238: intestazione del pannello prodotto = blocco di prodotti-panel-static ===== */
+/* COPIE LOCALI (candidate alla promozione in components/product-panel.css quando il collegamento dati con Prodotti verra' fatto; Ruggi ha rimandato): .panel-header-title-*, .tag, .panel-product-category (+ colori cat-*), .panel-stock-*, .panel-attention-*. Valori e token identici a 02-Prodotti/prodotti-panel-static.css. */
+.editor-prod-head { gap: var(--space-2); }
+.editor-prod-head .panel-header-title-row { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-3); margin-bottom: var(--space-10); } /* 2/11/2026 (Ruggi, 22:14): margin-bottom space-10 come nella pagina Prodotti (prima space-4). Era: pagina Prodotti: margin-bottom space-10 (sopra il numero grande); qui il pannello e' piu' stretto: space-4 */
+.editor-prod-head .panel-header-title-line { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+.editor-prod-head .panel-header-title-group { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.editor-prod-head #prodName { font: var(--type-title-xl); margin: 0; overflow-wrap: anywhere; } /* identico a #panelHeaderProductTitle */
+.editor-prod-head .panel-header-title-meta-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); }
+.editor-prod-head .panel-header-title-meta-row .tag { font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text); background: var(--item-active-bg); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); }
+.editor-prod-head .panel-header-title-meta-divider { width: var(--border-width-hairline); height: var(--spacing-4); background: var(--border); flex: none; margin: 0 var(--space-1); }
+.editor-prod-head .panel-product-category { display: inline-flex; align-items: center; max-width: 100%; font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-muted); background: var(--item-active-bg); border-radius: var(--radius-sm); padding: var(--space-1) var(--space-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.editor-prod-head .panel-product-category.cat-moda { background: #f1eafb; color: #6d4aa8; }
+.editor-prod-head .panel-product-category.cat-accessori { background: #e8f1fc; color: #2f6fb0; }
+.editor-prod-head .panel-product-category.cat-casa { background: #e6f7f4; color: #007A64; }
+.editor-prod-head .panel-stock-number { display: flex; align-items: baseline; font: var(--type-display-lg); color: var(--text); }
+.editor-prod-head .panel-stock-number > span:not(.editor-prod-stock-num) { display: inline-flex; align-items: center; gap: var(--space-2); font: var(--type-body-md); color: var(--text-muted); margin-left: var(--space-2); }
+.editor-prod-head .variant-esaurito-warning { display: inline-flex; flex: none; width: 14px; height: 14px; align-items: center; justify-content: center; color: var(--status-warning-fg); }
+.editor-prod-head .panel-stock-meta { display: flex; align-items: center; gap: var(--space-2); margin-bottom: var(--space-2); } /* come .panel-stock-meta in Prodotti (spazio sopra la progress) */
+.editor-prod-head .panel-product-price { font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--text); }
+.editor-prod-head .editor-prod-draft { display: flex; flex-direction: column; gap: var(--space-1); }
+.editor-prod-head .editor-prod-draft-main .editor-prod-stock-num { font: var(--type-display-lg); color: var(--text); }
+.editor-prod-head .editor-prod-draft-main { display: flex; align-items: baseline; gap: var(--space-2); }
+.editor-prod-head .editor-prod-draft-sub { font: var(--type-body-md); color: var(--text-muted); } /* = span accanto a .editor-prod-stock-num nel pubblicato */
+/* 3/11/2026 (Ruggi): «Vai al prodotto >» = stesso stile di `.link` + `.chev.inline` del Cruscotto (card-header: 14px, muted, hover --text, chevron che segue l'hover). Copia locale. */
+.editor-prod-head .panel-stock-number > span.panel-stock-lot { margin-left: auto; font-size: var(--font-size-14); color: var(--text-muted); } /* «Lotto N. x» a destra della riga stock (space-between) */
+.editor-prod-head .panel-stock-progress { display: block; width: 100%; height: var(--space-2); border: 0; border-radius: var(--radius-pill); overflow: hidden; accent-color: var(--color-lilla-500); background: var(--color-neutral-100); } /* copia locale di .panel-stock-progress (02-Prodotti) */
+.editor-prod-head .panel-stock-progress[hidden] { display: none; }
+.editor-prod-head .panel-stock-progress::-webkit-progress-bar { background: var(--color-neutral-100); border-radius: var(--radius-pill); }
+.editor-prod-head .panel-stock-progress::-webkit-progress-value { background: var(--color-lilla-500); border-radius: var(--radius-pill); }
+.editor-prod-head .panel-stock-progress::-moz-progress-bar { background: var(--color-lilla-500); border-radius: var(--radius-pill); }
+.editor-prod-head.is-soldout .editor-prod-stock-num, .editor-prod-head.is-soldout .panel-product-price { color: var(--text-muted); } /* esaurito: testo tutto muted */
+.editor-prod-head .editor-drop-invite-actions { display: flex; align-items: center; gap: var(--space-4); }
+.editor-prod-head .editor-prod-link { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); text-decoration: none; transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-prod-head .editor-prod-link:hover { color: var(--text); }
+.editor-prod-head .panel-meta-sep { color: var(--text-muted); }
+.editor-prod-head .product-row-stat { font-size: var(--font-size-14); color: var(--text-muted); }
+.editor-prod-head .panel-attention-row { display: flex; align-items: center; gap: var(--space-3); width: 100%; border-top: var(--border-width-hairline) solid var(--border); border-bottom: var(--border-width-hairline) solid var(--border); margin-top: var(--space-4); padding: var(--space-3) 0; color: inherit; text-decoration: none; }
+.editor-prod-head .panel-attention-symbol { flex: none; display: grid; place-items: center; width: var(--spacing-8); height: var(--spacing-8); border-radius: var(--radius-sm); background: var(--status-warning-bg); color: var(--status-warning-fg); font: var(--type-title-md); }
+.editor-prod-head .panel-attention-body { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+.editor-prod-head .panel-attention-title { font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+.editor-prod-head .panel-attention-text { font-size: var(--font-size-14); color: var(--text-muted); }
+.editor-prod-head .panel-attention-chevron { flex: none; display: flex; color: var(--text-muted); transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-prod-head .panel-attention-row:hover .panel-attention-chevron { color: var(--text); }
+
+/* Piede del pannello: slot di stato a sinistra + azione a destra. Visibile solo nell'editor di un prodotto. */
+.editor-foot-row { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-2); width: 100%; }
+.editor-save[data-state="pending"] { color: var(--status-warning-fg); }
+.editor-save[data-state="pending"] .editor-save-ico { width: var(--space-2); height: var(--space-2); background: var(--status-warning-fg); border-color: var(--status-warning-fg); font-size: 0; }
+
+/* 2/11/2026 (Ruggi): badge «In vetrina» accanto al titolo. COPIA LOCALE di .badge-icon (feedback-lists.css, non importato qui): stessi valori e token; 28px = altezza del titolo --type-title-xl. */
+.editor-prod-head .badge-icon { width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; color: var(--text-muted); border: var(--border-width-hairline) solid var(--border); cursor: default; }
+
+/* ===== 2/11/2026 (Ruggi, 17:38) — rev. 240: «Vai al prodotto», Drop collegato, Varianti (heading senza «Nuova variante») e variant-card semplificate ===== */
+.editor-head-right { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-3); min-width: 0; margin-left: auto; }
+.editor-panel-head .panel-header { flex-wrap: wrap; row-gap: var(--space-2); } /* con le frecce sezione visibili (X + frecce + stato + «Gestisci prodotto» > larghezza del pannello) il gruppo di destra va a capo, sempre a destra */
+.editor-head-right .btn-pill-dark { text-decoration: none; white-space: nowrap; }
+/* COPIE LOCALI (candidate alla promozione) delle regole di prodotti-panel-static.css / components/product-panel-products.css, scoped .editor-prod-head. Valori e token identici. */
+/* product-panel-products.css */
+.editor-prod-head .panel-variant-section-head {display: flex; align-items: center; justify-content: space-between; }
+/* product-panel-products.css */
+.editor-prod-head .panel-variant-section-title {font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+/* product-panel-products.css */
+.editor-prod-head .panel-variant-section-count {font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+/* product-panel-products.css */
+.editor-prod-head .panel-variant-section-desc {font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); margin-bottom: var(--space-8); display: block; }
+/* product-panel-products.css */
+.editor-prod-head .panel-variant-section-heading {display: flex; flex-direction: column; gap: var(--space-1); }
+/* product-panel-products.css */
+.editor-prod-head .panel-subvariant-chips {display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* product-panel-products.css */
+.editor-prod-head .panel-subvariant-chip {position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: var(--spacing-8); padding: var(--space-1) var(--space-2); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); font-size: var(--font-size-12); color: var(--text); background: transparent; }
+/* product-panel-products.css */
+.editor-prod-head .panel-subvariant-chip.esaurito {color: var(--text-faint); border-color: var(--border); background: var(--item-active-bg); }
+/* product-panel-products.css */
+.editor-prod-head .panel-subvariant-chip .variant-esaurito-dot {position: absolute; top: -5px; right: -5px; width: var(--spacing-3); height: var(--spacing-3); background: var(--bg); border-radius: var(--radius-full); }
+/* product-panel-products.css */
+.editor-prod-head .panel-subvariant-chip .variant-esaurito-dot svg {width: 10px; height: 10px; }
+/* product-panel-products.css */
+.editor-prod-head .panel-drop-col .drop-countdown {font-size: var(--font-size-20); font-weight: var(--font-weight-bold); color: var(--text); line-height: var(--font-lineHeight-tight); }
+/* product-panel-products.css */
+.editor-prod-head .panel-drop-col .drop-progress {display: flex; gap: var(--space-1); }
+/* product-panel-products.css */
+.editor-prod-head .panel-drop-col .drop-fill {height: 100%; background: var(--text-muted); border-radius: inherit; }
+/* product-panel-products.css */
+.editor-prod-head .variant-esaurito-dot {display: inline-flex; align-items: center; justify-content: center; width: 14px; height: 14px; flex: none; color: var(--status-danger-fg); }
+/* product-panel-products.css */
+.editor-prod-head .variant-esaurito-dot svg circle {fill: currentColor; }
+/* prodotti-panel-static.css */
+.editor-prod-head .drop-goto-btn {width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; text-decoration: none; background: none; transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease); }
+/* prodotti-panel-static.css */
+.editor-prod-head .drop-goto-btn:hover {background: var(--hover-bg); color: var(--text); }
+/* prodotti-panel-static.css */
+.editor-prod-head .drop-goto-btn {border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-sm); }
+/* prodotti-panel-static.css */
+.editor-prod-head .drop-goto-btn svg {display: block; }
+/* prodotti-panel-static.css */
+.editor-prod-head .drop-goto-btn {border-radius: var(--radius-sm); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-divider {margin: var(--space-12) 0; }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col {display: flex; flex-direction: column; justify-content: center; width: 100%; background: var(--color-neutral-25); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-md); padding: var(--space-4); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col .drop-countdown-row {display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-2); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col .drop-countdown-info {display: flex; align-items: baseline; gap: var(--space-2); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col .drop-phase {font-size: var(--font-size-14); color: var(--text-muted); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col .drop-progress {height: var(--space-2); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col .drop-seg {flex: 1; height: 100%; border-radius: var(--radius-pill); background: #f0f0f2; overflow: hidden; }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-drop-col .panel-drop-title {align-self: flex-start; margin-bottom: var(--space-4); font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-variant-section {margin-top: var(--space-12); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-variant-list {display: flex; flex-direction: column; gap: var(--space-4); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card {background: var(--color-neutral-25); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-md); padding: var(--space-5); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card-header {display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-3); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card-header-row {width: 100%; display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card-header-left {display: flex; align-items: baseline; gap: var(--space-2); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card-header-left .product-row-price {font-size: var(--font-size-14); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card-title {font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); }
+/* prodotti-panel-static.css */
+.editor-prod-head .panel-variant-section-title {font-size: var(--card-card_title_title_lg-font_size); font-weight: var(--card-card_title_title_lg-font_weight); }
+/* prodotti-panel-static.css */
+.editor-prod-head .variant-card-sizes {padding: 0; border-bottom: none; margin-bottom: var(--space-2); }
+.editor-prod-head .panel-variant-section-desc { margin-bottom: var(--space-4); } /* editor: meno spazio di Prodotti (space-8), il pannello e' piu' stretto */
+.editor-prod-head .panel-variant-section { margin-top: var(--space-8); }
+.editor-prod-head .editor-prod-drop { margin-top: var(--space-4); }
+.editor-prod-head .variant-card .panel-field-row.stacked { padding: 0; }
+
+/* 2/11/2026 (Ruggi, 17:54): divider fra la card «Drop collegato» e la sezione Varianti. */
+
+/* 2/11/2026 (Ruggi): la X resta ferma: testata a altezza costante (pulsante «Gestisci prodotto» incluso), gruppo sinistro centrato in quella fascia */
+.editor-panel-head .panel-header-left { min-height: calc(var(--spacing-7) + var(--space-1)); }
+.editor-head-right { min-height: calc(var(--spacing-7) + var(--space-1)); }
+
+/* 2/11/2026 (Ruggi, 21:48) — pannello prodotto: stato «In drop», invito «Crea drop», nota info, divider sotto la testata. CANDIDATI locali (promozione solo dopo approvazione). */
+.status-pill.in-drop { background: var(--color-lilla-50); color: var(--color-lilla-600); } /* copia di 03-Drop/drop-statico.css */
+.status-pill.in-drop .dot { background: var(--color-lilla-500); }
+.editor-prod-head .editor-drop-invite { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-8); width: 100%; margin-top: var(--space-12); padding: var(--space-4); border: var(--border-width-hairline) dashed var(--color-lilla-300); border-radius: var(--radius-md); } /* 12/11/2026 (Ruggi): lo stesso riquadro serve anche fuori dal pannello Prodotto (Anteprima drop in Banner drop / sezioni Drop) -- versione non scoperta a .editor-prod-head */
+.editor-drop-invite { display: flex; flex-direction: column; align-items: flex-start; gap: var(--space-8); width: 100%; margin-top: var(--space-12); padding: var(--space-4); border: var(--border-width-hairline) dashed var(--color-lilla-300); border-radius: var(--radius-md); }
+.editor-drop-invite-body { display: flex; flex-direction: column; gap: var(--space-2); }
+.editor-drop-invite-title { font-size: var(--font-size-16); font-weight: var(--font-weight-regular); color: var(--text); } /* = .panel-drop-title */
+.editor-drop-invite-text { margin: 0; font-size: var(--font-size-14); color: var(--text-muted); }
+/* 19/11/2026 (Ruggi): nei riquadri invito (.editor-drop-invite) solo il TESTO esplicativo e' regular; il titolo resta com'era (.editor-drop-invite-title sopra). */
+.editor-drop-invite .editor-drop-invite-text { font-weight: var(--font-weight-regular); }
+.editor-drop-invite .btn-pill-dark { text-decoration: none; white-space: nowrap; }
+.editor-prod-head .editor-prod-note { display: flex; align-items: flex-start; gap: var(--space-2); margin: var(--space-4) 0 0; font-size: var(--font-size-14); color: var(--color-blue-500); }
+.editor-prod-note svg { flex: none; margin-top: 2px; }
+.editor-panel[data-mode="list"][data-prod="on"] .editor-panel-head .panel-header, .editor-panel:not([data-mode="home"]):not([data-mode="product"]):not([data-mode="list"]) .editor-panel-head .panel-header { border-bottom: var(--border-width-hairline) solid var(--border); padding-bottom: var(--space-6); margin-bottom: 0; } /* 22:14: piu' aria tra icone e divider (space-4 → space-6) */ /* solo divider dove non ci sono tab (lista, prodotto, pagine fisse) */
+
+/* 2/11/2026 (Ruggi, 22:15): stato a riposo = «Ultima modifica <data>» (muted, 12px regular, senza icona) al posto di «Salvato» */
+.editor-save[data-state="idle"] { color: var(--text-muted); font-weight: var(--font-weight-regular); }
+.editor-save[data-state="idle"] .editor-save-ico { display: none; }
+
+/* 2/11/2026 (Ruggi, 22:26): lista Prodotti senza prodotto selezionato: niente divider e niente «Ultima modifica» (compaiono insieme alla selezione). */
+.editor-panel[data-mode="list"][data-prod="off"] .editor-save[data-state="idle"] { display: none; }
+/* 3/11/2026 (Ruggi): ARCHIVIATO — la nota blu sta dentro il riquadro, sotto i pulsanti */
+.editor-drop-invite > .editor-prod-note { margin: 0; }
+/* 4/11/2026 (Ruggi): banner «Nessuna tiratura» con margin-top space-4 (supera il «niente gap» del 3/11 sopra il banner) */
+.editor-prod-head #noTirBanner { margin-top: var(--space-4); }
+/* 4/11/2026 (Ruggi): card drop dell'editor — titolo a sinistra e data (drop concluso) a destra in space-between */
+.editor-prod-head .panel-drop-col .drop-col-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-4); }
+.editor-prod-head .panel-drop-col .drop-col-head .panel-drop-title { align-self: auto; margin-bottom: 0; }
+.editor-prod-head .panel-drop-col .drop-col-date { font-size: var(--font-size-12); color: var(--text-muted); }
+/* 4/11/2026 (Ruggi): invito «Fallo diventare un evento!» — il pulsante Crea drop sta a destra (sotto il testo) */
+.editor-prod-head #prodDropInvite > .btn-pill-dark { align-self: flex-end; } /* 12/11/2026 (Ruggi): stesso allineamento a destra anche per il riquadro Anteprima drop fuori dal pannello Prodotto */
+#secDropPreview > .btn-pill-dark { align-self: flex-end; }
+/* 4/11/2026 (Ruggi): riquadri Tutto venduto!/Archiviato — pulsanti a destra (il primario all'estrema destra); «Archivia prodotto» = ghost sm con icona prima della label (btn-ghost non ha .sm: copia del padding/font di btn-pill-dark.sm, CANDIDATO locale) */
+.editor-prod-head #prodReprop .editor-drop-invite-actions, .editor-prod-head #prodArchived .editor-drop-invite-actions { width: 100%; justify-content: flex-end; }
+.editor-prod-head .editor-drop-invite .btn-ghost.sm { padding: var(--button-btn_pill_dark_sm-padding); font-size: var(--button-btn_pill_dark_sm-font_size); text-decoration: none; white-space: nowrap; }
+/* 4/11/2026 (Ruggi): nota «Archiviato» sopra i pulsanti, icona centrata sulla riga di testo */
+.editor-prod-head #prodArchived .editor-prod-note { align-items: center; }
+.editor-prod-head #prodArchived .editor-prod-note svg { margin-top: 0; }
+/* 4/11/2026 (Ruggi): Archiviato — blocco testo + nota in un div (gap space-6); i pulsanti restano fuori con il gap del riquadro (space-8) */
+.editor-drop-invite-group { display: flex; flex-direction: column; gap: var(--space-6); }
+.editor-prod-head .editor-drop-invite-group > .editor-prod-note { margin: 0; }
+/* 4/11/2026 (Ruggi): in Marchio le righe (Logo, Favicon) senza divider tra l'una e l'altra */
+.editor-accordion-marchio .panel-field-row { border-bottom: none; }
+
+/* 4/11/2026: controlli generici di sezione (pannello destro) */
+.editor-ctl{display:flex;flex-direction:column;gap:var(--v2-space-5,20px);margin-top:var(--v2-space-4,16px)}
+.editor-ctl-group{display:flex;flex-direction:column;gap:var(--v2-space-3,12px)}
+.editor-ctl-field{display:flex;flex-direction:column;gap:var(--v2-space-2,8px)}
+.editor-ctl-top{display:flex;align-items:center;justify-content:space-between;gap:var(--v2-space-2,8px);min-height:24px}
+/* 7/11/2026: «Ripristina» di campo = .btn-ghost.xs (bottega-creazione.css) */
+.editor-ctl-warn{margin:0;color:var(--status-warning-fg)}
+
+/* 5/11/2026: i gruppi dei controlli di sezione usano .editor-accordion; il contenitore non aggiunge spazio proprio */
+.editor-ctl{gap:0}
+.editor-ctl > .editor-accordion:last-of-type{border-bottom:var(--border-width-hairline) solid var(--border)}
+
+/* 10/11/2026 (Ruggi): riga sotto le tab, in cima al corpo del pannello: «Tutti i prodotti» a sinistra, «Vai al prodotto» sempre a destra (space-between se ci sono entrambi). */
+.editor-body-toprow { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); margin-bottom: var(--space-8); }
+.editor-body-toprow:not(:has(> :not([hidden]))) { display: none; }
+.editor-body-toprow .bottega-cancel-link { margin: 0; display: inline-flex; align-items: center; gap: var(--space-1); }
+#bottegaPanelBody:has(#prodHead:not([hidden]) #noTirBanner:not([hidden])) .editor-body-toprow { margin-bottom: 0; }
+
+/* 5/11/2026 (Ruggi): pannello Sezioni, colori: i gruppi (cerchi del tema, Aggiuntivi generali, Aggiuntivi locali) stanno staccati come nella modale (gap space-4);
+   i sottotitoli dei gruppi hanno la stessa altezza di riga (24px) dell'etichetta «Sfondo», cosi' la distanza dai cerchi e' uguale. */
+.editor-ctl-tones { display: flex; flex-direction: column; gap: var(--space-4); }
+.editor-ctl-tones .editor-tone-group-title { min-height: 24px; }
+
+/* 5/11/2026 — Pagine: «Prodotti» apre il sottomenu (Catalogo / Lista prodotti / Recenti); la voce non naviga, quindi si evidenzia come pagina corrente quando ci si trova in una delle sue pagine */
+.editor-page-row.is-current { background: var(--sidebar-sidebar_item_active-background); color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); }
+.editor-page-sub > .editor-page-row .editor-page-row-chev { margin-left: auto; }
+.editor-pages-sub .editor-pages-title { margin: 0; padding: var(--space-1) var(--sidebar-sidebar_item-padding); }
+/* «Prodotti» resta in hover finché il puntatore è nel suo sottomenu (o il focus è dentro) */
+.editor-page-sub:hover > .editor-page-row:not(.is-current), .editor-page-sub:has(:focus-visible) > .editor-page-row:not(.is-current) { background: var(--item-hover-bg); }
+
+/* 5/11/2026 — Prodotti in evidenza: numero (1/2/3), un menu per posto, riquadro tratteggiato se non ci sono prodotti pubblicati */
+.editor-ev-count { display: flex; gap: var(--space-2); }
+.editor-ev-slots { display: flex; flex-direction: column; gap: var(--space-2); }
+.editor-ev-empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); padding: var(--space-6); text-align: center; border: var(--border-width-hairline) dashed var(--color-neutral-400); border-radius: var(--radius-md); }
+.editor-ev-empty .bottega-hint { margin: 0; }
+.editor-ev-empty .btn-pill-dark { width: auto; text-decoration: none; }
+/* 12/11/2026 (Ruggi): stato vuoto della modale «Aggiungi prodotto» quando non esiste nessun prodotto (bozze comprese) -- testo 16px centrato su due righe + button */
+.editor-ev-picker-empty { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); padding: var(--space-6) 0; text-align: center; }
+.editor-ev-picker-empty-text { margin: 0; color: var(--text-muted); font-size: var(--font-size-16); }
+.editor-ev-picker-empty .btn-pill-dark { width: auto; text-decoration: none; }
+/* sottomenu Prodotti: stessa distanza tra le voci del menu Pagine (prima era space-3) */
+.editor-pages-sub { gap: var(--space-0-5); }
+/* sottomenu Prodotti: «Recenti» non attaccato al divider */
+.editor-pages-sub .editor-pages-divider { margin-bottom: var(--space-2); }
+.editor-pages-sub .editor-pages-title { padding-top: var(--space-2); }
+/* selezione della sezione Prodotti in evidenza: le card sono a filo del bordo e coprono il contorno interno → contorno esterno */
+
+/* 5/11/2026 — Prodotti in evidenza: titolo gruppo senza accordion, «Numero di prodotti» + menu, lista numerata con item arrotondati (grip, nome, X in hover), item tratteggiato «Aggiungi prodotto» */
+.editor-ev { display: flex; flex-direction: column; gap: var(--space-4); }
+.editor-ctl-title { padding: var(--space-1) 0; }
+.editor-ev-numrow { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.editor-ev-num { width: 88px; flex: none; }
+.editor-ev-label { display: block; }
+.editor-ev-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.editor-ev-row { display: flex; align-items: center; gap: var(--space-3); }
+.editor-ev-num-label { flex: none; width: 20px; color: var(--text-muted); font-size: var(--font-size-14); text-align: right; }
+.editor-ev-item { flex: 1 1 auto; min-width: 0; display: flex; align-items: center; gap: var(--space-2); min-height: 40px; padding: var(--space-2) var(--space-3); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); background: var(--bg); color: var(--text); font: inherit; font-size: var(--font-size-14); cursor: grab; }
+.editor-ev-item.is-dragging, .editor-ev-item.is-dragging:not(.is-empty) { background: var(--item-hover-bg); cursor: grabbing; } /* 10/11/2026: stesso stato della riga trascinata in Struttura (.editor-struct-row.is-dragging) */
+.editor-ev-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editor-ev-remove { flex: none; display: none; align-items: center; justify-content: center; width: 24px; height: 24px; padding: 0; border: 0; border-radius: var(--radius-sm); background: none; color: var(--text-muted); cursor: pointer; }
+.editor-ev-item:hover .editor-ev-remove, .editor-ev-item:focus-within .editor-ev-remove { display: flex; }
+.editor-ev-remove:hover, .editor-ev-remove:focus-visible { background: var(--item-hover-bg); color: var(--text); }
+.editor-ev-item.is-empty { justify-content: center; border-style: dashed; border-color: var(--color-neutral-400); background: none; color: var(--text-muted); cursor: pointer; }
+.editor-ev-item.is-empty:hover, .editor-ev-item.is-empty:focus-visible { background: var(--item-hover-bg); color: var(--text); }
+/* 5/11/2026 (Ruggi) — modale «Aggiungi prodotto» = tabella come Prodotti (Prodotto · Prezzo · Venduti · Categoria · Data), selezione multipla con checkbox (pattern .order-checkbox di Ordini, candidato LOCALE), footer Annulla / Aggiungi (n). Box = dimensioni base della modale (.editor-modal-box). */
+.editor-ev-picker { width: min(56rem, 100%); height: min(36rem, 100%); }
+/* 5/11: padding-bottom space-4 rimosso, body = space-8 come tutte le modali */
+.editor-ev-table { display: flex; flex-direction: column; }
+.editor-ev-tr { display: grid; grid-template-columns: var(--spacing-5) minmax(0, 2fr) minmax(0, .8fr) minmax(0, .8fr) minmax(0, .8fr) minmax(0, .9fr) minmax(0, .9fr); align-items: center; column-gap: var(--space-4); padding: var(--space-4) var(--space-2); text-align: left; } /* 5/11/2026: padding = .product-row / .product-row-head delle tabelle; 12/11/2026 (Ruggi): aggiunta colonna Stato (pubblicato/bozza/esaurito), tolta dal nome prodotto */
+.editor-ev-tr[hidden] { display: none; }
+.editor-ev-th { padding-bottom: var(--space-2); margin-bottom: var(--space-1); font-size: var(--font-size-12); color: var(--text-muted); border-bottom: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-ev-pk { width: 100%; border: 0; border-radius: var(--radius-sm); background: none; font: inherit; color: var(--text); cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); } /* come .product-row: raggio sm, nessun filetto fra le righe */
+.editor-ev-pk:hover:not([aria-disabled="true"]):not([aria-checked="true"]) { background: var(--item-hover-bg); } /* la riga selezionata NON diventa mai grigia in hover */
+.editor-ev-pk[aria-checked="true"] { background: var(--color-lilla-50); } /* = .product-row.selected */
+.editor-ev-pk[aria-disabled="true"] { opacity: .45; cursor: not-allowed; }
+.editor-ev-pk:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: -2px; }
+.editor-ev-pk .order-checkbox-box { width: var(--spacing-5); height: var(--spacing-5); border-radius: var(--radius-sm); border: var(--border-width-hairline) solid var(--border); background: var(--bg); display: inline-flex; align-items: center; justify-content: center; color: transparent; }
+.editor-ev-pk[aria-checked="true"] .order-checkbox-box { background: var(--btn-primary-bg); border-color: var(--btn-primary-bg); color: var(--bg); }
+.editor-ev-pk-prod { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+.editor-ev-thumb { flex: none; width: var(--spacing-12); aspect-ratio: 4 / 5; border-radius: var(--radius-sm); background: var(--color-neutral-100); }
+.editor-ev-pk-col { display: flex; flex-direction: column; gap: var(--space-0-5); min-width: 0; }
+.editor-ev-pk-line { display: flex; align-items: center; gap: var(--space-2); min-width: 0; }
+.editor-ev-pk-name { font-size: var(--font-size-16); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editor-ev-pk-sub { font-size: var(--font-size-14); color: var(--text-muted); }
+.editor-ev-pk-status .status-pill { white-space: nowrap; }
+/* 12/11/2026 (Ruggi): colonna Categoria del picker «Aggiungi prodotto» = stessa chip della PIATTAFORMA (.panel-product-category + colori cat-*), copia locale come in .editor-prod-head/.editor-cats (riga 508/948) -- candidata alla stessa futura promozione, non una variante nuova */
+.editor-ev-pk-meta .panel-product-category { display: inline-flex; align-items: center; max-width: 100%; font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); line-height: 1.2; color: var(--text-muted); background: var(--item-active-bg); border-radius: var(--radius-sm); padding: var(--space-1) var(--space-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.editor-ev-pk-meta .panel-product-category.cat-moda { background: #f1eafb; color: #6d4aa8; }
+.editor-ev-pk-meta .panel-product-category.cat-accessori { background: #e8f1fc; color: #2f6fb0; }
+.editor-ev-pk-meta .panel-product-category.cat-casa { background: #e6f7f4; color: #007A64; }
+.editor-ev-pk-price, .editor-ev-pk-stat { font-size: var(--font-size-14); color: var(--text); }
+.editor-ev-pk-stat strong { font-weight: var(--font-weight-medium, 500); }
+.editor-ev-pk-meta { font-size: var(--font-size-12); color: var(--text-muted); }
+.editor-ev-foot { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-8); border-top: var(--border-width-hairline) solid var(--color-neutral-100); }
+.editor-ev-foot .bottega-hint { margin: 0; }
+.editor-ev-foot-actions { display: flex; align-items: center; gap: var(--space-2); }
+.editor-ev-foot .btn-pill-dark { width: auto; }
+.editor-ev-foot .btn-pill-dark:disabled { opacity: .45; cursor: not-allowed; }
+
+/* 5/11/2026 (Ruggi) — Prodotti in evidenza, rifiniture: numeri centrati; item prodotto = item normale (come le voci della sidebar) senza bordo; X in hover con sfondo tondo; spazio sotto la lista prima di «Testi» */
+.editor-ev { margin-bottom: var(--space-6); }
+.editor-ev-num-label { text-align: center; }
+.editor-ev-item:not(.is-empty) { border: 0; padding: var(--sidebar-sidebar_item-padding); border-radius: var(--sidebar-sidebar_item-border_radius); font-size: var(--sidebar-sidebar_item-font_size); min-height: 0; }
+.editor-ev-item:not(.is-empty):hover { background: var(--hover-bg); }
+.editor-ev-remove { border-radius: 50%; }
+/* la X occupa sempre il suo spazio (invisibile finché non si va in hover): l'altezza dell'item non cambia e la lista non si sposta */
+.editor-ev-remove { display: flex; visibility: hidden; margin-block: -4px; }
+.editor-ev-item:hover .editor-ev-remove, .editor-ev-item:focus-within .editor-ev-remove { visibility: visible; }
+/* X in hover: cerchio visibile anche sopra l'hover dell'item (prima aveva lo stesso grigio dell'item) */
+.editor-ev-item .editor-ev-remove:hover, .editor-ev-item .editor-ev-remove:focus-visible { background: color-mix(in srgb, var(--text) 10%, transparent); color: var(--text); }
+/* 5/11/2026 (Ruggi): nel pannello --hover-bg vale #e5e3e6 (come la shell), ma l'hover di una riga/item e' --item-hover-bg (#f3f1f4) e l'hover dell'icona dentro la riga e' --row-icon-hover-bg (#e5e3e6), come nelle righe delle tabelle. */
+.editor-ev-item { --row-icon-hover-bg: var(--item-active-hover-bg); }
+.editor-ev-item:not(.is-empty):hover { background: var(--item-hover-bg); }
+.editor-ev-item.is-empty:hover, .editor-ev-item.is-empty:focus-visible { background: var(--item-hover-bg); }
+.editor-ev-item .editor-ev-remove:hover, .editor-ev-item .editor-ev-remove:focus-visible { background: var(--row-icon-hover-bg); color: var(--text); }
+
+/* 5/11/2026 (Ruggi): nel menu «Numero di prodotti» le cifre 1/2/3 sono centrate nella voce */
+.editor-ev-num .editor-select-menu li { justify-content: center; }
+
+/* 5/11/2026 (Ruggi): hover dei link dei banner alert = stesso verso degli altri link/icone: dal tono 500 al tono 600 della stessa famiglia (più scuro), non più opacity .8 (che schiariva). */
+.panel-alert-banner.info :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-blue-600); }
+.panel-alert-banner.success :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-green-600); }
+.panel-alert-banner.warning :is(.panel-alert-action, .panel-alert-dismiss):hover { opacity: 1; color: var(--color-orange-600); }
+
+/* 5/11/2026 (Ruggi): la freccia del dropdown segue l'hover come i link/icone: muted -> colore testo quando il campo e' in hover o a fuoco */
+.editor-select-btn svg { transition: transform var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-select-btn:hover svg, .editor-select-btn:focus-visible svg, .editor-select-btn[aria-expanded="true"] svg { color: var(--text); }
+
+/* 5/11/2026 (Ruggi): footer picker — Annulla/Aggiungi a taglia normale; «Hai riempito i posti liberi.» = messaggio info (icona i + testo blu-500, stesso pattern di #panelSlugHint, CANDIDATO locale) */
+.editor-ev-foot .bottega-hint.is-info { display: flex; align-items: flex-start; gap: var(--space-1); color: var(--color-blue-500); }
+.editor-ev-foot .bottega-hint.is-info::before { content: ""; flex: none; width: 16px; height: 16px; margin-top: 2px; background: var(--color-blue-500); -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5'/%3E%3Cpath d='M12 7.5h.01'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M12 11v5'/%3E%3Cpath d='M12 7.5h.01'/%3E%3C/svg%3E") center / contain no-repeat; }
+
+/* 5/11/2026 (Ruggi): TUTTE le modali — header (titolo + X), body e footer con padding var(--space-8). CANDIDATO locale: padding dei modali non ancora in alias-candidati. */
+
+/* 5/11/2026: divider del picker — flex:none (nel contenitore flex a altezza fissa un div da 1px si schiacciava a 0 e il filetto spariva) */
+.editor-ev-table .table-row-divider { flex: none; }
+
+/* 5/11/2026 (Ruggi): hint del footer picker («N posti liberi», «Hai riempito…») a 14px (info secondaria importante, scala 12/14) invece dei 12px di .bottega-hint */
+.editor-ev-foot .bottega-hint { font-size: var(--font-size-14); }
+
+/* 5/11/2026 (Ruggi): righe del picker — freccia «Vai al prodotto» a destra, visibile in hover/focus, come .row-actions delle altre tabelle (copia LOCALE candidata: nel DS e' scoped a pagina). Sfondo hover della freccia: grigio su riga grigia, lilla su riga selezionata. */
+.editor-ev-pk { position: relative; --row-bg: var(--item-hover-bg); --row-icon-hover-bg: var(--item-active-hover-bg); --row-actions-pad-left: var(--space-6); }
+.editor-ev-pk[aria-checked="true"] { --row-bg: var(--color-lilla-50); --row-icon-hover-bg: var(--color-lilla-100); }
+.editor-ev-pk .row-actions { position: absolute; top: 0; right: 0; bottom: 0; display: flex; align-items: center; padding: 0 var(--space-2) 0 var(--row-actions-pad-left); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; background: linear-gradient(to right, transparent, var(--row-bg) var(--space-5)); opacity: 0; transition: opacity var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-ev-pk:hover .row-actions, .editor-ev-pk:focus-visible .row-actions, .editor-ev-pk:has(:focus-visible) .row-actions { opacity: 1; }
+.editor-ev-pk .row-goto-btn { width: var(--spacing-7); height: var(--spacing-7); border-radius: var(--radius-pill); flex: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); text-decoration: none; transition: color var(--motion-duration-150) var(--motion-easing-ease), background var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-ev-pk .row-goto-btn svg { display: block; }
+.editor-ev-pk .row-goto-btn:hover { background: var(--row-icon-hover-bg); }
+.editor-ev-pk .row-goto-btn:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 1px; }
+/* 5/11/2026 (Ruggi): come .product-row-date nelle altre tabelle — la freccia e' SOVRAPPOSTA all'ultima cella (non occupa spazio nella colonna) e la cella Data sfuma sotto di lei in hover. Riserva = 1 solo pulsante (nel DS sono 2: ⋮ + freccia). */
+.editor-ev-pk { --row-actions-reserve: calc(var(--spacing-7) + var(--space-2)); --row-actions-fade-start: calc(var(--row-actions-reserve) + var(--space-8)); }
+.editor-ev-pk .editor-ev-pk-meta:nth-last-child(2) { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.editor-ev-pk:hover .editor-ev-pk-meta:nth-last-child(2), .editor-ev-pk:focus-visible .editor-ev-pk-meta:nth-last-child(2) { mask-image: linear-gradient(to right, black calc(100% - var(--row-actions-fade-start)), transparent calc(100% - var(--row-actions-reserve))); -webkit-mask-image: linear-gradient(to right, black calc(100% - var(--row-actions-fade-start)), transparent calc(100% - var(--row-actions-reserve))); }
+
+/* 7/11/2026 → 10/11/2026 (Ruggi): riga delle tab = solo le tab. «Vai al prodotto» (link di testo del DS: 14px, regular, muted, hover --text; freccia SVG come «Tutti i prodotti») sta ora nella riga .editor-body-toprow sotto le tab. */
+.editor-head-tabrow { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); }
+.editor-head-tabrow:not(:has(> :not([hidden]))) { display: none; }
+.editor-head-tabrow:has(> #editorTabs:not([hidden])) { border-bottom: var(--tabs-panel_tabs-border_bottom); }
+.editor-head-tabrow > .panel-tabs { flex: 1 1 auto; min-width: 0; border-bottom: 0; }
+.editor-body-toprow .editor-prod-goto { flex: none; margin-left: auto; display: inline-flex; align-items: center; gap: var(--space-1); font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); text-decoration: none; white-space: nowrap; transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-body-toprow .editor-prod-goto[hidden] { display: none; }
+.editor-body-toprow .editor-prod-goto:hover { color: var(--text); }
+.editor-body-toprow .editor-prod-goto svg { flex: none; }
+
+/* 10/11/2026 (Ruggi) — accordion «Immagini» delle sezioni aggiunte: per ogni immagine prevista un riquadro quadrato tratteggiato (icona upload, «Trascina qui il tuo file oppure», button ghost xs «Sfoglia i file»). Trascinando un file sopra: bordo lilla attenuato, testi/icona/button spariscono e lo sfondo diventa il segnaposto della sezione. Con immagine: X in hover. Candidato LOCALE. */
+
+
+/* 10/11/2026 (Ruggi): Immagini delle sezioni — riquadro di caricamento separato, fila «Da caricare», griglia riordinabile, anteprima ingrandita, messaggi a scala */
+.editor-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.editor-img-wrap { display: flex; flex-direction: column; gap: var(--space-3); }
+.editor-img-drop { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2); min-height: 152px; padding: var(--space-4); border: var(--border-width-hairline) dashed var(--color-neutral-400); border-radius: var(--radius-md); color: var(--text-muted); text-align: center; transition: border-color var(--motion-duration-150) var(--motion-easing-ease), background-color var(--motion-duration-150) var(--motion-easing-ease); }
+.editor-img-up { display: flex; }
+.editor-img-text { font-size: var(--font-size-12); line-height: 1.4; }
+.editor-img-hint { margin: 0; font-size: var(--font-size-12); line-height: 1.4; color: var(--text-muted); }
+.editor-img-browse { margin-top: var(--space-3); }
+.editor-img-drop.is-full { background: var(--color-neutral-50, transparent); }
+.editor-img-drop.is-over { border-color: var(--color-lilla-500); background-color: var(--color-lilla-50); }
+.editor-img-drop.is-over > * { visibility: hidden; }
+.editor-img-msg { margin: 0; font-size: var(--font-size-12); line-height: 1.4; color: var(--color-red-500); }
+.editor-img-stage { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-md); }
+.editor-img-stage > .panel-field-label { margin: 0; }
+.editor-img-stage-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.editor-img-stage-item { position: relative; width: 56px; height: 56px; border-radius: var(--radius-sm); background: var(--color-neutral-100) center / cover no-repeat; }
+.editor-img-stage-item.is-loading { opacity: .5; }
+.editor-img-stage-act { display: flex; align-items: center; gap: var(--space-2); }
+.editor-img-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-2); }
+.editor-img-grid[hidden], .editor-img-hint[hidden] { display: none; }
+.editor-img-tile { position: relative; aspect-ratio: 1 / 1; border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-sm); background: var(--color-neutral-100) center / cover no-repeat; cursor: pointer; overflow: hidden; }
+.editor-img-tile:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.editor-img-tile.is-dragging { opacity: .45; outline: var(--border-width-hairline) dashed var(--color-lilla-500); outline-offset: -1px; cursor: grabbing; }
+.editor-img-grip, .editor-img-x { position: absolute; top: 4px; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; padding: 0; border: 0; border-radius: 50%; background: var(--bg); color: var(--text-muted); visibility: hidden; }
+.editor-img-grip { left: 4px; cursor: grab; }
+.editor-img-x { right: 4px; cursor: pointer; }
+.editor-img-tile:hover .editor-img-grip, .editor-img-tile:hover .editor-img-x, .editor-img-tile:focus-within .editor-img-grip, .editor-img-tile:focus-within .editor-img-x { visibility: visible; }
+.editor-img-x:hover, .editor-img-x:focus-visible { background: var(--item-active-hover-bg); color: var(--text); }
+.editor-img-stage-item .editor-img-x { visibility: visible; top: -6px; right: -6px; box-shadow: 0 0 0 1px var(--color-neutral-200); }
+.editor-img-num { position: absolute; left: 4px; bottom: 4px; min-width: 18px; padding: 0 5px; border-radius: var(--radius-pill); background: var(--bg); color: var(--text); font-size: var(--font-size-12); line-height: 18px; text-align: center; }
+.editor-toasts { position: fixed; left: 50%; bottom: var(--space-6); transform: translateX(-50%); z-index: calc(var(--zIndex-50) + 2); display: flex; flex-direction: column; gap: var(--space-2); align-items: center; pointer-events: none; }
+.editor-toasts .editor-toast { position: static; transform: none; pointer-events: auto; max-width: min(92vw, 440px); animation: editor-toast-in var(--motion-duration-150, 150ms) var(--motion-easing-ease, ease) both; transition: opacity 200ms ease, transform 200ms ease; }
+.editor-toasts .editor-toast.is-out { opacity: 0; transform: translateY(6px); }
+.editor-toast-text { min-width: 0; overflow-wrap: anywhere; }
+@keyframes editor-toast-in { from { opacity: 0; transform: translateY(-6px); } }
+.editor-lb { position: fixed; inset: 0; z-index: calc(var(--zIndex-50) + 1); display: flex; align-items: center; justify-content: center; padding: var(--space-6); }
+.editor-lb-backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--dark) 55%, transparent); }
+.editor-lb-box { position: relative; display: flex; flex-direction: column; gap: var(--space-3); width: min(92vw, 880px); max-height: 92vh; padding: var(--space-4); background: var(--bg); border-radius: var(--radius-md); box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent); outline: none; }
+.editor-lb-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.editor-lb-meta { display: flex; flex-direction: column; min-width: 0; }
+.editor-lb-title { font-size: var(--font-size-14); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.editor-lb-count { font-size: var(--font-size-12); color: var(--text-muted); }
+.editor-lb-stage { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; background: var(--color-neutral-100); border-radius: var(--radius-sm); overflow: hidden; }
+.editor-lb-img { display: block; max-width: 100%; max-height: min(64vh, 640px); object-fit: contain; transition: opacity 180ms ease, transform 180ms ease; }
+.editor-lb-img.is-out { opacity: 0; transform: scale(.96); }
+.editor-lb-nav { position: absolute; top: 50%; transform: translateY(-50%); display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; background: var(--bg); color: var(--text); cursor: pointer; box-shadow: 0 0 0 1px var(--color-neutral-200); }
+.editor-lb-nav[hidden] { display: none; }
+.editor-lb-nav.is-prev { left: var(--space-3); } .editor-lb-nav.is-next { right: var(--space-3); }
+.editor-lb-nav:disabled { opacity: .35; cursor: default; }
+.editor-lb-nav:not(:disabled):hover { background: var(--item-active-hover-bg); }
+.editor-lb-nav:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.editor-lb-foot { display: flex; justify-content: flex-end; }
+@media (prefers-reduced-motion: reduce) { .editor-img-drop, .editor-lb-img, .editor-toasts .editor-toast { transition: none; animation: none; } }
+
+/* 10/11/2026 (Ruggi): i dropdown lunghi hanno altezza definita e scorrono al loro interno (la pagina non scorre) */
+.editor-select-menu { max-height: 16rem; overflow-y: auto; overscroll-behavior: contain; }
+
+/* 10/11/2026 (Ruggi): freccia «Vai al prodotto» sulle righe di Prodotti in evidenza = stessa icona-bottone della x: niente bordo né sfondo a riposo, visibile solo in hover/focus della riga; in hover sulla freccia compare il cerchio come per tutte le altre icone */
+.editor-ev-goto { flex: none; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; margin-block: -4px; padding: 0; border: 0; border-radius: 50%; background: none; box-shadow: none; color: var(--text-muted); cursor: pointer; visibility: hidden; -webkit-appearance: none; appearance: none; }
+.editor-ev-goto svg { display: block; }
+.editor-ev-item:hover .editor-ev-goto, .editor-ev-item:focus-within .editor-ev-goto { visibility: visible; }
+.editor-ev-item .editor-ev-goto:hover, .editor-ev-item .editor-ev-goto:focus-visible { background: var(--row-icon-hover-bg); color: var(--text); }
+.editor-ev-item .editor-ev-goto:focus-visible { outline: 2px solid var(--focus-ring, currentColor); outline-offset: 1px; }
+
+/* 11/11/2026 (Ruggi): Loghi della Fascia, due colonne */
+.editor-img-grid.is-logo { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.editor-img-grid.is-logo .editor-img-tile { aspect-ratio: 5 / 3; background-color: var(--bg); background-size: contain !important; background-repeat: no-repeat; background-position: center; }
+
+/* 10/11/2026 (Ruggi): immagini piu' arieggiate; titoli «Da caricare» / «Immagini caricate»; azioni in basso a destra della stessa taglia */
+.editor-img-wrap { gap: var(--space-6); }
+.editor-img-title { margin: 0 0 var(--space-3); font-size: var(--font-size-14); line-height: 1.4; font-weight: 500; color: var(--text); }
+.editor-img-title[hidden] { display: none; }
+.editor-img-wrap > .editor-img-title { margin-bottom: calc(var(--space-3) * -1 + var(--space-1)); }
+.editor-img-stage { gap: var(--space-4); padding: var(--space-4); }
+.editor-img-stage > .editor-img-title { margin: 0; }
+.editor-img-stage-list { gap: var(--space-4); }
+.editor-img-stage-act { justify-content: flex-end; gap: var(--space-3); margin-top: var(--space-2); }
+.editor-img-grid { gap: var(--space-3); padding-bottom: var(--space-3); }
+
+/* 10/11/2026 (Ruggi): anteprima ingrandita = modale del DS (titolo generale + X, divider, footer); solo l'immagine, senza sfondo; nome file nel footer, senza «N di N» */
+.editor-modal-box.editor-lb-box { width: min(48rem, 100%); height: auto; max-height: 100%; padding: 0; gap: 0; box-shadow: none; }
+.editor-lb-box .editor-modal-body { flex: 1 1 auto; overflow: auto; padding: var(--space-8); }
+.editor-lb-stage { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; justify-items: center; gap: var(--space-4); background: none; border-radius: 0; overflow: visible; }
+.editor-lb-nav { position: static; transform: none; grid-row: 1; flex: none; }
+.editor-lb-nav.is-prev { grid-column: 1; left: auto; } .editor-lb-nav.is-next { grid-column: 3; right: auto; }
+.editor-lb-img { grid-column: 2; grid-row: 1; max-width: 100%; max-height: min(55vh, 560px); border-radius: var(--radius-sm); }
+.editor-lb-foot { align-items: center; gap: var(--space-4); }
+.editor-lb-name { margin-right: auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-14); color: var(--text-muted); }
+
+/* 10/11/2026 (Ruggi): la piattaforma resta ferma — la pagina non ha scroll proprio (solo i pannelli e l'anteprima scorrono al loro interno) */
+html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
+.editor-shell { position: fixed; inset: 0; height: auto; }
+
+/* 10/11/2026 (Ruggi): blocco «Categorie» nel pannello di Catalogo e Griglia prodotti (fuori dagli accordion). Chip della PIATTAFORMA (.panel-product-category + colori cat-*, copia locale come in .editor-prod-head, candidata alla promozione), leggermente piu' grande, «Label (N)» dentro. */
+.editor-cat-list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.editor-cats .panel-product-category { display: inline-flex; align-items: center; max-width: 100%; font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); line-height: 1.2; color: var(--text-muted); background: var(--item-active-bg); border-radius: var(--radius-sm); padding: var(--space-1) var(--space-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.editor-cats .panel-product-category.cat-moda { background: #f1eafb; color: #6d4aa8; }
+.editor-cats .panel-product-category.cat-accessori { background: #e8f1fc; color: #2f6fb0; }
+.editor-cats .panel-product-category.cat-casa { background: #e6f7f4; color: #007A64; }
+
+/* 10/11/2026 (Ruggi): eliminazione sezioni — button «Elimina» in fondo al pannello (ghost rosso, tutta larghezza, staccato dall'ultimo elemento) e modale di conferma compatta (stesso scheletro delle altre modali dell'editor) */
+.editor-section-delete-zone { margin-top: var(--space-16); } /* 10/11/2026 13:25: ben staccato dal resto del pannello */
+.editor-section-delete { width: 100%; justify-content: center; text-align: center; }
+.editor-modal-box.editor-delsec { width: min(30rem, 100%); height: auto; max-height: 100%; }
+.editor-delsec .editor-modal-view { overflow: visible; }
+
+/* 10/11/2026 (Ruggi): variante nel nome della sezione aggiuntiva (« · variante»). Titolo del pannello (title-lg): variante come i titoli degli accordion (16px regular, --text). Lista Struttura (14px): stessa dimensione del nome ma regular e attenuata, per non superare il titolo. */
+.editor-label-var { font-weight: var(--font-weight-regular); opacity: .7; }
+#secTitle .editor-label-var { font-size: var(--font-size-16); color: var(--text-muted); opacity: 1; }
+
+
+/* 19/11/2026 (Ruggi) — Invito «Attiva i pagamenti» dopo la prima pubblicazione (.editor-setup): card centrata, sfondo scuro solo per contrasto (stesso .editor-modal-backdrop), fascia visiva come le card «Botteghe da cui prendere ispirazione» (valori copiati da .theme-art-story / .preview-window di bottega-onboarding.css: pattern LOCALE candidato, non promosso), titolo, passaggi, CTA primary (non sm) + «Più tardi». */
+.editor-setup-box { width: min(27rem, 100%); height: auto; max-height: 100%; overflow-y: auto; }
+.editor-setup-close { position: absolute; top: var(--space-4); right: var(--space-4); z-index: 2; background: color-mix(in srgb, var(--bg) 70%, transparent); }
+.editor-setup-art { position: relative; flex: none; height: 11rem; overflow: hidden; padding: 1.35rem; box-sizing: border-box; background: linear-gradient(135deg, #eee9e3 0%, #ded2c5 100%); }
+.editor-setup-window { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: 57%; height: 100%; box-sizing: border-box; padding: 1rem; background: #faf8f4; border-radius: .4rem; box-shadow: 0 5px 18px #3d32221a; }
+.editor-setup-kicker { color: var(--text-muted); font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; }
+.editor-setup-line { display: block; height: .35rem; margin-top: .5rem; border-radius: 1rem; background: #b9b2a7; }
+.editor-setup-line.long { width: 88%; }
+.editor-setup-line.short { width: 58%; }
+.editor-setup-cta { width: 2.4rem; height: .45rem; margin-top: auto; border-radius: 1rem; background: #29272b; }
+.editor-setup-orb { position: absolute; width: 7rem; height: 7rem; right: 8%; top: 22%; border-radius: 50%; background: #c6a990; }
+.editor-setup-badge { position: absolute; z-index: 2; right: calc(8% + 2.5rem); bottom: 1.35rem; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--dark); color: var(--bg); }
+.editor-setup-body { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-2); }
+.editor-setup-text { max-width: 40rem; margin: var(--space-1) 0 0; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); color: var(--text-muted); } /* = .onb-next-desc (onboarding-banner.css) */
+.editor-setup-steps { list-style: none; margin: var(--space-4) 0 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+.editor-setup-step { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-md); }
+.editor-setup-step[role=button] { cursor: pointer; }
+.editor-setup-step.is-next { border-color: var(--color-lilla-500); }
+.editor-setup-mark { flex: none; width: 1.5rem; height: 1.5rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--color-neutral-100); color: var(--text); font-size: 12px; font-weight: 600; }
+.editor-setup-step.is-next .editor-setup-mark { background: var(--color-lilla-500); color: #fff; }
+.editor-setup-copy { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.editor-setup-name { font-size: var(--font-size-16); color: var(--text); } /* = .todo-label */
+.editor-setup-desc { font-size: var(--font-size-14); color: var(--text-muted); } /* = .todo-meta */
+.editor-setup-step.is-done .editor-setup-name { color: var(--text-muted); }
+
+/* 19/11/2026 (Ruggi) — «Copia link» = icona DENTRO il campo indirizzo (in fondo al gruppo); al clic diventa una spunta che resta ~2s e poi torna l'icona di copia. */
+.editor-slug-copy { flex: none; display: flex; align-items: center; justify-content: center; width: var(--spacing-8, 2.5rem); padding: 0; border: 0; background: transparent; color: var(--text-muted); cursor: pointer; }
+.editor-slug-copy[hidden] { display: none; }
+.editor-slug-copy:hover { color: var(--text); background: var(--hover-bg); }
+.editor-slug-copy:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: -2px; }
+.editor-slug-copy .slug-ic-check { display: none; }
+.editor-slug-copy.is-copied { color: var(--status-success-fg, var(--text)); }
+.editor-slug-copy.is-copied .slug-ic-copy { display: none; }
+.editor-slug-copy.is-copied .slug-ic-check { display: block; }
+
+#panelSlugHint[hidden] { display: none; } /* 19/11/2026: il display:flex di #panelSlugHint annullerebbe l'attributo hidden */
+
+/* 19/11/2026 (Ruggi) — bannerino lilla sotto la toolbar (.editor-setup-banner): stesso trattamento del banner di attivazione (sfondo selected-accent, bordo lilla-200); testo + pulsanti in fondo. Candidato LOCALE. */
+.editor-setup-banner { flex: none; display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; gap: var(--space-6); padding: var(--space-6); background: var(--color-background-selected-accent); border-bottom: var(--border-width-hairline) solid var(--color-lilla-200); }
+.editor-setup-banner[hidden] { display: none; }
+/* titolo = tipografia di .card-title.title-lg (come .onb-banner-title del Cruscotto); testo 16px/24 */
+.editor-setup-banner-title { margin: 0; font-size: var(--card-card_title_title_lg-font_size, var(--font-size-20)); font-weight: var(--card-card_title_title_lg-font_weight, var(--font-weight-bold)); color: var(--text); }
+.editor-setup-banner-text { margin: 0; max-width: 46rem; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); color: var(--text-muted); }
+.editor-setup-banner-actions { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; justify-content: flex-start; gap: var(--space-4); margin-top: var(--space-3); }
+.editor-setup-banner-actions .btn-pill-dark { width: auto; flex: none; }
+
+.editor-setup-banner-copy { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.editor-setup-banner-actions { margin-top: 0; flex: none; }
+
+/* 19/11/2026 (Ruggi) — toast di successo = .onb-toast del Cruscotto (cruscotto-onboarding.css), copiato 1:1 (candidato locale) */
+.onb-toast-stack { position: fixed; right: var(--space-6); bottom: var(--space-6); z-index: calc(var(--zIndex-50) + 2); display: flex; flex-direction: column-reverse; align-items: flex-end; gap: var(--space-3); width: min(28rem, calc(100vw - var(--space-8))); pointer-events: none; }
+.onb-toast { --toast-bg: var(--color-feedback-success-background); --toast-fg: var(--color-feedback-success-foreground); display: flex; align-items: center; gap: var(--space-3); width: 100%; padding: var(--space-4); border: var(--border-width-hairline) solid color-mix(in srgb, var(--toast-fg) 24%, transparent); border-radius: var(--radius-sm); background: var(--toast-bg); color: var(--toast-fg); box-shadow: 0 8px 24px rgb(27 26 27 / 12%); font-size: var(--font-size-14); opacity: 0; transform: translateX(calc(100% + var(--space-6))); pointer-events: auto; }
+.onb-toast.is-visible { animation: onb-toast-enter calc(var(--motion-duration-280) + var(--motion-duration-280)) var(--motion-easing-ease) forwards; }
+.onb-toast.is-leaving { animation: onb-toast-exit calc(var(--motion-duration-280) + var(--motion-duration-280)) var(--motion-easing-ease) forwards; }
+.onb-toast > span:first-child { flex: 1; }
+.onb-toast-close-wrap { position: relative; display: grid; place-items: center; width: var(--spacing-8); height: var(--spacing-8); flex: none; }
+.onb-toast-timer { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.onb-toast-timer circle { fill: none; stroke-width: 2; }
+.onb-toast-timer-track { stroke: color-mix(in srgb, var(--toast-fg) 20%, transparent); }
+.onb-toast-timer-fill { stroke: currentColor; stroke-dasharray: 50.27; stroke-dashoffset: 0; }
+.onb-toast.is-visible .onb-toast-timer-fill { animation: onb-toast-countdown 5s linear forwards; }
+.onb-toast-dismiss { position: relative; z-index: 1; display: grid; place-items: center; width: 100%; height: 100%; padding: 0; border: 0; border-radius: var(--radius-pill); background: transparent; color: inherit; cursor: pointer; }
+.onb-toast-dismiss:hover { background: color-mix(in srgb, var(--toast-fg) 10%, transparent); }
+.onb-toast-dismiss svg { width: var(--spacing-4); height: var(--spacing-4); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.onb-toast-dismiss:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+@keyframes onb-toast-enter { from { opacity: 0; transform: translateX(calc(100% + var(--space-6))); } to { opacity: 1; transform: translateX(0); } }
+@keyframes onb-toast-exit { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(calc(100% + var(--space-6))); } }
+@keyframes onb-toast-countdown { to { stroke-dashoffset: 50.27; } }
+
+/* 19/11/2026 (Ruggi) — l'invito pagamenti entra con motion: sfondo in dissolvenza, card che sale e si ingrandisce appena (token motion-280 / ease) */
+.editor-setup .editor-modal-backdrop { animation: editor-setup-fade var(--motion-duration-280, 280ms) var(--motion-easing-ease, ease) both; }
+.editor-setup .editor-setup-box { animation: editor-setup-rise calc(var(--motion-duration-280, 280ms) + var(--motion-duration-150, 150ms)) var(--motion-easing-ease, ease) both; }
+@keyframes editor-setup-fade { from { opacity: 0; } }
+@keyframes editor-setup-rise { from { opacity: 0; transform: translateY(var(--space-4)) scale(.98); } }
+@media (prefers-reduced-motion: reduce) { .editor-setup .editor-modal-backdrop, .editor-setup .editor-setup-box { animation: none; } }
+
+/* 19/11/2026 (Ruggi) — il banner pagamenti compare con motion (dopo «Più tardi»/chiusura dell'invito): dissolvenza + scivola dall'alto; si riavvia ogni volta che passa da nascosto a visibile */
+.editor-setup-banner:not([hidden]) { animation: editor-setup-banner-in calc(var(--motion-duration-280, 280ms) + var(--motion-duration-150, 150ms)) var(--motion-easing-ease, ease) both; }
+@keyframes editor-setup-banner-in { from { opacity: 0; transform: translateY(calc(var(--space-4) * -1)); } }
+@media (prefers-reduced-motion: reduce) { .editor-setup-banner:not([hidden]) { animation: none; } }
+
+/* 19/11/2026 (Ruggi) — il banner segue la toolbar: stesso margin-right (--editor-gap) e padding laterale space-6, cosi' il padding destro della pagina e' rispettato */
+.editor-setup-banner { margin-right: var(--editor-gap); box-sizing: border-box; }
+
+/* 19/11/2026 (Ruggi) — il banner sta SOPRA il contenuto (overlay sotto la toolbar), non spinge e non rimpicciolisce anteprima/pannelli: wrapper alto 0 nel flusso + banner assoluto */
+.editor-setup-banner-wrap { position: relative; flex: none; height: 0; z-index: var(--zIndex-30); }
+.editor-setup-banner-wrap .editor-setup-banner { position: absolute; top: 0; left: 0; right: 0; margin-right: var(--editor-gap); box-shadow: 0 8px 24px rgb(27 26 27 / 12%); }
+
+.editor-setup-banner-text { white-space: pre-line; } /* 19/11/2026: «\n» nel testo = a capo */
+
+/* 19/11/2026 (Ruggi) — banner con bordo pieno e angoli stondati come .onb-banner del Cruscotto (lilla-200 + --card-card-border_radius); staccato dai bordi di --editor-gap */
+.editor-setup-banner-wrap .editor-setup-banner { top: var(--editor-gap); left: var(--editor-gap); right: var(--editor-gap); margin-right: 0; border: var(--border-width-hairline) solid var(--color-lilla-200); border-radius: var(--card-card-border_radius); }
+
+/* 19/11/2026 (Ruggi) — larghezza del banner = quella della toolbar (a sinistra a filo come lei, a destra si ferma a --editor-gap), non quella dell'anteprima */
+.editor-setup-banner-wrap .editor-setup-banner { left: 0; right: var(--editor-gap); }
+
+/* 19/11/2026 (Ruggi) — «Non mostrare più»: il banner esce con motion (inverso dell'entrata: dissolvenza + scivola verso l'alto, 430ms) */
+.editor-setup-banner.is-leaving { animation: editor-setup-banner-out calc(var(--motion-duration-280, 280ms) + var(--motion-duration-150, 150ms)) var(--motion-easing-ease, ease) forwards; pointer-events: none; }
+@keyframes editor-setup-banner-out { to { opacity: 0; transform: translateY(calc(var(--space-4) * -1)); } }
+
+/* 24/11/2026 (Ruggi) — modale «Aggiungi una sezione»: (1) campo Abbinamento = stile form (.bottega-field): label 14px, altezza spacing-6, gap space-2 fra label e campo; (2) pannello del dropdown sopra ai contenuti (position: fixed, coordinate da JS in makeSelect), non incastrato nella colonna che scorre; ombra Foundation invariata. Candidato locale. */
+#addPairBox { gap: var(--space-2); }
+#addPairBox > .panel-field-label { font-size: var(--font-size-14); min-height: var(--spacing-6); }
+.editor-modal-controls .editor-select-menu { position: fixed; right: auto; z-index: calc(var(--zIndex-50) + 1); }

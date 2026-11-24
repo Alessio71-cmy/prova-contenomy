@@ -1,0 +1,92 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.svg-icon {
+  display: var(--button-svg_icon-display);
+  color: var(--button-svg_icon-color);
+}
+
+.btn-pill-dark {
+  background: var(--button-btn_pill_dark-background);
+  color: var(--button-btn_pill_dark-color);
+  border: var(--button-btn_pill_dark-border);
+  border-radius: var(--button-btn_pill_dark-border_radius);
+  padding: var(--button-btn_pill_dark-padding);
+  font-size: var(--button-btn_pill_dark-font_size);
+  font-weight: var(--button-btn_pill_dark-font_weight);
+  cursor: var(--button-btn_pill_dark-cursor);
+  display: var(--button-btn_pill_dark-display);
+  align-items: var(--button-btn_pill_dark-align_items);
+  gap: var(--button-btn_pill_dark-gap);
+  transition: var(--button-btn_pill_dark-transition);
+}
+
+.btn-pill-dark:hover {
+  background: var(--button-btn_pill_dark_hover-background);
+}
+
+.btn-pill-dark.primary:active {
+  background: var(--button-btn_pill_dark_primary_active-background);
+}
+
+.btn-pill-dark.secondary:active {
+  background: var(--button-btn_pill_dark_secondary_active-background);
+}
+
+.btn-pill-dark.sm {
+  padding: var(--button-btn_pill_dark_sm-padding);
+  font-size: var(--button-btn_pill_dark_sm-font_size);
+}
+
+.btn-pill-dark.secondary {
+  background: var(--button-btn_pill_dark_secondary-background);
+}
+
+.btn-pill-dark.secondary:hover {
+  background: var(--button-btn_pill_dark_secondary_hover-background);
+}
+
+.btn-ghost {
+  background: transparent; /* 12/10/2026, richiesta Ruggi */
+  color: var(--button-btn_ghost-color);
+  border: var(--button-btn_ghost-border);
+  border-radius: var(--button-btn_ghost-border_radius);
+  padding: var(--button-btn_ghost-padding);
+  font-size: var(--button-btn_ghost-font_size);
+  font-weight: var(--button-btn_ghost-font_weight);
+  cursor: var(--button-btn_ghost-cursor);
+  display: var(--button-btn_ghost-display);
+  align-items: var(--button-btn_ghost-align_items);
+  gap: var(--button-btn_ghost-gap);
+  transition: var(--button-btn_ghost-transition);
+}
+
+.btn-ghost:hover {
+  background: var(--hover-bg);
+}
+
+.btn-ghost:active {
+  background: var(--item-active-hover-bg);
+}
+
+/* Variante per azioni bloccanti/distruttive: conserva la gerarchia secondaria del
+   ghost button, ma segnala il rischio con il feedback danger già disponibile. */
+.btn-ghost.danger {
+  color: var(--status-danger-fg);
+  border-color: var(--status-danger-fg);
+}
+
+.btn-ghost.danger:hover,
+.btn-ghost.danger:active {
+  background: var(--status-danger-bg);
+}
+
+/* 24/11/2026 (Ruggi) — CANDIDATO: azione principale distruttiva (es. «Elimina» nelle modali di conferma) = rosso pieno.
+   Usa solo variabili esistenti (feedback.danger.foreground + red-600/700 già Foundation). Le azioni secondarie (Annulla, Rimuovi, Elimina non principale) restano .btn-ghost.danger (bordo + label rossi). */
+.btn-pill-dark.danger {
+  background: var(--status-danger-fg);
+}
+.btn-pill-dark.danger:hover {
+  background: var(--color-red-600);
+}
+.btn-pill-dark.danger:active {
+  background: var(--color-red-700);
+}

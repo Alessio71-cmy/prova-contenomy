@@ -1,0 +1,170 @@
+@import url("../06-bacheca/bottega-creazione.css");
+
+/* =====================================================================
+   PRODOTTO CREAZIONE — 19/11/2026
+   Base: 06-bacheca/bottega-creazione.css (import: shell, topbar, stepper, campi, tabella-form, riepilogo, pannello destro, banner).
+   La creazione raccoglie solo i dati; la pagina del prodotto si costruisce nell'editor.
+   Tutto cio' che e' .pc-* / .prod-panel e' LOCALE/CANDIDATO: nessuna nuova variabile Foundation/alias, nessun valore nuovo fuori scala.
+   Le copie delle regole del riepilogo-prodotto (.pc-head*) vengono da .editor-prod-head di bottega-editor.css (bozza), come previsto
+   dalla promozione futura in components/product-panel.css.
+   ===================================================================== */
+
+/* --- Contenuto: blocchi form uno sotto l'altro --- */
+.pc-blocks { display: flex; flex-direction: column; gap: var(--space-6); }
+.pc-blocks, .pc-blocks .bottega-form, .bottega-summary, .bottega-form.bottega-form-table { width: 100%; max-width: none; } /* 19/11/2026 (Ruggi): i blocchi form occupano tutta la larghezza del workspace, niente 40rem fisso */
+
+/* --- Tipo di prodotto (radio card: pallino radio + etichetta + descrizione) ---
+   LOCALE/CANDIDATO (24/11/2026, Ruggi). Il pallino riprende .theme-filter-radio di bottega-creazione.css (rev. 91): bordo text, selezionato = btn-primary-bg con punto pieno. */
+.pc-choice-group { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
+.pc-choice { display: flex; align-items: flex-start; gap: var(--space-3); padding: var(--space-4); text-align: left; font: inherit; color: var(--text); background: var(--bg); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-md); cursor: pointer; }
+.pc-choice { --hover-bg: var(--item-hover-bg); } /* 24/11/2026: le card stanno su superficie BIANCA (la tabella) dentro un workspace neutral: a pannello aperto il bucket ereditato era #E5E3E6 (superfici neutral), qui serve #F3F1F4 (regola hover contestuale + hover dentro le tabelle). Stesso pattern di .products-panel in prodotti.css */
+.pc-choice:hover { background: var(--hover-bg); }
+.pc-choice[aria-checked="true"] { border-color: var(--color-lilla-500); background: var(--color-background-selected-accent); }
+.pc-choice:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+.pc-choice-radio { flex: none; width: var(--spacing-5); height: var(--spacing-5); box-sizing: border-box; border: var(--border-width-moderate) solid var(--text); border-radius: var(--radius-full); background: var(--bg); display: flex; align-items: center; justify-content: center; margin-top: var(--space-0-5); }
+.pc-choice:hover .pc-choice-radio::after { content: ""; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-full); background: var(--color-neutral-300); }
+.pc-choice[aria-checked="true"] .pc-choice-radio { border-color: var(--btn-primary-bg); }
+.pc-choice[aria-checked="true"] .pc-choice-radio::after { content: ""; width: var(--space-2); height: var(--space-2); border-radius: var(--radius-full); background: var(--btn-primary-bg); }
+.pc-choice-copy { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.pc-choice-name { font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); color: var(--text); }
+.pc-choice-desc { font-size: var(--font-size-14); color: var(--text-muted); } /* 24/11/2026 (Ruggi): descrizione delle card Tipo di prodotto = 14px (era 12px); il titolo resta 14px semibold */
+
+/* --- Tag estetici --- */
+
+/* --- Switch --- */
+.pc-switch-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+.pc-switch { position: relative; flex: none; width: var(--spacing-10); height: var(--spacing-6); padding: 0; border: 0; border-radius: var(--radius-pill); background: var(--color-neutral-200); cursor: pointer; transition: background var(--motion-duration-150) var(--motion-easing-ease); }
+.pc-switch-knob { position: absolute; top: var(--spacing-0-5); left: var(--spacing-0-5); width: calc(var(--spacing-6) - var(--spacing-1)); height: calc(var(--spacing-6) - var(--spacing-1)); border-radius: var(--radius-full); background: var(--bg); transition: transform var(--motion-duration-150) var(--motion-easing-ease); }
+.pc-switch[aria-checked="true"] { background: var(--color-lilla-500); }
+.pc-switch[aria-checked="true"] .pc-switch-knob { transform: translateX(calc(var(--spacing-10) - var(--spacing-6))); }
+.pc-switch:focus-visible { outline: 2px solid var(--btn-primary-bg); outline-offset: 2px; }
+#pcPersHint { margin-top: var(--space-2); }
+
+/* --- Righe (foto, varianti) --- */
+.pc-files { display: flex; flex-direction: column; gap: var(--space-2); }
+.pc-file { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-3); border: var(--border-width-hairline) dashed var(--border); border-radius: var(--radius-md); }
+.pc-file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--font-size-14); color: var(--text); }
+.pc-file-cover { flex: none; font-size: var(--font-size-12); color: var(--text-muted); }
+.pc-var-list { display: flex; flex-direction: column; gap: var(--space-2); }
+.pc-var-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr) auto; align-items: center; gap: var(--space-2); }
+.pc-var-row .bottega-input { min-width: 0; }
+.pc-var-head { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr) var(--spacing-8); gap: var(--space-2); font-size: var(--font-size-12); color: var(--text-muted); }
+.pc-expgar { margin: var(--space-3) 0 0; }
+
+/* --- Riepilogo: valori su piu' righe --- */
+.bottega-summary-row dd small { display: block; margin-top: var(--space-1); font-size: var(--font-size-12); color: var(--text-muted); }
+
+/* --- Salvato: azioni successive --- */
+.pc-next .pc-next-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-4) 0; }
+.pc-next .pc-next-row + .pc-next-row { border-top: var(--border-width-hairline) solid var(--border); }
+.pc-next-copy { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
+.pc-next-name { font-size: var(--font-size-16); color: var(--text); }
+.pc-next-desc { font-size: var(--font-size-14); color: var(--text-muted); }
+.pc-next-row a { flex: none; text-decoration: none; }
+.pc-next-row a[aria-disabled="true"] { opacity: .45; pointer-events: none; }
+
+/* ===================== PANNELLO DESTRO ===================== */
+.prod-panel { display: flex; flex-direction: column; }
+.prod-panel .bottega-panel-steps { display: block; flex: none; }
+.prod-panel .phase-stepper { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.prod-panel .panel-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+.prod-panel .panel-body::-webkit-scrollbar { display: none; }
+.pc-pane[hidden] { display: none; }
+.pc-pane-title { margin: 0 0 var(--space-4); }
+.pc-pane-title-2 { margin-top: var(--space-8); }
+
+/* anteprima della card prodotto */
+.pc-card { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); border: var(--border-width-hairline) solid var(--border); border-radius: var(--radius-md); background: var(--bg); }
+.pc-card-thumb { flex: none; width: var(--spacing-12); height: var(--spacing-12); border-radius: var(--radius-sm); background: var(--color-neutral-100); }
+.pc-card-copy { display: flex; flex-direction: column; gap: var(--space-1); flex: 1; min-width: 0; }
+.pc-card-name { font-size: var(--font-size-16); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc-card-name.is-empty, .pc-card-cat.is-empty { color: var(--text-faint); }
+.pc-card-cat { font-size: var(--font-size-12); color: var(--text-muted); }
+.pc-card-price { flex: none; font-size: var(--font-size-16); font-weight: var(--font-weight-semibold); color: var(--text); }
+
+/* calcolatore del prezzo */
+.pc-calc { margin: 0; display: flex; flex-direction: column; }
+.pc-calc-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) 0; }
+.pc-calc-row dt { font-size: var(--font-size-14); color: var(--text-muted); }
+.pc-calc-row dd { margin: 0; font-size: var(--font-size-14); color: var(--text); white-space: nowrap; }
+.pc-calc-row.is-total { margin-top: var(--space-2); padding-top: var(--space-3); border-top: var(--border-width-hairline) solid var(--border); }
+.pc-calc-row.is-total dt { color: var(--text); font-weight: var(--font-weight-semibold); }
+.pc-calc-row.is-total dd { font-weight: var(--font-weight-semibold); font-size: var(--font-size-16); }
+.pc-calc-row.is-net dd { color: var(--status-success-fg); }
+.pc-calc-note { margin-top: var(--space-4); }
+
+/* segnaposto tratteggiato (stessa famiglia di .bottega-panel-placeholder) */
+.pc-empty { display: flex; align-items: center; justify-content: center; min-height: 10rem; padding: var(--space-6); text-align: center; font-size: var(--font-size-14); color: var(--text-muted); border: var(--border-width-moderate) dashed var(--border); border-radius: var(--radius-md); }
+.pc-empty[hidden] { display: none; }
+.pc-empty-sm { min-height: 6rem; margin-top: var(--space-6); }
+
+/* riepilogo prodotto in bozza (copia di .editor-prod-head, bozza) */
+.pc-head { display: flex; flex-direction: column; gap: var(--space-2); }
+.pc-head-title { margin: 0 0 var(--space-3); font: var(--type-title-xl); color: var(--text); overflow-wrap: anywhere; }
+.pc-head-title.is-empty { color: var(--text-faint); }
+.pc-head-meta { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-8); }
+.pc-tag { font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text); background: var(--item-active-bg); padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); }
+.pc-head-divider { width: var(--border-width-hairline); height: var(--spacing-4); background: var(--border); flex: none; margin: 0 var(--space-1); }
+.pc-cat { display: inline-flex; max-width: 100%; font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text-muted); background: var(--item-active-bg); border-radius: var(--radius-sm); padding: var(--space-1) var(--space-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pc-head-main { display: flex; align-items: baseline; gap: var(--space-2); }
+.pc-head-num { font: var(--type-display-lg); color: var(--text); }
+.pc-head-sub { font: var(--type-body-md); color: var(--text-muted); }
+.pc-head-meta2 { display: flex; align-items: center; gap: var(--space-2); font: var(--type-body-md); color: var(--text-muted); }
+.pc-head-meta2[hidden] { display: none; }
+.pc-after + .pc-after { margin-top: var(--space-3); }
+
+/* azioni del pannello: Indietro a sinistra, avanti a destra */
+.prod-panel .bottega-step-actions { justify-content: flex-end; }
+
+/* ===================== POPUP «Dai una casa al tuo prodotto» ===================== */
+/* Stesso pattern dell'invito «Attiva i pagamenti» di bottega-editor (card centrata, sfondo scuro solo per contrasto, fascia visiva, CTA primary + «Più tardi»). Candidato LOCALE. */
+.pc-setup { position: fixed; inset: 0; z-index: calc(var(--zIndex-50) + 1); display: flex; align-items: center; justify-content: center; padding: var(--space-6); }
+.pc-setup[hidden] { display: none; }
+.pc-setup-backdrop { position: absolute; inset: 0; background: color-mix(in srgb, var(--color-neutral-900) 60%, transparent); }
+.pc-setup-box { position: relative; width: min(27rem, 100%); max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; background: var(--bg); border-radius: var(--radius-lg); }
+.pc-setup-close { position: absolute; top: var(--space-4); right: var(--space-4); z-index: 2; background: color-mix(in srgb, var(--bg) 70%, transparent); }
+.pc-setup-art { position: relative; flex: none; height: 11rem; overflow: hidden; padding: 1.35rem; box-sizing: border-box; background: linear-gradient(135deg, #eee9e3 0%, #ded2c5 100%); }
+.pc-setup-window { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; width: 57%; height: 100%; box-sizing: border-box; padding: 1rem; background: #faf8f4; border-radius: .4rem; box-shadow: 0 5px 18px #3d32221a; }
+.pc-setup-kicker { color: var(--text-muted); font-size: .58rem; letter-spacing: .08em; text-transform: uppercase; }
+.pc-setup-line { display: block; height: .35rem; margin-top: .5rem; border-radius: 1rem; background: #b9b2a7; }
+.pc-setup-line.long { width: 88%; }
+.pc-setup-line.short { width: 58%; }
+.pc-setup-cta { width: 2.4rem; height: .45rem; margin-top: auto; border-radius: 1rem; background: #29272b; }
+.pc-setup-orb { position: absolute; width: 7rem; height: 7rem; right: 8%; top: 22%; border-radius: 50%; background: #c6a990; }
+.pc-setup-body { padding: var(--space-8); display: flex; flex-direction: column; gap: var(--space-2); }
+.pc-setup-body .card-title { margin: 0; }
+.pc-setup-text { margin: var(--space-1) 0 0; font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); color: var(--text-muted); }
+.pc-setup-actions { display: flex; align-items: center; gap: var(--space-4); margin-top: var(--space-6); }
+.pc-setup-actions .btn-pill-dark, .pc-setup-actions .btn-ghost { width: auto; flex: none; text-decoration: none; }
+.pc-setup:not([hidden]) .pc-setup-backdrop { animation: pc-setup-fade var(--motion-duration-280, 280ms) var(--motion-easing-ease, ease) both; }
+.pc-setup:not([hidden]) .pc-setup-box { animation: pc-setup-rise calc(var(--motion-duration-280, 280ms) + var(--motion-duration-150, 150ms)) var(--motion-easing-ease, ease) both; }
+@keyframes pc-setup-fade { from { opacity: 0; } }
+@keyframes pc-setup-rise { from { opacity: 0; transform: translateY(var(--space-4)) scale(.98); } }
+@media (prefers-reduced-motion: reduce) { .pc-setup:not([hidden]) .pc-setup-backdrop, .pc-setup:not([hidden]) .pc-setup-box { animation: none; } }
+
+@media (max-width: 760px) { .pc-choice-group { grid-template-columns: 1fr; } .pc-var-row, .pc-var-head { grid-template-columns: 1fr; } }
+
+/* 19/11/2026 (Ruggi): la pagina non scorre per intero — scorre solo .workspace; topbar, sidebar e pannello restano fermi (stessa regola di bottega-editor.css) */
+html, body { height: 100%; margin: 0; overflow: hidden; overscroll-behavior: none; }
+.workspace { overscroll-behavior: contain; }
+
+/* 24/11/2026 (Ruggi): distanza tra le tabelle = gap var(--space-6) di .pc-blocks. Il margin-top space-16 della base (bottega-creazione.css, rev. 72) resta solo sulla prima tabella, sotto l'intestazione. */
+.pc-blocks > .bottega-form-table:not(:first-child) { margin-top: 0; }
+
+/* ===== 24/11/2026 (Ruggi): dropdown custom (regola design-system-dropdown-custom: niente select nativo). Copia di .editor-select* (bottega-editor.css) / .order-select (ordini-statico.css) — LOCALE/CANDIDATO, da promuovere a componente condiviso. Il <select> nativo resta nascosto come contenitore del valore. ===== */
+.pc-select-native { display: none; }
+.pc-select { position: relative; width: 100%; min-width: 0; }
+.pc-select-btn { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); width: 100%; text-align: left; cursor: pointer; color: var(--text); }
+.pc-select-btn svg { flex: none; color: var(--text-muted); transition: transform var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease); }
+.pc-select-btn:hover svg, .pc-select-btn:focus-visible svg, .pc-select-btn[aria-expanded="true"] svg { color: var(--text); }
+.pc-select-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.pc-select-btn:disabled { background: var(--color-neutral-50); color: var(--text-faint); cursor: not-allowed; }
+.pc-select-btn:disabled svg { color: var(--text-faint); }
+.pc-select-value { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pc-select-value.is-placeholder { color: var(--text-muted); }
+.pc-select-btn:disabled .pc-select-value.is-placeholder { color: var(--text-faint); }
+.pc-select-menu { position: absolute; top: calc(100% + var(--space-1)); left: 0; right: 0; z-index: var(--zIndex-4); margin: 0; padding: var(--space-2); list-style: none; display: flex; flex-direction: column; gap: var(--space-0-5); max-height: 16rem; overflow-y: auto; overscroll-behavior: contain; background: var(--bg); border: var(--border-width-hairline) solid var(--color-neutral-200); border-radius: var(--radius-md); box-shadow: var(--elevation-x) var(--elevation-y) var(--elevation-blur) color-mix(in srgb, var(--dark) var(--elevation-alpha), transparent); }
+.pc-select-menu[hidden] { display: none; }
+.pc-select-menu li { display: flex; align-items: center; gap: var(--sidebar-sidebar_item-gap); padding: var(--sidebar-sidebar_item-padding); border-radius: var(--sidebar-sidebar_item-border_radius); font-size: var(--sidebar-sidebar_item-font_size); color: var(--text); cursor: pointer; outline: none; }
+.pc-select-menu li:hover, .pc-select-menu li:focus-visible { background: var(--color-neutral-50); }
+.pc-select-menu li[aria-selected="true"], .pc-select-menu li[aria-selected="true"]:hover { background: var(--sidebar-sidebar_item_active-background); color: var(--sidebar-sidebar_item_active-color); font-weight: var(--sidebar-sidebar_item_active-font_weight); }

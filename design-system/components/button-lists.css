@@ -1,0 +1,26 @@
+/* Condiviso; riferimenti mapped generati dalla decisione di consolidamento. */
+.icon-btn {
+  width: var(--button-icon_btn-width);
+  height: var(--button-icon_btn-height);
+  display: var(--button-icon_btn-display);
+  align-items: var(--button-icon_btn-align_items);
+  justify-content: var(--button-icon_btn-justify_content);
+  border-radius: var(--button-icon_btn-border_radius);
+  cursor: var(--button-icon_btn-cursor);
+  color: var(--button-icon_btn-color);
+  transition: var(--button-icon_btn-transition);
+}
+
+.icon-btn:hover {
+  background: var(--hover-bg);
+  color: var(--button-icon_btn_hover-color);
+}
+
+.icon-btn:active {
+  background: var(--item-active-hover-bg);
+}
+
+.icon-btn.active {
+  background: var(--button-icon_btn_active_2-background);
+  color: var(--button-icon_btn_active_2-color);
+}

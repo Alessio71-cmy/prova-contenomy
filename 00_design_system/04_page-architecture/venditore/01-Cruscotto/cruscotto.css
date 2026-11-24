@@ -1,0 +1,281 @@
+@import url("../../../../design-system/build/css/tokens.css");
+@import url("../../../../design-system/build/css/compatibility.css");
+@import url("../../../../design-system/components/shell.css");
+@import url("../../../../design-system/components/shell-dashboard-and-products.css");
+@import url("../../../../design-system/components/shell-interactive.css");
+@import url("../../../../design-system/components/button.css");
+@import url("../../../../design-system/components/card.css");
+@import url("../../../../design-system/components/navigation.css");
+@import url("../../../../design-system/components/product-panel.css");
+@import url("../../../../design-system/components/tooltip.css");
+
+
+:root {
+
+  --item-active-hover-bg: var(--color-neutral-100); /* 16/9/2026, decisione Ruggi: da color-mix a valore fisso (scalabilita' e modifica precisa in caso di cambi futuri, invece di una formula derivata) — riuso diretto della Foundation neutral.100 esistente, nessun nuovo valore. Numericamente quasi identico al risultato del vecchio mix (~#e0dee1 vs #e5e3e6): stessa leggerezza visiva di oggi, solo scritto come letterale invece che come formula. Vedi STRUTTURA_E_STATO.md per il ragionamento completo (contrasto, bucket bianco/neutral, scelta leggerezza su accessibilita' stretta). */
+
+  --hover-bg: var(--item-hover-bg); /* 21/9/2026: default = superficie BIANCA (#F3F1F4). Le superfici neutral lo sovrascrivono a --item-active-hover-bg (#E5E3E6) — vedi blocco dopo :root. */
+
+  --progress-stacked-primary-fill: var(--text-muted); /* alias: progress-stacked-primary-fill — segmento "netto" della barra incassi (DEC-039, decisione Ruggi 11/9); prima condiviso con rank-bar/drop sotto il nome data-fill-neutral, ora ruolo proprio, agganciato a progress-stacked-secondary-fill (lordo) nella stessa scala */
+  --progress-stacked-secondary-fill: #b5b5bd; /* alias: progress-stacked-secondary-fill — segmento "lordo" della barra incassi (11/9); prima valore fisso, ora tokenizzato e agganciato a progress-stacked-primary-fill (netto) come coppia della stessa scala */
+  --progress-segmented-fill: var(--text-muted); /* alias: progress-segmented-fill — riempimento barra avanzamento drop (DEC-039, decisione Ruggi 11/9); prima condiviso con incassi/rank-bar sotto il nome data-fill-neutral, ora ruolo indipendente perche' potra' avere un colore proprio in futuro */
+  --success: var(--status-success-fg); /* alias: success — stato positivo/completato (DEC-039, decisione Ruggi 11/9); 15/9/2026: ripuntato a status-success-fg (feedback.success, green.500) per coerenza totale con trend/status-pill — non più isolato, decisione Ruggi. Verificato: 5.38:1 testo bianco su questo sfondo (.status-dot.done) e 5.38:1 come stroke su bianco (.ring-fill) */
+
+  /* Alias feedback (success/warning/danger) — 15/9/2026, decisione Ruggi: stesso "salto"
+     sfondo-50/testo+pallino-500 per tutte e 3 le famiglie, verificato AA (4.7:1-5.1:1
+     sul proprio chip). Vedi tokens/alias/color/feedback.json e tokens-preview.css. */
+
+}
+
+/* 21/9/2026, decisione Ruggi — HOVER CONTESTUALE per icone e chip (icon-btn, icon-btn-ghost, btn-ghost, status-chip, filter-pill, view-switch-btn, filter-chip, badge cliccabili, frecce paginazione, chiudi/naviga pannello, chevron riga).
+   Regola: su sfondo BIANCO -> #F3F1F4 (--item-hover-bg); su sfondo NEUTRAL (25/50) -> #E5E3E6 (--item-active-hover-bg). Stesso valore per icone e chip.
+   --hover-bg e' impostata dalla superficie che contiene l'elemento e si eredita ai figli; dove la superficie cambia con .body.panel-open, l'override e' invertito.
+   Nessun nuovo valore Foundation. Candidato locale (4 file pilota), non alias formale. NON toccati: righe tabella, .sidebar-item (neutral-200), bottoni scuri, stati :active. */
+.topbar, .card, .filter-row { --hover-bg: var(--item-active-hover-bg); }
+.card.incassi-card { --hover-bg: var(--item-hover-bg); box-shadow: none !important; }
+
+ /* 17/9/2026, propagato da prodotti-panel-static.css. */
+
+.icon-btn {
+  width: var(--spacing-8); height: var(--spacing-8);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease); /* 11/9: mancava, aggiunta per coerenza con gli altri pulsanti */
+}
+.icon-btn:hover { background: var(--hover-bg); }
+
+/* Sistema semantico primary/secondary (11/9, ragionato con Ruggi): oggi .primary e
+   .secondary sono visivamente IDENTICI (entrambi scuri, nessun colore definito ancora per
+   il secondary) — servono a marcare fin da ora quali bottoni scuri sono l'azione principale
+   di un contesto (Nuovo prodotto, Gestisci variante) vs quali sono scuri ma di importanza
+   minore (Condividi, Nuova variante, Nuovo drop, Ripubblica) — cosi quando il secondary
+   avra un trattamento diverso sara un cambio di due righe CSS, non una caccia nell'HTML. */
+.btn-pill-dark.primary { }
+
+/* --- Workspace --- */
+.workspace {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  margin: 0 var(--space-4) 0;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--color-neutral-100); /* 12/10/2026, richiesta Ruggi: border workspace neutral-200 */
+  border-bottom: 0;
+  background: var(--color-background-default); /* 12/10/2026, richiesta Ruggi: tutti i workspace su sfondo bianco (alias color.background.default = neutral.0); era var(--color-neutral-50). Nota: l'alias color.background.workspace resta su neutral.50 e al momento non è usato. */ /* 28/9/2026, richiesta Ruggi: il workspace ha sempre bg neutral-50 e bordo neutral-100, identico a riposo e a pannello aperto — estesa qui la stessa correzione fatta su prodotti-panel-static.css (nessun override di questa pagina a pannello aperto: era già uniforme). */
+}
+/* 12/10/2026, richiesta Ruggi: a sidebar chiusa il workspace si appoggia alla sidebar compressa — margin-left 0 (shell.css lo portava a var(--sidebar-shell_sidebar_collapsed_workspace-margin_left) = spacing-2); top 0, right e bottom restano space-4 dalla regola base. Solo margin-left, di proposito: così non interferisce con `.body.panel-open .workspace { margin-right }` (stessa specificità). */
+.shell.sidebar-collapsed .workspace { margin-left: 0; }
+
+/* 21/9/2026, su richiesta di Ruggi: RIMOSSO l'override `.shell.sidebar-collapsed .workspace-inner { max-width: 70rem; }` (17/9). A sidebar chiusa .workspace-inner resta a 80rem, come a sidebar aperta: le tabelle guadagnano spazio invece di restare a 70rem. */
+
+.page-header { margin-bottom: var(--space-12); display: flex; align-items: flex-start; justify-content: space-between; }
+.page-header-actions { display: flex; align-items: flex-start; gap: var(--space-2); flex: none; }
+
+
+ /* 14/9/2026: stato "premuto", un filo più marcato dell'hover, distinto da un'eventuale classe .active di selezione (qui non esiste, ma il criterio è lo stesso) */
+.btn-ghost.sm { padding: var(--space-2) var(--space-3); font-size: var(--font-size-14); }
+.page-title { font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); }
+.page-sub { font-size: var(--font-size-16); line-height: var(--font-lineHeight-24); font-weight: var(--font-weight-regular); color: var(--text-muted); margin-top: var(--space-2); }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-12); /* 14/9/2026: valore richiesto esplicitamente da Ruggi per lo spazio fra banner incassi e griglia metriche (era var(--space-6), prima ancora 64px fisso — vedi §8.32) */
+}
+.span-4 { grid-column: span 4; }
+.span-6 { grid-column: span 6; }
+.span-8 { grid-column: span 8; }
+.span-12 { grid-column: span 12; }
+
+/* --- Barra incassi --- */
+.incassi-card { display: flex; flex-direction: column; border: none; padding: 0; background: transparent; }
+.incassi-totals { display: flex; align-items: center; justify-content: space-between; }
+.incassi-totals > div { display: flex; align-items: baseline; gap: var(--space-2); }
+.icon-btn-ghost {
+  width: var(--spacing-8); height: var(--spacing-8); flex: none;
+  display: flex; align-items: center; justify-content: center;
+  border: var(--border-width-hairline) solid var(--color-neutral-100); border-radius: var(--radius-sm); /* 28/9/2026, richiesta Ruggi: border neutral-200 (era neutral-100/--border) */
+  color: var(--text); background: transparent; /* 12/10/2026, richiesta Ruggi: ghost trasparente */ cursor: pointer; text-decoration: none; /* 28/9/2026, richiesta Ruggi: ora referenzia il token condiviso --button-btn_ghost-background (neutral-25) invece del valore hardcoded — stesso sfondo di .btn-ghost, singola fonte di verità */
+  transition: background var(--motion-duration-150) var(--motion-easing-ease); /* 11/9: mancava, aggiunta per coerenza con gli altri pulsanti */
+}
+.icon-btn-ghost:hover { background: var(--hover-bg); } /* 16/9/2026: spostato al bucket "neutral" — .icon-btn-ghost sta dentro .incassi-card (background:transparent), quindi sul neutral-25 di .workspace, non sul bianco */ /* 21/9/2026: hover contestuale (--hover-bg), vedi blocco dopo :root — eventuali commenti sul "bucket" sopra sono superati */
+.icon-btn-ghost:active { background: var(--item-active-hover-bg); } /* 14/9/2026: stato "premuto" */
+.incassi-netto { font-size: var(--font-size-34); font-weight: var(--font-weight-bold); color: var(--text); }
+.incassi-sep { font-size: var(--font-size-18); color: var(--text-muted); }
+.incassi-lordo { font-size: var(--font-size-18); color: var(--text-muted); }
+.incassi-bar { position: relative; width: 100%; height: var(--spacing-7); border-radius: var(--radius-pill); overflow: hidden; margin-top: var(--space-3); }
+.incassi-seg { position: absolute; left: 0; top: 0; height: 100%; border-radius: var(--radius-pill); }
+.incassi-seg.netto { background: var(--progress-stacked-primary-fill); z-index: var(--zIndex-3); } /* DEC-039: era var(--dark)/accent su un valore di fatturato — decisione Ruggi 11/9; ripuntato da data-fill-neutral condiviso al proprio alias l'11/9 */
+.incassi-seg.lordo { background: var(--progress-stacked-secondary-fill); z-index: var(--zIndex-2); } /* tokenizzato 11/9, agganciato a progress-stacked-primary-fill (netto) come coppia */
+.incassi-seg.track { background: #f0f0f2; z-index: var(--zIndex-1); }
+.incassi-legend { display: flex; gap: var(--space-4); font-size: var(--font-size-14); color: var(--text-muted); margin-top: var(--space-4); padding-left: var(--space-1); }
+.incassi-legend .dot { width: var(--spacing-2); height: var(--spacing-2); border-radius: var(--radius-full); display: inline-block; margin-right: var(--space-2); vertical-align: middle; }
+.incassi-legend .dot.netto { background: var(--progress-stacked-primary-fill); } /* bug 11/9: il puntino era rimasto sul vecchio accent (var(--dark)) mentre la barra reale era gia' passata al grigio dato — ora combaciano */
+.incassi-legend .dot.lordo { background: var(--progress-stacked-secondary-fill); } /* tokenizzato 11/9, stesso principio del dot netto: il puntino referenzia l'alias della barra, non un valore duplicato */
+.incassi-legend .dot.track { background: #f0f0f2; border: var(--border-width-hairline) solid var(--border); }
+
+/* --- Da fare --- */
+.todo-progress { display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-size-14); color: var(--text-muted); }
+.filter-row {
+  display: flex; gap: var(--space-0-5); margin: var(--space-4) 0;
+  background: var(--item-active-bg); border-radius: var(--radius-pill); padding: var(--space-1);
+}
+.filter-pill {
+  flex: 1; border: none; background: transparent; border-radius: var(--radius-pill);
+  padding: var(--space-2) var(--space-3); font-size: var(--font-size-14); color: var(--text-muted); cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease);
+}
+
+ /* 12/9: bold rimosso — troppo pesante visivamente, resta solo cambio di sfondo/colore (decisione Ruggi) */
+.count { color: var(--text-muted); margin-left: var(--space-1); } /* 12/9: era opacity:.7 (si smorzava sul colore corrente del genitore), ora colore neutro fisso come tutti gli altri testi muted del sistema — contrasto verificato ~5.4:1 anche su sfondo scuro attivo (decisione Ruggi) */
+.filter-pill.active .count { color: var(--color-text-inverse); } /* 14/9/2026: su richiesta di Ruggi — non è un problema di leggibilità (6.3:1 già ok), ma di coerenza visiva: quando l'etichetta diventa bianca il numero accanto resta unito allo stesso "gruppo" selezionato, invece di apparire un dettaglio dimenticato (decisione Ruggi, rivede la scelta del 12/9) */
+
+.todo-list { display: flex; flex-direction: column; gap: var(--space-1); }
+.todo-row, .todo-row.done {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-2); /* 10px non era in scala, corretto a 12px (9/9) */
+  border-radius: var(--radius-pill);
+  cursor: pointer; /* riga cliccabile, niente hover di sfondo su richiesta esplicita */
+}
+.status-dot {
+  width: var(--spacing-5); height: var(--spacing-5); border-radius: var(--radius-full); border: var(--border-width-moderate) solid var(--border); flex: none;
+  display: flex; align-items: center; justify-content: center; font-size: 11px;
+}
+.status-dot.done { background: var(--success); border-color: var(--success); color: var(--color-text-inverse); } /* DEC-039: era var(--dark)/accent su uno stato completato — decisione Ruggi 11/9 */
+.ring-track { stroke: var(--border); } /* era hardcoded #ececec, non allineato a --border (#f0f0f0) — corretto 11/9 */
+.ring-fill { stroke: var(--success); } /* DEC-039: era hardcoded #111/accent — decisione Ruggi 11/9 */
+.todo-body { flex: 1; min-width: 0; }
+.todo-label { font-size: var(--font-size-16); color: var(--text); }
+.todo-label.done { color: var(--text-muted); text-decoration: line-through; }
+.todo-meta { font-size: var(--font-size-14); color: var(--text-muted); } /* 5/11/2026 (Ruggi): 14px (era 12), testo muted del design system */
+.chev {
+  width: 6px; height: 6px; border-right: var(--border-width-moderate) solid var(--text-muted); border-bottom: var(--border-width-moderate) solid var(--text-muted);
+  transform: rotate(-45deg); flex: none;
+}
+.chev.inline { margin-left: var(--space-1); }
+.link { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); display: flex; align-items: center; text-decoration: none; transition: color var(--motion-duration-150) var(--motion-easing-ease); }
+.link:hover { color: var(--text); } /* 14/9/2026, decisione Ruggi: mancava qualunque feedback hover su "Vedi tutto" (Da fare, Drop) — esteso lo stesso passaggio muted->primary già usato ovunque nel sistema (chevron tabella, icone header pannello). */
+.link:hover .chev { border-color: var(--text); } /* .chev ha il colore scritto fisso nel bordo (non currentColor), serve una regola dedicata perché segua lo stesso hover del testo accanto — non tocca .filter-chip .chev altrove, che resta invariato */
+.todo-row:hover .chev,
+.drop-product-row:hover .chev { border-color: var(--text); } /* 14/9/2026, richiesta Ruggi: righe di "Da fare"/"Drop" sono cliccabili (cursor:pointer) ma il chev restava muted anche in hover — allineato allo stesso pattern muted->primary di .row-goto-btn/.row-menu-btn in Prodotti (stessa logica di .link:hover .chev sopra, estesa alle righe che non sono un <a class="link">) */
+
+/* --- Drop --- */
+.drop-countdown-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); } /* 21/9/2026: align-items flex-end → center, su richiesta di Ruggi — countdown+fase non sono più impilati ma affiancati (vedi .drop-countdown-info sotto) e la riga ora ospita anche il bottone freccia .icon-btn-ghost, centrato verticalmente contro il testo. */
+.drop-countdown-info { display: flex; align-items: baseline; gap: var(--space-4); } /* 21/9/2026: nuovo wrapper — drop-countdown e drop-phase erano impilati in un div senza gap dichiarato (drop-phase aveva margin-top:space-1); ora affiancati nello stesso div con gap:var(--space-4), su richiesta di Ruggi. */
+.drop-countdown { font-size: var(--font-size-28); font-weight: var(--font-weight-bold); color: var(--text); line-height: var(--font-lineHeight-tight); }
+.drop-phase { font-size: var(--font-size-14); color: var(--text-muted); } /* 21/9/2026: rimosso margin-top:var(--space-1) — non più necessario, ora affiancato a drop-countdown (baseline+gap) invece che impilato sotto */
+.tag {
+  display: inline-block; margin-bottom: var(--space-4);
+  font-size: var(--font-size-12); font-weight: var(--font-weight-semibold); color: var(--text); background: var(--item-active-bg);
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill);
+} /* 12/9: allineato al trattamento badge (12px/600), decisione Ruggi — .tag era 14px/400.
+     21/9/2026: display:inline-block + margin-bottom aggiunti — il tag non è più dentro
+     drop-countdown-row (flex, dove i margini verticali erano irrilevanti perché blockificato
+     come flex item) ma sopra di esso in normale flusso, su richiesta di Ruggi; un elemento
+     inline (span) ignora i margini verticali, serve inline-block perché lo spazio sotto funzioni.
+     Unico uso di .tag in questo file oggi (Drop, Cruscotto) — se in futuro .tag viene riusato
+     altrove in cruscotto.html, ricontrollare che display/margin non siano indesiderati lì. */
+.drop-progress { display: flex; gap: var(--space-1); margin-bottom: var(--space-4); }
+.drop-seg { flex: 1; height: var(--space-2); border-radius: var(--radius-pill); background: #f0f0f2; overflow: hidden; } /* 21/9/2026: 6px → var(--space-2) (8px), su richiesta di Ruggi di usare una variabile space coerente invece del valore letterale */
+.drop-fill { height: 100%; background: var(--progress-segmented-fill); border-radius: inherit; } /* DEC-039: era var(--dark)/accent su un dato di avanzamento puro — decisione Ruggi 11/9; ripuntato dal data-fill-neutral condiviso al proprio alias l'11/9, perche' potra' avere un colore diverso da incassi/rank-bar in futuro */
+
+.drop-product-row { display: flex; align-items: center; gap: var(--space-3); padding: 0 var(--space-2); cursor: pointer; margin-top: var(--space-3); /* riga cliccabile, niente hover di sfondo su richiesta esplicita */ }
+/* .product-row qui era materiale abbandonato (nessun markup lo usava in Cruscotto, collideva di nome con la riga tabella viva in Prodotti) — rimosso 11/9, decisione Ruggi. margin-top riassorbito sopra perché .drop-product-row è l'unico consumatore reale rimasto. */
+.thumb { flex: none; width: var(--spacing-12); aspect-ratio: 4 / 5; border-radius: var(--radius-sm); background: var(--color-neutral-100); } /* 5/11/2026 (Ruggi): miniatura prodotto = stessa del picker «Aggiungi prodotto» (.editor-ev-thumb): 48px, 4/5 verticale, neutral-100 */
+.thumb.sm { width: var(--spacing-10); }
+.drop-product-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-0-5); }
+.drop-product-name-line { display: flex; align-items: baseline; gap: var(--space-2); }
+.drop-product-name { font-size: var(--font-size-16); color: var(--text); }
+.drop-product-sep, .drop-product-price { font-size: var(--font-size-14); color: var(--text-muted); }
+.drop-substat { font-size: var(--font-size-14); color: var(--text-muted); } /* 12/9: era pieno, allineato a product-card-stat (stesso ruolo "enfasi interna") — decisione Ruggi */
+.drop-substat strong { font-weight: var(--font-weight-bold); color: var(--text); } /* esplicitato, stesso pattern di .product-card-stat strong — prima si affidava al bold di default del browser */
+.drop-substat.muted { color: var(--text-muted); } /* ora ridondante con la base, lasciata per compatibilità con eventuali override futuri */
+.drop-substat-row { display: flex; align-items: center; gap: var(--space-2); }
+ /* 21/9/2026: copiata da drop.css/prodotti-panel-static.css (rosso semantico come .status-pill.esaurito), qui non esisteva */
+
+/* --- Widget Drop: stato vuoto (variante confermata da Ruggi, 15/9/2026) ---
+   Header (titolo + .card-sub) e divider restano invariati rispetto allo stato popolato;
+   cambia solo: il bottone "Nuovo drop" esce dall'header (la CTA si sposta nel blocco vuoto),
+   e tutto il contenuto sotto il divider è sostituito da questo blocco centrato.
+   .card riceve il modificatore .drop-card SOLO per abilitare flex-direction:column — non altera
+   il rendering dello stato popolato (i figli block si impilano identici dentro un flex column). */
+.card.drop-card { display: flex; flex-direction: column; }
+.drop-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-4);
+}
+/* 12/10/2026, richiesta Ruggi: testi degli stati vuoti 14px muted */
+.drop-empty-text { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); } /* {type.body.md} */
+
+.btn-icon { flex: none; display: block; }
+
+/* --- Metriche --- */
+.metriche-card { display: flex; align-items: stretch; padding: var(--space-6) 0; }
+.metrica {
+  flex: 1; display: flex; flex-direction: column; gap: var(--space-1);
+  padding: 0 var(--space-6);
+  border-left: var(--border-width-hairline) solid var(--border);
+}
+.metrica:first-child { border-left: none; }
+.metrica-value { font-size: var(--font-size-30); font-weight: var(--font-weight-bold); color: var(--text); line-height: var(--font-lineHeight-tight); }
+.metrica-value-sep { color: var(--text-muted); font-weight: var(--font-weight-regular); }
+.metrica-label-row { display: flex; align-items: center; gap: var(--space-1); }
+.metrica-label { font-size: var(--font-size-14); color: var(--text-muted); }
+.metrica-trend { display: inline-flex; align-items: center; gap: var(--space-0-5); font-size: var(--font-size-14); font-weight: var(--font-weight-semibold); }
+.metrica-trend.up { color: var(--status-success-fg); }  /* 15/9/2026: promosso a feedback.success.foreground, era letterale #1a8a4a — verificato 5.38:1 su bianco */
+.metrica-trend.down { color: var(--status-danger-fg); }  /* 15/9/2026: promosso a feedback.danger.foreground, era letterale #c23b3b — verificato 5.79:1 su bianco */
+
+/* --- Ultimi prodotti: grid a 4 colonne --- */
+.products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); }
+
+.product-new-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--space-2);
+  border: var(--border-width-moderate) dashed var(--border); border-radius: var(--radius-md);
+  background: transparent; color: var(--text-muted); font-size: var(--font-size-14); cursor: pointer;
+  transition: background var(--motion-duration-150) var(--motion-easing-ease), color var(--motion-duration-150) var(--motion-easing-ease); /* 11/9: mancava, aggiunta per coerenza con gli altri pulsanti */
+}
+.product-new-card:hover { background: var(--item-hover-bg); color: var(--text); }
+/* Il + resta sempre nero (11/9, Ruggi): e gia un icon-button a se, non deve seguire il
+   colore muted->nero in hover della label testuale accanto. Il cerchio attorno e sempre
+   visibile (11/9, ripristinato: NON solo in hover, a differenza del pannello prodotto) */
+.product-new-icon {
+  width: var(--spacing-9); height: var(--spacing-9); border-radius: var(--radius-full); border: var(--border-width-hairline) solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text);
+}
+
+.product-card { display: flex; flex-direction: column; }
+.product-card-thumb { /* 29/10/2026 (Ruggi): proporzione 16:10 (era 1:1, troppo alta: allungava la card); badge a space-4 da alto e sinistra; testo con padding space-4 */
+  width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius-lg) var(--radius-lg) 0 0; background: #f0f0f2;
+  position: relative;
+  cursor: pointer; /* solo l'immagine è zona cliccabile della card — il resto (testo, Ripubblica) resta fuori per non creare ambiguità con il bottone */
+}
+.product-card-badge {
+  position: absolute; top: var(--space-4); left: var(--space-4); font-size: var(--font-size-12); font-weight: var(--font-weight-semibold);
+  padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); background: var(--color-background-default); border: var(--border-width-hairline) solid var(--border);
+}
+/* 21/9/2026 (correzione di una lettura sbagliata mia, richiesta Ruggi): il badge "Esaurito" della card = stessi colori di .status-pill.esaurito del resto del sistema (sfondo --status-danger-bg, pallino e testo --status-danger-fg), non neutro. Dimensioni/padding/peso restano quelli di .product-card-badge (identici a .status-pill); il bordo resta 1px ma trasparente per non cambiare l'ingombro rispetto a "In vetrina". Il pallino è ::before (6px, currentColor) per non toccare il markup. */
+.product-card-badge.esaurito { display: inline-flex; align-items: center; gap: var(--space-1); background: var(--status-danger-bg); color: var(--status-danger-fg); border-color: transparent; }
+.product-card-badge.esaurito::before { content: ""; width: 6px; height: 6px; border-radius: var(--radius-full); background: currentColor; flex: none; }
+.product-card-body { flex: 1; display: flex; flex-direction: column; padding: var(--space-4); border: 1px solid var(--color-neutral-100); border-top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: var(--color-background-default); }
+.product-card-text { display: flex; flex-direction: column; gap: var(--space-2); }
+.product-card-primary { display: flex; flex-direction: column; gap: var(--space-1); }
+.product-card-name-line { display: flex; align-items: baseline; gap: var(--space-2); }
+.product-card-name { font-size: var(--font-size-16); color: var(--text); cursor: pointer; } /* stessa zona cliccabile del thumb, stesso target — non tutta la card */
+.product-card-sep { font-size: var(--font-size-14); color: var(--text-muted); }
+.product-card-price { font-size: var(--font-size-14); color: var(--text-muted); }
+.product-card-stat { font-size: var(--font-size-14); font-weight: var(--font-weight-regular); color: var(--text-muted); }
+.product-card-stat strong { font-weight: var(--font-weight-bold); color: var(--text); }
+.product-card-restock { width: 100%; margin: var(--space-6) 0 0; justify-content: center; }
+
+.product-card-reviews { display: flex; align-items: center; gap: var(--space-1); font-size: var(--font-size-14); color: var(--text-muted); }
+.product-card-reviews-icon { flex: none; }
